@@ -54,6 +54,7 @@ proof of the trick:
 = p(\tau;\theta)\,\nabla_\theta \log p(\tau;\theta)
 \end{equation}
 
+$$
 \begin{align}
 \nabla_\theta \mathbb{E}_{\tau\sim\pi_\theta}[R(\tau)]
 &= \nabla_\theta \int p_{\pi_\theta}(\tau)\,R(\tau)\,\mathrm{d}\tau \\
@@ -62,6 +63,7 @@ proof of the trick:
 &= \mathbb{E}_{\tau\sim\pi_\theta}\bigl[\nabla_\theta \log p_{\pi_\theta}(\tau)\,R(\tau)\bigr] \\
 &= \nabla_\theta J(\theta)\,.
 \end{align}
+$$
 
 
 \bigskip
