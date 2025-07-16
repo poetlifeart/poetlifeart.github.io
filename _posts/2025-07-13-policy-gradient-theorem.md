@@ -66,9 +66,9 @@ $$
 $$
 
 
-\bigskip
 
-\noindent\textbf{ Decompose \(\log p_{\pi_{\theta}}(\tau)\):}
+
+ Decompose $(\log p_{\pi_{\theta}}(\tau)\)$:
 
 $$
 p(\tau)
