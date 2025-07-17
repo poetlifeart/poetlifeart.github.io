@@ -93,51 +93,97 @@ $$
 
 ## 3. Introducing the Reward-to-Go (Causality)
 
-Only future rewards \\(r_{t'}\\) for \\(t'\ge t\\) depend on \\(a_t\\), so we replace the full return with the **reward-to-go**:
+Only future rewards depend on \\a_t\\. Dropping past rewards:
+(mathematically if you write out the integral terms that do not depend on the integrator 
+factor out and you are left with the gradient of integral of a probability which is the constant 1 and hence zero)
 
 $$
-R_{t:\,H}(\tau) = \sum_{t'=t}^H \gamma^{t'-t} r(s_{t'},a_{t'}).
+\nabla_{\theta}J(\theta)
+= \sum_{t=0}^{H}\mathbb{E}_{\tau}\Bigl[\nabla_{\theta}\log\pi_{\theta}(a_t\mid s_t)\,
+\underbrace{\sum_{t'=t}^{H}\gamma^{t'}r(s_{t'},a_{t'})}_{\text{reward‐to‐go}}\Bigr].
+\]
+Factor out \(\gamma^t\):
+$$
+= \sum_{t=0}^{H}\mathbb{E}_{\tau}\Bigl[\gamma^t\,\nabla_{\theta}\log\pi_{\theta}(a_t\mid s_t)\,
+\sum_{t'=t}^{H}\gamma^{\,t'-t}r(s_{t'},a_{t'})\Bigr].
 $$
 
-The gradient becomes:
+Add a Baseline (As to what a baseline is and why we subtract see pp 329 of Sutton, but here we give the proof)}
 
-$$
-\nabla_\theta J(\theta)
-= \sum_{t=0}^H \mathbb{E}_{\tau}\bigl[\gamma^t \nabla_\theta\log\pi_\theta(a_t\mid s_t)\,R_{t:\,H}(\tau)\bigr].
-$$
-
-## 4. Subtracting a Baseline for Variance Reduction
-
-To reduce variance without bias, subtract a state-dependent baseline \\(b(s_t)\\):
-
-$$
-\nabla_\theta J(\theta)
-= \sum_{t=0}^H \mathbb{E}_{\tau}\Bigl[\gamma^t \nabla_\theta\log\pi_\theta(a_t\mid s_t)
-\bigl(R_{t:\,H}(\tau) - b(s_t)\bigr)\Bigr].
-$$
-
-One can show:
-$$
-\mathbb{E}_{\tau}[\nabla_\theta\log\pi_\theta(a_t\mid s_t)\,b(s_t)] = 0,
-$$
-so the estimator remains unbiased.
-
-## 5. Infinite-Horizon Form and Discounted Occupancy
-
-Defining the **discounted state occupancy**:
-
-$$
-d_{\pi}(s) = (1-\gamma)\sum_{t=0}^\infty \gamma^t d^\pi_t(s),
-$$
-
-we obtain the infinite-horizon gradient:
-
-$$
-\nabla_\theta J(\theta)
-= \frac{1}{1-\gamma} \mathbb{E}_{s\sim d_{\pi},\,a\sim\pi_\theta}
-[\nabla_\theta\log\pi_\theta(a\mid s)\,A^\pi(s,a)],
-$$
-
-where \\(A^\pi(s,a)\\) is the advantage function estimate.
+Subtract a baseline \\b(s_t)\\:
+\[
+\nabla_{\theta}J(\theta)
+= \sum_{t=0}^{H}\mathbb{E}_{\tau}\Bigl[\gamma^t\,\nabla_{\theta}\log\pi_{\theta}(a_t\mid s_t)\,
+\Bigl(\sum_{t'=t}^{H}\gamma^{\,t'-t}r(s_{t'},a_{t'}) - b(s_t)\Bigr)\Bigr].
+\]
 
 
+proof that you can subtract the base so long as it is a function of state alone:
+
+\begin{align*}
+\nabla_{\theta} J(\pi_{\theta}) 
+&= \mathbb{E}_{\tau\sim p_{\pi_{\theta}}(\tau)}\left[
+\sum_{t=0}^{H}\gamma^{t}\nabla_{\theta}\log\pi_{\theta}(a_{t}|s_{t})\left(\sum_{t'=t}^{H}\gamma^{t'-t}r(s_{t'},a_{t'}) - b(s_{t})\right)
+\right]
+\end{align*}
+
+We explicitly verify that the baseline is unbiased:
+\begin{align*}
+&\mathbb{E}_{\tau\sim p_{\pi_{\theta}}(\tau)}\left[
+\sum_{t=0}^{H}\gamma^{t}\nabla_{\theta}\log\pi_{\theta}(a_{t}|s_{t}) b(s_{t})
+\right] \\
+&\quad= \sum_{t=0}^{H}\gamma^{t}\mathbb{E}_{\tau\sim p_{\pi_{\theta}}(\tau)}\left[
+b(s_{t})\mathbb{E}_{a_{t}\sim\pi_{\theta}(a_{t}|s_{t})}\left[\nabla_{\theta}\log\pi_{\theta}(a_{t}|s_{t})\middle|s_{t}\right]
+\right] \\
+&\quad= \sum_{t=0}^{H}\gamma^{t}\mathbb{E}_{\tau\sim p_{\pi_{\theta}}(\tau)}\left[
+b(s_{t})\int_{a_t}\pi_{\theta}(a_{t}|s_{t})\nabla_{\theta}\log\pi_{\theta}(a_{t}|s_{t})\,da_{t}
+\right] \\
+&\quad= \sum_{t=0}^{H}\gamma^{t}\mathbb{E}_{\tau\sim p_{\pi_{\theta}}(\tau)}\left[
+b(s_{t})\int_{a_t}\nabla_{\theta}\pi_{\theta}(a_{t}|s_{t})\,da_{t}
+\right] \\
+&\quad= \sum_{t=0}^{H}\gamma^{t}\mathbb{E}_{\tau\sim p_{\pi_{\theta}}(\tau)}\left[
+b(s_{t}) \cdot 0
+\right] \\
+&\quad= 0
+\end{align*}
+
+
+\vspace{2em}
+
+% Erratum note: finite‐ to infinite‐horizon carry–over typo
+\noindent
+In the finite‐horizon derivation we write
+\[
+\nabla_{\theta}
+= \sum_{t=0}^{H}
+\mathbb{E}_{s_{t}\sim d_{t}^{\pi},\,a_{t}\sim\pi_{\theta}}
+\bigl[\gamma^{t}\,\nabla_{\theta}\log\pi_{\theta}(a_{t}\mid s_{t})\,\hat{A}(s_{t},a_{t})\bigr].
+\]
+Here both the state‐distribution \(d_{t}^{\pi}\) and the discount weight \(\gamma^{t}\) are explicitly indexed by \(t\).
+
+When passing to the infinite‐horizon form, those two pieces are folded into a single “discounted occupancy” measure
+\[
+d^{\pi}(s)\;=\;(1-\gamma)\sum_{t=0}^{\infty}\gamma^{t}\,d_{t}^{\pi}(s),
+\]
+We can now absorb the discount factor and the sum into the measure $d_{t}^{\pi}(s)$ (tutorial characterizes this as "dropping" the discount factor but this is not really an accurate description)  so that the gradient can be written as
+\[
+\nabla_{\theta}J
+= \frac{1}{1-\gamma}\,
+\mathbb{E}_{s\sim d^{\pi},\,a\sim\pi_{\theta}}
+\bigl[\nabla_{\theta}\log\pi_{\theta}(a\mid s)\,\hat{A}(s,a)\bigr].
+\]
+
+The stray subscript “\(_t\)” on the state distribution in the infinite‐horizon equation was simply a leftover from the finite‐horizon version. The correct infinite‐horizon line should read
+\[
+\nabla_{\theta}J
+= \frac{1}{1-\gamma}\,
+\mathbb{E}_{s\sim d^{\pi}(s),\,a\sim\pi_{\theta}(a\mid s)}
+\bigl[\nabla_{\theta}\log\pi_{\theta}(a\mid s)\,\hat{A}(s,a)\bigr],
+\]
+with no time index on \(d^{\pi}\).
+
+While a simple time-dependent baseline $b_t = \frac{1}{N} \sum_{i=1}^N R_{i,t}$ is often used to reduce variance in Monte Carlo policy gradient estimators, it does not represent a true value function $V(s_t) = \mathbb{E}[R_t \mid s_t]$. This is because $b_t$ marginalizes over all states $s_t$ encountered at time $t$ rather than conditioning on a specific state. Thus, it captures only the average return under the state visitation distribution $d_t(s)$, not the expected return from a particular state $s_t = s$. Although useful for variance reduction, this approach lacks the precision and generalization capabilities of a learned, state-dependent baseline.
+
+so there is enough data that we achiever epsilon under offline data. Now we use this policy and measure and compare the policy with supposed one which is correct at this point we do not actually have the labels so the l is theoretical 
+
+\end{document}
