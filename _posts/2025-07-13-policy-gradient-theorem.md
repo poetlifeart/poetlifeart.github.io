@@ -101,8 +101,8 @@ $$
 \nabla_{\theta}J(\theta)
 = \sum_{t=0}^{H}\mathbb{E}_{\tau}\Bigl[\nabla_{\theta}\log\pi_{\theta}(a_t\mid s_t)\,
 \underbrace{\sum_{t'=t}^{H}\gamma^{t'}r(s_{t'},a_{t'})}_{\text{reward‐to‐go}}\Bigr].
-\]
-Factor out \(\gamma^t\):
+$$
+Factor out \\gamma^t\\:
 $$
 = \sum_{t=0}^{H}\mathbb{E}_{\tau}\Bigl[\gamma^t\,\nabla_{\theta}\log\pi_{\theta}(a_t\mid s_t)\,
 \sum_{t'=t}^{H}\gamma^{\,t'-t}r(s_{t'},a_{t'})\Bigr].
@@ -111,23 +111,28 @@ $$
 Add a Baseline (As to what a baseline is and why we subtract see pp 329 of Sutton, but here we give the proof)}
 
 Subtract a baseline \\b(s_t)\\:
-\[
+$$
 \nabla_{\theta}J(\theta)
 = \sum_{t=0}^{H}\mathbb{E}_{\tau}\Bigl[\gamma^t\,\nabla_{\theta}\log\pi_{\theta}(a_t\mid s_t)\,
 \Bigl(\sum_{t'=t}^{H}\gamma^{\,t'-t}r(s_{t'},a_{t'}) - b(s_t)\Bigr)\Bigr].
-\]
+$$
 
 
 proof that you can subtract the base so long as it is a function of state alone:
 
+
+$$
 \begin{align*}
 \nabla_{\theta} J(\pi_{\theta}) 
 &= \mathbb{E}_{\tau\sim p_{\pi_{\theta}}(\tau)}\left[
 \sum_{t=0}^{H}\gamma^{t}\nabla_{\theta}\log\pi_{\theta}(a_{t}|s_{t})\left(\sum_{t'=t}^{H}\gamma^{t'-t}r(s_{t'},a_{t'}) - b(s_{t})\right)
 \right]
 \end{align*}
+$$
 
 We explicitly verify that the baseline is unbiased:
+
+$$
 \begin{align*}
 &\mathbb{E}_{\tau\sim p_{\pi_{\theta}}(\tau)}\left[
 \sum_{t=0}^{H}\gamma^{t}\nabla_{\theta}\log\pi_{\theta}(a_{t}|s_{t}) b(s_{t})
@@ -146,34 +151,34 @@ b(s_{t}) \cdot 0
 \right] \\
 &\quad= 0
 \end{align*}
-
+$$
 
 \vspace{2em}
 
-% Erratum note: finite‐ to infinite‐horizon carry–over typo
-\noindent
+Erratum note: finite‐ to infinite‐horizon carry–over typo
+
 In the finite‐horizon derivation we write
-\[
+$$
 \nabla_{\theta}
 = \sum_{t=0}^{H}
 \mathbb{E}_{s_{t}\sim d_{t}^{\pi},\,a_{t}\sim\pi_{\theta}}
 \bigl[\gamma^{t}\,\nabla_{\theta}\log\pi_{\theta}(a_{t}\mid s_{t})\,\hat{A}(s_{t},a_{t})\bigr].
-\]
+$$
 Here both the state‐distribution \(d_{t}^{\pi}\) and the discount weight \(\gamma^{t}\) are explicitly indexed by \(t\).
 
 When passing to the infinite‐horizon form, those two pieces are folded into a single “discounted occupancy” measure
-\[
+$$
 d^{\pi}(s)\;=\;(1-\gamma)\sum_{t=0}^{\infty}\gamma^{t}\,d_{t}^{\pi}(s),
-\]
-We can now absorb the discount factor and the sum into the measure $d_{t}^{\pi}(s)$ (tutorial characterizes this as "dropping" the discount factor but this is not really an accurate description)  so that the gradient can be written as
-\[
+$$
+We can now absorb the discount factor and the sum into the measure \\d_{t}^{\pi}(s)\\ (tutorial characterizes this as "dropping" the discount factor but this is not really an accurate description)  so that the gradient can be written as
+$$
 \nabla_{\theta}J
 = \frac{1}{1-\gamma}\,
 \mathbb{E}_{s\sim d^{\pi},\,a\sim\pi_{\theta}}
 \bigl[\nabla_{\theta}\log\pi_{\theta}(a\mid s)\,\hat{A}(s,a)\bigr].
-\]
+$$
 
-The stray subscript “\(_t\)” on the state distribution in the infinite‐horizon equation was simply a leftover from the finite‐horizon version. The correct infinite‐horizon line should read
+The stray subscript “\\(_t\\)” on the state distribution in the infinite‐horizon equation was simply a leftover from the finite‐horizon version. The correct infinite‐horizon line should read
 \[
 \nabla_{\theta}J
 = \frac{1}{1-\gamma}\,
