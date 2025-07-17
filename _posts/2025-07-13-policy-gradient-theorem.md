@@ -1,3 +1,15 @@
+---
+title: "Deriving the Policy Gradient Theorem"
+date: 2025-07-13
+tags:
+- reinforcement learning
+- policy gradient
+- mathematics
+layout: post
+---
+
+
+
 <!-- Load MathJax so LaTeX renders in GitHub Pages without touching layouts -->
 <script>
   window.MathJax = {
@@ -8,15 +20,6 @@
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
----
-title: "Deriving the Policy Gradient Theorem"
-date: 2025-07-13
-tags:
-  - reinforcement learning
-  - policy gradient
-  - mathematics
-layout: post
----
 
 In this post, we walk through the step-by-step derivation of the **Policy Gradient Theorem**, highlighting the log-derivative trick, reward-to-go (causal) formulation, and the incorporation of a baseline for variance reduction. All equations are rendered with MathJax.
 
@@ -93,7 +96,7 @@ $$
 
 ## 3. Introducing the Reward-to-Go (Causality)
 
-Only future rewards depend on \\a_t\\. Dropping past rewards:
+Only future rewards depend on \\(a_t\\). Dropping past rewards:
 (mathematically if you write out the integral terms that do not depend on the integrator 
 factor out and you are left with the gradient of integral of a probability which is the constant 1 and hence zero)
 
@@ -113,7 +116,7 @@ $$
 
 Add a Baseline (As to what a baseline is and why we subtract see pp 329 of Sutton, but here we give the proof)}
 
-Subtract a baseline \\b(s_t)\\:
+Subtract a baseline \\(b(s_t)\\):
 $$
 \nabla_{\theta}J(\theta)
 = \sum_{t=0}^{H}\mathbb{E}_{\tau}\Bigl[\gamma^t\,\nabla_{\theta}\log\pi_{\theta}(a_t\mid s_t)\,
@@ -176,7 +179,7 @@ $$
 d^{\pi}(s)\;=\;(1-\gamma)\sum_{t=0}^{\infty}\gamma^{t}\,d_{t}^{\pi}(s),
 $$
 
-We can now absorb the discount factor and the sum into the measure \\(d_{t}^{\pi}(s)\\) (tutorial characterizes this as "dropping" the discount factor but this is not really an accurate description)  so that the gradient can be written as\
+We can now absorb the discount factor and the sum into the measure \\(d_{t}^{\pi}(s)\\) (tutorial characterizes this as "dropping" the discount factor but this is not really an accurate description)  so that the gradient can be written as
 
 $$
 \nabla_{\theta}J
