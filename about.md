@@ -4,11 +4,11 @@ title: About
 permalink: /about/
 ---
 
-AI Matheamtical Musing 
+AI Mathematical Musing 
 
 ### More Information
 
 The initial plan is to go through some topics in Offline RL and Flow Matching. 
 ### Contact me
 
-[@domain.com](mailto:vahid@engramsciences.com)
+[@engramsciences.com](mailto:vahid@engramsciences.com)
