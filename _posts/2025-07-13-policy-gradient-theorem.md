@@ -103,7 +103,7 @@ $$
 \underbrace{\sum_{t'=t}^{H}\gamma^{t'}r(s_{t'},a_{t'})}_{\text{reward‐to‐go}}\Bigr].
 $$
 
-Factor out \\\gamma^t\\:
+Factor out \\(\gamma^t\\):
 
 $$
 
