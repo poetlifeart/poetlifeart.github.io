@@ -6,8 +6,6 @@ permalink: /about/
 
 AI Mathematical Musing 
 
-### More Information
-
 The initial plan is to go through some topics in Offline RL and Flow Matching. 
 ### Contact me
 
