@@ -68,13 +68,15 @@ $$
 
 
 
- Decompose  \\(\log p_{\pi_{\theta}}(\tau)\\)
+Decompose  \\(\log p_{\pi_{\theta}}(\tau)\\)
 
 $$
 p(\tau)
 = \rho_0(s_0)\,\prod_{t=0}^{H}\pi_{\theta}(a_t\mid s_t)\,P(s_{t+1}\mid s_t,a_t),
 $$
+
 so
+
 $$
 \nabla_{\theta}\log p_{\pi_{\theta}}(\tau)
 = \sum_{t=0}^{H}\nabla_{\theta}\log\pi_{\theta}(a_t\mid s_t).
@@ -87,6 +89,8 @@ $$
 = \mathbb{E}_{\tau}\Bigl[\Bigl(\sum_{t=0}^{H}\nabla_{\theta}\log\pi_{\theta}(a_t\mid s_t)\Bigr)\,R(\tau)\Bigr]
 = \sum_{t=0}^{H}\mathbb{E}_{\tau}\bigl[\nabla_{\theta}\log\pi_{\theta}(a_t\mid s_t)\,R(\tau)\bigr].
 $$
+
+
 ## 3. Introducing the Reward-to-Go (Causality)
 
 Only future rewards \\(r_{t'}\\) for \\(t'\ge t\\) depend on \\(a_t\\), so we replace the full return with the **reward-to-go**:
