@@ -1,5 +1,5 @@
 ---
-title: "Deriving the Policy Gradient Theorem"
+title: "Offline RL"
 date: 2025-07-13
 tags:
 - reinforcement learning
@@ -21,11 +21,12 @@ layout: post
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 
-In this post, we walk through the step-by-step derivation of the **Policy Gradient Theorem**, highlighting the log-derivative trick, reward-to-go (causal) formulation, and the incorporation of a baseline for variance reduction. All equations are rendered with MathJax.
+In this post, we walk through the step-by-step derivations of some of the math in the 
+paper [Link text](https://arxiv.org/abs/2005.01643))  "Offline Reinforcement Learning: Tutorial, Review, and Perspectives on Open Problems", at times provide a deeper discussion and correct some minor mistakes and typoes in that paper. 
 
 ## 1. Objective: Maximizing Expected Return
 
-We aim to maximize the expected return under a parameterized policy \\(\pi_\theta\\):
+Let's start with (2) in the paper. We aim to maximize the expected return under a parameterized policy \\(\pi_\theta\\):
 
 $$
 \begin{align}
@@ -202,6 +203,6 @@ with no time index on \\(d^{\pi}\\).
 
 While a simple time-dependent baseline \\(b_t = \frac{1}{N} \sum_{i=1}^N R_{i,t}\\) is often used to reduce variance in Monte Carlo policy gradient estimators, it does not represent a true value function \\(V(s_t) = \mathbb{E}[R_t \mid s_t]\\). This is because \\(b_t\\) marginalizes over all states \\(s_t\\) encountered at time \\(t\\) rather than conditioning on a specific state. Thus, it captures only the average return under the state visitation distribution \\(d_t(s)\\), not the expected return from a particular state \\(s_t = s\\). Although useful for variance reduction, this approach lacks the precision and generalization capabilities of a learned, state-dependent baseline.
 
-so there is enough data that we achiever epsilon under offline data. Now we use this policy and measure and compare the policy with supposed one which is correct at this point we do not actually have the labels so the l is theoretical 
+
 
 
