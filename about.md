@@ -4,12 +4,11 @@ title: About
 permalink: /about/
 ---
 
-Some information about you!
+AI Matheamtical Musing 
 
 ### More Information
 
-A place to include any other types of information that you'd like to include about yourself.
-
+The initial plan is to go through some topics in Offline RL and Flow Matching. 
 ### Contact me
 
-[email@domain.com](mailto:email@domain.com)
+[@domain.com](mailto:vahid@engramsciences.com)
