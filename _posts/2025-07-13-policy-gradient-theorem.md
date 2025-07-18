@@ -22,7 +22,7 @@ layout: post
 
 
 In this post, we walk through the step-by-step derivations of some of the math in the 
-paper [ Offline Reinforcement Learning: Tutorial, Review, and Perspectives on Open Problems](https://arxiv.org/abs/2005.01643), at times provide a deeper discussion and correct some minor mistakes and typoes in that paper. 
+paper [ Offline Reinforcement Learning: Tutorial, Review, and Perspectives on Open Problems](https://arxiv.org/abs/2005.01643), at times provide a deeper discussion and correct minor mistakes and typoes in that paper. 
 
 ## 1. Objective: Maximizing Expected Return
 
