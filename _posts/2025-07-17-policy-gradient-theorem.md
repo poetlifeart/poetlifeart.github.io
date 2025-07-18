@@ -1,3 +1,26 @@
+---
+title: "Discrete Flow Matching"
+date: 2025-07-17
+tags:
+- flow matching 
+- mathematics
+layout: post
+---
+
+
+
+<!-- Load MathJax so LaTeX renders in GitHub Pages without touching layouts -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(','\\)'], ['\\[','\\]']]
+    }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
 This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2025.1.7)  28 MAY 2025 04:58
 entering extended mode
  restricted \write18 enabled.
@@ -154,94 +177,94 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 LaTeX Warning: No \author given.
 
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no œ in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no  in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no œ in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no  in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no  in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
 LaTeX Font Info:    Try loading font information for OMS+cmr on input line 14.
 (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 14.
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no ” in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no ” in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no  in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no œ in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no  in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no œ in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no  in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no ™ in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no œ in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no  in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no  in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no ™ in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no ” in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no ™ in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no ™ in font cmr10!
-Missing character: There is no â in font cmbx12!
-Missing character: There is no † in font cmbx12!
-Missing character: There is no ’ in font cmbx12!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmbx12!
+Missing character: There is no ï¿½ in font cmbx12!
+Missing character: There is no ï¿½ in font cmbx12!
  [2]
-Missing character: There is no â in font cmti10!
-Missing character: There is no † in font cmti10!
-Missing character: There is no ’ in font cmti10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no œ in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no  in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no œ in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no  in font cmr10!
+Missing character: There is no ï¿½ in font cmti10!
+Missing character: There is no ï¿½ in font cmti10!
+Missing character: There is no ï¿½ in font cmti10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
 
 Overfull \hbox (4.11313pt too wide) in paragraph at lines 108--109
 \OT1/cmr/m/n/10 Introduce an aux-il-iary cou-pling $\OML/cmm/m/it/10 Z \OT1/cmr
@@ -250,18 +273,18 @@ $\OML/cmm/m/it/10 i \OMS/cmsy/m/n/10 2 f\OT1/cmr/m/n/10 1\OML/cmm/m/it/10 ; []
 ; d\OMS/cmsy/m/n/10 g$\OT1/cmr/m/n/10 ,
  []
 
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no œ in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no  in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no œ in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no  in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
 
 Overfull \hbox (18.11595pt too wide) detected at line 127
 [][]\OML/cmm/m/it/10 X[] \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 X[] \OMS/cmsy/m/n/1
@@ -272,27 +295,27 @@ m/n/10 = \OML/cmm/m/it/10 x[][] \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 t;  [][]X[]
  x[][] \OT1/cmr/m/n/10 = 1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 t:
  []
 
-Missing character: There is no â in font cmbx12!
-Missing character: There is no € in font cmbx12!
-Missing character: There is no  in font cmbx12!
-Missing character: There is no â in font cmbx12!
-Missing character: There is no † in font cmbx12!
-Missing character: There is no ’ in font cmbx12!
-Missing character: There is no â in font cmr10!
-Missing character: There is no † in font cmr10!
-Missing character: There is no ’ in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no  in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no œ in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no “ in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no  in font cmr10!
+Missing character: There is no ï¿½ in font cmbx12!
+Missing character: There is no ï¿½ in font cmbx12!
+Missing character: There is no ï¿½ in font cmbx12!
+Missing character: There is no ï¿½ in font cmbx12!
+Missing character: There is no ï¿½ in font cmbx12!
+Missing character: There is no ï¿½ in font cmbx12!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
 
 Overfull \hbox (68.0789pt too wide) detected at line 155
 \OML/cmm/m/it/10 u[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 y[]; x\OT1/cmr/m/n/10 ) =
@@ -306,9 +329,9 @@ cmm/m/it/10 x[] \OMS/cmsy/m/n/10 j \OML/cmm/m/it/10 x\OT1/cmr/m/n/10 )\OML/cmm/
 m/it/10 :
  []
 
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no  in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
 
 Overfull \hbox (41.84436pt too wide) detected at line 171
 \OML/cmm/m/it/10 P[]X[] \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 y[] \OMS/cmsy/m/n/10
@@ -323,24 +346,24 @@ t/10 :
  []
 
 [3]
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no  in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no † in font cmr10!
-Missing character: There is no ’ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
 
 Overfull \hbox (3.86166pt too wide) in paragraph at lines 177--178
 \OT1/cmr/m/n/10 This makes ex-plicit how the learned pos-te-rior per co-or-di-n
 ate drives the sourcesink
  []
 
-Missing character: There is no â in font cmbx12!
-Missing character: There is no € in font cmbx12!
-Missing character: There is no  in font cmbx12!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no  in font cmr10!
+Missing character: There is no ï¿½ in font cmbx12!
+Missing character: There is no ï¿½ in font cmbx12!
+Missing character: There is no ï¿½ in font cmbx12!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
 
 Overfull \hbox (49.42064pt too wide) detected at line 205
 \OML/cmm/m/it/10 P[]X[] \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 y[] \OMS/cmsy/m/n/10
@@ -354,46 +377,46 @@ L/cmm/m/it/10 o\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 h\OT1/cmr/m/n/10 )\OML/cmm/m/i
 t/10 :
  []
 
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no  in font cmr10!
-Missing character: There is no â in font cmbx12!
-Missing character: There is no € in font cmbx12!
-Missing character: There is no  in font cmbx12!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmbx12!
+Missing character: There is no ï¿½ in font cmbx12!
+Missing character: There is no ï¿½ in font cmbx12!
 
 Overfull \hbox (5.92294pt too wide) in paragraph at lines 211--211
 []\OT1/cmr/bx/n/14.4 PerCoordinate Pos-te-rior Pa-ram-e-ter-i-za-tion and
  []
 
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no œ in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no “ in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no  in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
 
 LaTeX Warning: Reference `sec:implementation' on page 4 undefined on input line
  217.
 
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no  in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no  in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
 [4]
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no  in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no ™ in font cmr10!
-Missing character: There is no â in font cmr10!
-Missing character: There is no € in font cmr10!
-Missing character: There is no  in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
+Missing character: There is no ï¿½ in font cmr10!
  [5] (./discreteflow1.aux)
 
 LaTeX Warning: There were undefined references.
