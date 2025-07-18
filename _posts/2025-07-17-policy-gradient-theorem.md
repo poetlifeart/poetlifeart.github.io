@@ -22,8 +22,8 @@ layout: post
 
 ## Table of Contents
 - [Introduction](#introduction)
-- [Training Procedure](#Training Procedure)
-- [Inference Procedure](## Inference Procedure)
+- [Training Procedure](#Training Procedure )
+- [Inference Procedure](#Inference Procedure)
 
 
 ## Introduction {#introduction} 
@@ -44,7 +44,7 @@ The basic idea is straightforward:
 
 
 
-## Training Procedure {## Training Procedure}
+## Training Procedure {# Training Procedure}
 
 1\. Sample a data point:
 
@@ -90,7 +90,7 @@ $$
 L(\theta) = -\mathbb{E}_{t,X_0,X_1,X_t}\sum_{i=1}^d \log p^{\theta,i}_{1|t}(X_1^i|X_t)+\text{const}.
 $$
 
-## Inference Procedure {##  Inference Procedure}
+## Inference Procedure {# Inference Procedure}
 
 During inference, reverse the process:
 
