@@ -21,434 +21,258 @@ layout: post
 
 
 
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2025.1.7)  28 MAY 2025 04:58
-entering extended mode
- restricted \write18 enabled.
- %&-line parsing enabled.
-**discreteflow1.tex
-(./discreteflow1.tex
-LaTeX2e <2017-04-15>
-Babel <3.18> and hyphenation patterns for 3 language(s) loaded.
-(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
-Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
-(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
-File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+This tutorial bridges the gap between the rigorous mathematical formulation of \emph{Discrete Flow Matching} for continuous time Markov chains and a minimal, practical PyTorch implementation.  We begin by defining a factorized mixture path between a simple “source” distribution and an observed “target” distribution, derive the coordinate‐wise CTMC velocities via the Kolmogorov forward equation, and show how to assemble those into a learnable model.  Each step of the derivation is  followed by the code that implements it.
+\medskip
+You will find:
+\begin{itemize}
+	\item A concise statement of each mathematical object (probability path, Bregman divergence, CTMC velocity, posterior parameterization).
+	\item The exact lines of code—no hidden helpers—showing how to (1) sample the mixture path, (2) compute the matching loss, and (3) run the coordinate‐wise Euler sampler.
+	\item Tips on how to factorize over dimensions so that both training and sampling remain tractable even in high dimensions.
+\end{itemize}
+
+The basic idea is straightforward: 
+	
+
+	\begin{enumerate}
+		\item Sample a data point 
+		\[
+		X_1 \sim q_{\mathrm{data}}.
+		\]
+		This is your “target” $(X_i^1)$ in every coordinate.
+		\item Sample a “source” 
+		\[
+		X_0
+		\]
+		from your simple prior (e.g.\ uniform or noise).
+		\item Pick a time 
+		\[
+		t \sim U[0,1].
+		\]
+		\item Draw the intermediate state 
+		\[
+		X_t
+		\]
+		from the mixture path
+		\[
+		p_{t\mid0,1}(x\mid X_0,X_1)
+		= \prod_{i=1}^D
+		\Bigl[
+		\kappa(t)\,\delta(x_i,\,X_i^1)
+		+\bigl(1-\kappa(t)\bigr)\,\delta(x_i,\,X_i^0)
+		\Bigr].
+		\]
+		In other words, each coordinate \(i\) of \(X_t\) is \(X_i^1\) with probability \(\kappa(t)\), or \(X_i^0\) otherwise.
+		\item Compute the loss using the known true generator (which depends on \(X_i^1\)) and your model’s posterior
+		\[
+		p^{\theta,i}_{1\mid t}(\,\cdot\mid X_t).
+		\]
+		Because \(X_i^1\) is always the data, it drives the “true” velocity in every coordinate, and \(X_t\) is exactly where you evaluate both true and model velocities.
+		
+		\medskip
+		$p^{\theta,i}_{1\mid t}(\,\cdot\mid X_t)$ is learned through a simple cross‐entropy objective:
+		\[
+		L(\theta)
+		=-\mathbb{E}_{\,t,X_0,X_1,X_t}\!\sum_{i=1}^d
+		\log p^{\theta,i}_{1\mid t}\bigl(X_1^i\mid X_t\bigr)
+		\;+\;\mathrm{const}.
+		\]
+	\end{enumerate}
+	
+	\medskip
+	
+	\noindent\textbf{During inference, you reverse this:}
+	\begin{enumerate}
+		\item Start from \(X_0\) drawn from the prior.
+		\item Iteratively step forward in \(t\) using the learned posterior \(p^{\theta,i}_{1\mid t}\) to sample each coordinate’s jump, until you reach \(X_1\)—your generated sample.
+	\end{enumerate}
+	
+	\smallskip
+	
+	\noindent\emph{Note:} 
+	\(X_i^1\) in the formulas is always the data’s coordinate \(i\).  
+	\(X_t\) during training is sampled via the chosen mixture path \(p_{t\mid0,1}\), ensuring the model learns to match that path’s velocity field.  
+	
+	\section{Factorized Source→Sink Velocities}
+	
+	Because both the probability path and its velocity factorize over coordinates, we may treat each dimension independently. Writing a full state as \(x=(x_1,\dots,x_d)\) and a proposed next state as \(y=(y_1,\dots,y_d)\), we have
+	\[
+	q_t(x)=\prod_{i=1}^d q^i_t(x_i),
+	\]
+	and the full rate vector
+	\[
+	u_t(y,x)
+	=\sum_{i=1}^d
+	\underbrace{\delta\bigl(y_{\bar i},\,x_{\bar i}\bigr)}_{\displaystyle \prod_{j\neq i}\delta(y_j,x_j)}
+	\;u^i_t\bigl(y_i,\,x\bigr).
+	\]
+	Here
+	\[
+	\delta(y_{\bar i},x_{\bar i})
+	=\prod_{j\neq i}\delta(y_j,x_j)
+	\]
+	ensures that only coordinate \(i\) is allowed to move, and
+	\[
+	u^i_t(y_i,x)\in\mathbb{R}
+	\]
+	is exactly the \emph{source→sink rate} for changing coordinate \(i\) from its current value \(x_i\) (the “source”) to a new value \(y_i\) (the “sink”). By factorizing both \(q_t\) and \(u_t\) this way, we reduce the high-dimensional CTMC rate problem into \(d\) independent scalar rate functions \(u^i_t\).
+	
+	
+\section{Mixture-path Construction}
+
+Introduce an auxiliary coupling \(Z=(X_0,X_1)\).  For each coordinate \(i\in\{1,\dots,d\}\), define the conditional marginal path
+\[
+p^i_{t\mid0,1}(x_i\mid x_0,x_1)
+\;=\;
+\kappa(t)\,\delta\bigl(x_i,x_{1,i}\bigr)
+\;+\;
+\bigl(1-\kappa(t)\bigr)\,\delta\bigl(x_i,x_{0,i}\bigr)\,,
+\]
+where we choose the simple scheduler
+\[
+\kappa(t)=t,
+\qquad
+\dot\kappa(t)=1.
+\]
+Under this choice, at time \(t\) each coordinate \(X^i_t\) equals its “sink” value \(X^i_1\) with probability \(t\), and its “source” value \(X^i_0\) with probability \(1-t\).  In other words,
+\[
+\Pr\bigl[X^i_t = X^i_1 \mid X_0=x_0,\,X_1=x_1\bigr] = t,
+\qquad
+\Pr\bigl[X^i_t = X^i_0 \mid X_0=x_0,\,X_1=x_1\bigr] = 1-t.
+\]
+Thus the full factorized path is
+\[
+p_{t\mid0,1}(x\mid x_0,x_1)
+\;=\;\prod_{i=1}^d p^i_{t\mid0,1}(x_i\mid x_0,x_1)\,. 
+\]
+
+\section{Posterior‐driven Source→Sink Velocities}
+
+Once we have the pure source→sink rates 
+\[
+u^i_t(y_i, x\mid x_0, x_1)
+=\frac{1}{1-t}\Bigl[\delta(y_i,x_{1,i})-\delta(y_i,x_i)\Bigr]
+\]
+for the mixture path, we introduce a learnable per‐coordinate “target–initial” posterior
+\[
+p_{\theta,i,1\mid t}(x_{1,i}\mid x)
+\approx p_{i,1\mid t}(x_{1,i}\mid x)\,.
+\]
+We then assemble the marginal velocity as
+\[
+u^i_t(y_i,x)
+=\sum_{x_{1,i}}
+u^i_t(y_i,x\mid x_0,x_1)\;p_{\theta,i,1\mid t}(x_{1,i}\mid x)
+=\frac{1}{1-t}
+\sum_{x_{1,i}}
+\Bigl[\delta(y_i,x_{1,i})-\delta(y_i,x_i)\Bigr]\,
+p_{\theta,i,1\mid t}(x_{1,i}\mid x).
+\]
+Plugging this into the Euler‐step transition kernel
+\[
+P\bigl(X_{t+h,i}=y_i\mid X_t=x\bigr)
+=\delta(y_i,x_i)+h\,u^i_t(y_i,x)+o(h)
+\]
+yields
+\[
+P\bigl(X_{t+h,i}=y_i\mid X_t=x\bigr)
+=\sum_{x_{1,i}}
+\Bigl[
+\delta(y_i,x_i)
++\tfrac{h}{1-t}\bigl(\delta(y_i,x_{1,i})-\delta(y_i,x_i)\bigr)
+\Bigr]\,
+p_{\theta,i,1\mid t}(x_{1,i}\mid x)
++o(h).
+\]
+In practice, sampling is implemented coordinate‐wise by:
+\begin{enumerate}
+	\item Draw \(x_{1,i}\sim p_{\theta,i,1\mid t}(\cdot\mid x)\).
+	\item With probability \(\frac{h}{1-t}\), set \(X_{t+h,i}=x_{1,i}\); otherwise keep \(X_{t+h,i}=x_i\).
+\end{enumerate}
+This makes explicit how the learned posterior per coordinate drives the source→sink transitions during sampling.
+	
+	
+\section{Coordinate‐wise Euler Sampling}
+
+For a small time step \(h\), the CTMC transition kernel factorizes over coordinates:
+\[
+P\bigl(X_{t+h,i}=y_i \mid X_t=x\bigr)
+=\delta(y_i,x_i)+h\,u^i_t(y_i,x)+o(h).
+\]
+Substituting our posterior‐assembled velocity
+\[
+u^i_t(y_i,x)
+=\frac{1}{1-t}
+\sum_{x_{1,i}}
+\bigl[\delta(y_i,x_{1,i})-\delta(y_i,x_i)\bigr]\,
+p_{\theta,i,1\mid t}(x_{1,i}\mid x),
+\]
+we obtain
+\[
+P\bigl(X_{t+h,i}=y_i \mid X_t=x\bigr)
+=\sum_{x_{1,i}}
+\Bigl[
+\delta(y_i,x_i)
++\frac{h}{1-t}\bigl(\delta(y_i,x_{1,i})-\delta(y_i,x_i)\bigr)
+\Bigr]\,
+p_{\theta,i,1\mid t}(x_{1,i}\mid x)
++o(h).
+\]
+Hence the coordinate‐wise sampling algorithm is:
+\begin{enumerate}
+	\item Draw \(x_{1,i}\sim p_{\theta,i,1\mid t}(\,\cdot\mid x)\).
+	\item With probability \(\tfrac{h}{1-t}\), set \(X_{t+h,i}=x_{1,i}\); otherwise keep \(X_{t+h,i}=x_i\).
+\end{enumerate}
+\section{Per‐Coordinate Posterior Parameterization and Training Loss}
+
+We parameterize the marginal “target–initial” posterior per coordinate
+\[
+p_{\theta,i,1\mid t}(x_{1,i}\mid x_t)
+\]
+via a neural network (embedded and flattened as in Section \ref{sec:implementation}).  By Proposition 1 the Conditional Discrete Flow Matching loss over our mixture path reduces to a sum of generalized‐KL Bregman divergences per coordinate:
+\[
+L(\theta)
+=\mathbb{E}_{\,t,X_0,X_1,X_t}\!\Biggl[\sum_{i=1}^d
+D_{\mathrm{gKL}}\!\Bigl(\,u^i_t(\cdot,x_t\mid x_0,x_1)\,,\,
+u^{\theta,i}_t(\cdot,x_t)\Bigr)\Biggr].
+\]
+For the mixture‐path generator
+\[
+u^i_t(y_i,x_t\mid x_0,x_1)
+=\frac{1}{1-t}\bigl[\delta(y_i,x_{1,i})-\delta(y_i,x_{t,i})\bigr],
+\]
+choosing \(D_{\mathrm{gKL}}\) yields the simple cross‐entropy objective
+\[
+L(\theta)
+=-\mathbb{E}_{\,t,X_0,X_1,X_t}\!\sum_{i=1}^d
+\log p_{\theta,i,1\mid t}\bigl(X_{1,i}\mid X_t\bigr)
+\;+\;\mathrm{const}.
+\]
+
+\medskip
+In code, using the library’s generalized‐KL loss wrapper:
+\begin{verbatim}
+from flow_matching.loss import MixturePathGeneralizedKL
+
+loss_fn = MixturePathGeneralizedKL(path=path)
+
+for x_0, x_1 in dataloader:
+t      = torch.rand(batch_size) * (1.0 - 1e-3)
+sample = path.sample(t=t, x_0=x_0, x_1=x_1)
+logits = model(sample.x_t, sample.t)
+loss   = loss_fn(
+logits=logits,
+x_1=sample.x_1,
+x_t=sample.x_t,
+t=sample.t
 )
-\c@part=\count79
-\c@section=\count80
-\c@subsection=\count81
-\c@subsubsection=\count82
-\c@paragraph=\count83
-\c@subparagraph=\count84
-\c@figure=\count85
-\c@table=\count86
-\abovecaptionskip=\skip41
-\belowcaptionskip=\skip42
-\bibindent=\dimen102
-)
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
-Package: amsmath 2017/09/02 v2.17a AMS math features
-\@mathmargin=\skip43
+optimizer.zero_grad()
+loss.backward()
+optimizer.step()
+\end{verbatim}
+	
+	
+	
 
-For additional information on amsmath, use the `?' option.
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
-Package: amstext 2000/06/29 v2.01 AMS text
+	
 
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty
-File: amsgen.sty 1999/11/30 v2.0 generic functions
-\@emptytoks=\toks14
-\ex@=\dimen103
-))
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
-Package: amsbsy 1999/11/29 v1.2d Bold Symbols
-\pmbraise@=\dimen104
-)
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
-Package: amsopn 2016/03/08 v2.02 operator names
-)
-\inf@bad=\count87
-LaTeX Info: Redefining \frac on input line 213.
-\uproot@=\count88
-\leftroot@=\count89
-LaTeX Info: Redefining \overline on input line 375.
-\classnum@=\count90
-\DOTSCASE@=\count91
-LaTeX Info: Redefining \ldots on input line 472.
-LaTeX Info: Redefining \dots on input line 475.
-LaTeX Info: Redefining \cdots on input line 596.
-\Mathstrutbox@=\box26
-\strutbox@=\box27
-\big@size=\dimen105
-LaTeX Font Info:    Redeclaring font encoding OML on input line 712.
-LaTeX Font Info:    Redeclaring font encoding OMS on input line 713.
-\macc@depth=\count92
-\c@MaxMatrixCols=\count93
-\dotsspace@=\muskip10
-\c@parentequation=\count94
-\dspbrk@lvl=\count95
-\tag@help=\toks15
-\row@=\count96
-\column@=\count97
-\maxfields@=\count98
-\andhelp@=\toks16
-\eqnshift@=\dimen106
-\alignsep@=\dimen107
-\tagshift@=\dimen108
-\tagwidth@=\dimen109
-\totwidth@=\dimen110
-\lineht@=\dimen111
-\@envbody=\toks17
-\multlinegap=\skip44
-\multlinetaggap=\skip45
-\mathdisplay@stack=\toks18
-LaTeX Info: Redefining \[ on input line 2817.
-LaTeX Info: Redefining \] on input line 2818.
-)
-(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
-Package: amssymb 2013/01/14 v3.01 AMS font symbols
-
-(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty
-Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
-\symAMSa=\mathgroup4
-\symAMSb=\mathgroup5
-LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
-(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
-))
-(/usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
-Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
-
-(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg
-File: color.cfg 2016/01/02 v1.6 sample color configuration
-)
-Package xcolor Info: Driver file: pdftex.def on input line 225.
-
-(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def
-File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
-)
-Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
-Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1352.
-Package xcolor Info: Model `RGB' extended on input line 1364.
-Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
-Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
-Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
-Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
-Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
-Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
-)
-(./discreteflow1.aux)
-\openout1 = `discreteflow1.aux'.
-
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 5.
-LaTeX Font Info:    ... okay on input line 5.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 5.
-LaTeX Font Info:    ... okay on input line 5.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 5.
-LaTeX Font Info:    ... okay on input line 5.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 5.
-LaTeX Font Info:    ... okay on input line 5.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 5.
-LaTeX Font Info:    ... okay on input line 5.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 5.
-LaTeX Font Info:    ... okay on input line 5.
-
-(/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
-[Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count99
-\scratchdimen=\dimen112
-\scratchbox=\box28
-\nofMPsegments=\count100
-\nofMParguments=\count101
-\everyMPshowfont=\toks19
-\MPscratchCnt=\count102
-\MPscratchDim=\dimen113
-\MPnumerator=\count103
-\makeMPintoPDFobject=\count104
-\everyMPtoPDFconversion=\toks20
-)
-LaTeX Font Info:    Try loading font information for U+msa on input line 8.
- (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-)
-LaTeX Font Info:    Try loading font information for U+msb on input line 8.
-
-(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-
-LaTeX Warning: No \author given.
-
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 14.
-(/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
-File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 14.
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
- [1
-
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmbx12!
-Missing character: There is no � in font cmbx12!
-Missing character: There is no � in font cmbx12!
- [2]
-Missing character: There is no � in font cmti10!
-Missing character: There is no � in font cmti10!
-Missing character: There is no � in font cmti10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-
-Overfull \hbox (4.11313pt too wide) in paragraph at lines 108--109
-\OT1/cmr/m/n/10 Introduce an aux-il-iary cou-pling $\OML/cmm/m/it/10 Z \OT1/cmr
-/m/n/10 = (\OML/cmm/m/it/10 X[]; X[]\OT1/cmr/m/n/10 )$. For each co-or-di-nate 
-$\OML/cmm/m/it/10 i \OMS/cmsy/m/n/10 2 f\OT1/cmr/m/n/10 1\OML/cmm/m/it/10 ; [] 
-; d\OMS/cmsy/m/n/10 g$\OT1/cmr/m/n/10 ,
- []
-
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-
-Overfull \hbox (18.11595pt too wide) detected at line 127
-[][]\OML/cmm/m/it/10 X[] \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 X[] \OMS/cmsy/m/n/1
-0 j \OML/cmm/m/it/10 X[] \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 x[];  X[] \OT1/cmr/
-m/n/10 = \OML/cmm/m/it/10 x[][] \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 t;  [][]X[] 
-\OT1/cmr/m/n/10 = \OML/cmm/m/it/10 X[] \OMS/cmsy/m/n/10 j \OML/cmm/m/it/10 X[] 
-\OT1/cmr/m/n/10 = \OML/cmm/m/it/10 x[];  X[] \OT1/cmr/m/n/10 = \OML/cmm/m/it/10
- x[][] \OT1/cmr/m/n/10 = 1 \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 t:
- []
-
-Missing character: There is no � in font cmbx12!
-Missing character: There is no � in font cmbx12!
-Missing character: There is no � in font cmbx12!
-Missing character: There is no � in font cmbx12!
-Missing character: There is no � in font cmbx12!
-Missing character: There is no � in font cmbx12!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-
-Overfull \hbox (68.0789pt too wide) detected at line 155
-\OML/cmm/m/it/10 u[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 y[]; x\OT1/cmr/m/n/10 ) =
- [] \OML/cmm/m/it/10 u[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 y[]; x \OMS/cmsy/m/n/
-10 j \OML/cmm/m/it/10 x[]; x[]\OT1/cmr/m/n/10 ) \OML/cmm/m/it/10 p[]\OT1/cmr/m/
-n/10 (\OML/cmm/m/it/10 x[] \OMS/cmsy/m/n/10 j \OML/cmm/m/it/10 x\OT1/cmr/m/n/10
- ) = [] [][]\OML/cmm/m/it/10 ^^N\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 y[]; x[]\OT1/
-cmr/m/n/10 ) \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 ^^N\OT1/cmr/m/n/10 (\OML/cmm
-/m/it/10 y[]; x[]\OT1/cmr/m/n/10 )[] \OML/cmm/m/it/10 p[]\OT1/cmr/m/n/10 (\OML/
-cmm/m/it/10 x[] \OMS/cmsy/m/n/10 j \OML/cmm/m/it/10 x\OT1/cmr/m/n/10 )\OML/cmm/
-m/it/10 :
- []
-
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-
-Overfull \hbox (41.84436pt too wide) detected at line 171
-\OML/cmm/m/it/10 P[]X[] \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 y[] \OMS/cmsy/m/n/10
- j \OML/cmm/m/it/10 X[] \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 x[] \OT1/cmr/m/n/10 
-= [][]\OML/cmm/m/it/10 ^^N\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 y[]; x[]\OT1/cmr/m/
-n/10 ) + [][]\OML/cmm/m/it/10 ^^N\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 y[]; x[]\OT1
-/cmr/m/n/10 ) \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 ^^N\OT1/cmr/m/n/10 (\OML/cm
-m/m/it/10 y[]; x[]\OT1/cmr/m/n/10 )[][] \OML/cmm/m/it/10 p[]\OT1/cmr/m/n/10 (\O
-ML/cmm/m/it/10 x[] \OMS/cmsy/m/n/10 j \OML/cmm/m/it/10 x\OT1/cmr/m/n/10 ) + \OM
-L/cmm/m/it/10 o\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 h\OT1/cmr/m/n/10 )\OML/cmm/m/i
-t/10 :
- []
-
-[3]
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-
-Overfull \hbox (3.86166pt too wide) in paragraph at lines 177--178
-\OT1/cmr/m/n/10 This makes ex-plicit how the learned pos-te-rior per co-or-di-n
-ate drives the sourcesink
- []
-
-Missing character: There is no � in font cmbx12!
-Missing character: There is no � in font cmbx12!
-Missing character: There is no � in font cmbx12!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-
-Overfull \hbox (49.42064pt too wide) detected at line 205
-\OML/cmm/m/it/10 P[]X[] \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 y[] \OMS/cmsy/m/n/10
- j \OML/cmm/m/it/10 X[] \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 x[] \OT1/cmr/m/n/10 
-= [][]\OML/cmm/m/it/10 ^^N\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 y[]; x[]\OT1/cmr/m/
-n/10 ) + [][]\OML/cmm/m/it/10 ^^N\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 y[]; x[]\OT1
-/cmr/m/n/10 ) \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 ^^N\OT1/cmr/m/n/10 (\OML/cm
-m/m/it/10 y[]; x[]\OT1/cmr/m/n/10 )[][] \OML/cmm/m/it/10 p[]\OT1/cmr/m/n/10 (\O
-ML/cmm/m/it/10 x[] \OMS/cmsy/m/n/10 j \OML/cmm/m/it/10 x\OT1/cmr/m/n/10 ) + \OM
-L/cmm/m/it/10 o\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 h\OT1/cmr/m/n/10 )\OML/cmm/m/i
-t/10 :
- []
-
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmbx12!
-Missing character: There is no � in font cmbx12!
-Missing character: There is no � in font cmbx12!
-
-Overfull \hbox (5.92294pt too wide) in paragraph at lines 211--211
-[]\OT1/cmr/bx/n/14.4 PerCoordinate Pos-te-rior Pa-ram-e-ter-i-za-tion and
- []
-
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-
-LaTeX Warning: Reference `sec:implementation' on page 4 undefined on input line
- 217.
-
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-[4]
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
-Missing character: There is no � in font cmr10!
- [5] (./discreteflow1.aux)
-
-LaTeX Warning: There were undefined references.
-
- ) 
-Here is how much of TeX's memory you used:
- 2089 strings out of 494923
- 24389 string characters out of 6180743
- 82869 words of memory out of 5000000
- 5420 multiletter control sequences out of 15000+600000
- 11710 words of font info for 46 fonts, out of 8000000 for 9000
- 14 hyphenation exceptions out of 8191
- 27i,12n,35p,572b,200s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
-7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/s
-hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/t
-exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive
-/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on discreteflow1.pdf (5 pages, 178710 bytes).
-PDF statistics:
- 84 PDF objects out of 1000 (max. 8388607)
- 60 compressed objects within 1 object stream
- 0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
