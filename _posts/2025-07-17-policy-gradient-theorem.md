@@ -20,8 +20,10 @@ layout: post
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 
+## Table of Contents
+- [Introduction](#introduction)
 
-
+## Introduction {#introduction} 
 
 This tutorial bridges the gap between the rigorous mathematical formulation of $\textit{Discrete Flow Matching}$ for continuous time Markov chains and a minimal, practical PyTorch implementation. We define a factorized mixture path, derive coordinate-wise CTMC velocities via the Kolmogorov forward equation, and show how to assemble those into a learnable model.
 
@@ -37,7 +39,9 @@ You will find:
 
 The basic idea is straightforward:
 
-## Training Procedure
+
+
+## Training Procedure {## Training Procedure}
 
 1\. Sample a data point:
 
