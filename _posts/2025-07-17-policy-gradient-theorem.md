@@ -93,7 +93,7 @@ $$
 L(\theta) = -\mathbb{E}_{t,X_0,X_1,X_t}\sum_{i=1}^d \log p^{\theta,i}_{1|t}(X_1^i|X_t)+\text{const}.
 $$
 
-## Inference Procedure{#inference-procedure}
+## Inference Procedure {#inference-procedure}
 
 During inference, reverse the process:
 
