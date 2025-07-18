@@ -22,7 +22,7 @@ layout: post
 
 ## Table of Contents
 - [Introduction](#introduction)
-- [Training Procedure](#Training Procedure )
+- [Training Procedure](#training Procedure )
 - [Inference Procedure](#Inference Procedure)
 
 
@@ -44,7 +44,7 @@ The basic idea is straightforward:
 
 
 
-## Training Procedure {# Training Procedure}
+## Training Procedure {#training Procedure}
 
 1\. Sample a data point:
 
