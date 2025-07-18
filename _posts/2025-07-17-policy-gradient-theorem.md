@@ -21,188 +21,265 @@ layout: post
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 
-In this post, we walk through the step-by-step derivations of some of the math in the 
-paper [ Offline Reinforcement Learning: Tutorial, Review, and Perspectives on Open Problems](https://arxiv.org/abs/2005.01643) , at times provide a deeper discussion and correct some minor mistakes and typoes in that paper. 
-
-## 1. Objective: Maximizing Expected Return
-
-Let's start with (2) in the paper. We aim to maximize the expected return under a parameterized policy \\(\pi_\theta\\):
-
-$$
-\begin{align}
-\nabla_\theta J(\pi_\theta)
-&= \mathbb{E}_{\tau\sim\pi_\theta}\Bigl[\sum_{t=0}^H \gamma^t\nabla_\theta\log\pi_\theta(a_t\!\mid\!s_t)\,R_{t:H}(\tau)\Bigr]\\
-&= \sum_{t=0}^H \mathbb{E}_{\tau}\bigl[\gamma^t\nabla_\theta\log\pi_\theta(a_t\!\mid\!s_t)\,R_{t:H}(\tau)\bigr].
-\end{align}
-$$
-
-
-$$
-J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta}[R(\tau)], \quad R(\tau) = \sum_{t=0}^H \gamma^t r(s_t,a_t).
-$$
-
-Here, \\(\tau=(s_0,a_0,\dots,s_H,a_H)\\) is a trajectory, and \\(\gamma\in[0,1]\\) is the discount factor.
-
-## 2. Applying the Log-Derivative Trick
-
-$$
-\nabla_{\theta}J(\theta)
-= \nabla_{\theta}\,\mathbb{E}_{\tau\sim\pi_{\theta}}\bigl[R(\tau)\bigr]
-= \mathbb{E}_{\tau\sim\pi_{\theta}}\!\bigl[\nabla_{\theta}\log p_{\pi_{\theta}}(\tau)\,R(\tau)\bigr].
-$$
-
-proof of the trick:
-
-\begin{equation}
-\nabla_\theta p(\tau;\theta)
-= p(\tau;\theta)\,\nabla_\theta \log p(\tau;\theta)
-\end{equation}
-
-$$
-\begin{align}
-\nabla_\theta \mathbb{E}_{\tau\sim\pi_\theta}[R(\tau)]
-&= \nabla_\theta \int p_{\pi_\theta}(\tau)\,R(\tau)\,\mathrm{d}\tau \\
-&= \int \nabla_\theta p_{\pi_\theta}(\tau)\,R(\tau)\,\mathrm{d}\tau \\
-&= \int p_{\pi_\theta}(\tau)\,\nabla_\theta \log p_{\pi_\theta}(\tau)\,R(\tau)\,\mathrm{d}\tau \\
-&= \mathbb{E}_{\tau\sim\pi_\theta}\bigl[\nabla_\theta \log p_{\pi_\theta}(\tau)\,R(\tau)\bigr] \\
-&= \nabla_\theta J(\theta)\,.
-\end{align}
-$$
+This tutorial bridges the gap between the rigorous mathematical formulation of Discrete Flow Matching for continuous time Markov chains and a minimal, practical PyTorch implementation.  We begin by defining a factorized mixture path between a simple “source” distribution and an observed “target” distribution, derive the coordinate‐wise CTMC velocities via the Kolmogorov forward equation, and show how to assemble those into a learnable model.  Each step of the derivation is  followed by the code that implements it.
 
 
 
+You will find:
+	- A concise statement of each mathematical object (probability path, Bregman divergence, CTMC velocity, posterior parameterization).
 
-Decompose  \\(\log p_{\pi_{\theta}}(\tau)\\)
+	-The exact lines of code—no hidden helpers—showing how to (1) sample the mixture path, (2) compute the matching loss, and (3) run the coordinate‐wise Euler sampler.
 
-$$
-p(\tau)
-= \rho_0(s_0)\,\prod_{t=0}^{H}\pi_{\theta}(a_t\mid s_t)\,P(s_{t+1}\mid s_t,a_t),
-$$
-
-so
-
-$$
-\nabla_{\theta}\log p_{\pi_{\theta}}(\tau)
-= \sum_{t=0}^{H}\nabla_{\theta}\log\pi_{\theta}(a_t\mid s_t).
-$$
-
-Plug in:
-
-$$
-\nabla_{\theta}J(\theta)
-= \mathbb{E}_{\tau}\Bigl[\Bigl(\sum_{t=0}^{H}\nabla_{\theta}\log\pi_{\theta}(a_t\mid s_t)\Bigr)\,R(\tau)\Bigr]
-= \sum_{t=0}^{H}\mathbb{E}_{\tau}\bigl[\nabla_{\theta}\log\pi_{\theta}(a_t\mid s_t)\,R(\tau)\bigr].
-$$
+	- Tips on how to factorize over dimensions so that both training and sampling remain tractable even in high dimensions.
 
 
-## 3. Introducing the Reward-to-Go (Causality)
+The basic idea is straightforward: 
+	
 
-Only future rewards depend on \\(a_t\\). Dropping past rewards:
-(mathematically if you write out the integral terms that do not depend on the integrator 
-factor out and you are left with the gradient of integral of a probability which is the constant 1 and hence zero)
+## Algorithm
 
-$$
-\nabla_{\theta}J(\theta)
-= \sum_{t=0}^{H}\mathbb{E}_{\tau}\Bigl[\nabla_{\theta}\log\pi_{\theta}(a_t\mid s_t)\,
-\underbrace{\sum_{t'=t}^{H}\gamma^{t'}r(s_{t'},a_{t'})}_{\text{reward‐to‐go}}\Bigr].
-$$
+1. Sample a data point  
+   $$
+   X_1 \sim q_{\mathrm{data}}.
+   $$  
+   This is your “target” \((X_i^1)\) in every coordinate.
 
-Factor out \\(\gamma^t\\):
+2. Sample a “source”  
+   $$
+   X_0
+   $$  
+   from your simple prior (e.g.\ uniform or noise).
 
-$$
+3. Pick a time  
+   $$
+   t \sim U[0,1].
+   $$
 
-= \sum_{t=0}^{H}\mathbb{E}_{\tau}\Bigl[\gamma^t\,\nabla_{\theta}\log\pi_{\theta}(a_t\mid s_t)\,
-\sum_{t'=t}^{H}\gamma^{\,t'-t}r(s_{t'},a_{t'})\Bigr].
-$$
+4. Draw the intermediate state  
+   $$
+   X_t
+   $$  
+   from the mixture path  
+   $$
+   p_{t\mid0,1}(x\mid X_0,X_1)
+   = \prod_{i=1}^D
+   \Bigl[
+     \kappa(t)\,\delta(x_i,\,X_i^1)
+     +\bigl(1-\kappa(t)\bigr)\,\delta(x_i,\,X_i^0)
+   \Bigr].
+   $$  
+   In other words, each coordinate \(i\) of \(X_t\) is \(X_i^1\) with probability \(\kappa(t)\), or \(X_i^0\) otherwise.
 
-Add a Baseline (As to what a baseline is and why we subtract see pp 329 of Sutton, but here we give the proof)}
+5. Compute the loss using the known true generator (which depends on \(X_i^1\)) and your model’s posterior  
+   $$
+   p^{\theta,i}_{1\mid t}(\,\cdot\mid X_t).
+   $$  
+   Because \(X_i^1\) is always the data, it drives the “true” velocity in every coordinate, and \(X_t\) is exactly where you evaluate both true and model velocities.
 
-Subtract a baseline \\(b(s_t)\\):
-$$
-\nabla_{\theta}J(\theta)
-= \sum_{t=0}^{H}\mathbb{E}_{\tau}\Bigl[\gamma^t\,\nabla_{\theta}\log\pi_{\theta}(a_t\mid s_t)\,
-\Bigl(\sum_{t'=t}^{H}\gamma^{\,t'-t}r(s_{t'},a_{t'}) - b(s_t)\Bigr)\Bigr].
-$$
+   $p^{\theta,i}_{1\mid t}(\,\cdot\mid X_t)$ is learned through a simple cross‐entropy objective:  
+   $$
+   L(\theta)
+   = -\mathbb{E}_{\,t,X_0,X_1,X_t}\!\sum_{i=1}^d
+     \log p^{\theta,i}_{1\mid t}\bigl(X_1^i\mid X_t\bigr)
+     \;+\;\mathrm{const}.
+   $$
 
+	
+	\medskip
+	
+	\noindent\textbf{During inference, you reverse this:}
+	\begin{enumerate}
+		\item Start from \(X_0\) drawn from the prior.
+		\item Iteratively step forward in \(t\) using the learned posterior \(p^{\theta,i}_{1\mid t}\) to sample each coordinate’s jump, until you reach \(X_1\)—your generated sample.
+	\end{enumerate}
+	
+	\smallskip
+	
+	\noindent\emph{Note:} 
+	\(X_i^1\) in the formulas is always the data’s coordinate \(i\).  
+	\(X_t\) during training is sampled via the chosen mixture path \(p_{t\mid0,1}\), ensuring the model learns to match that path’s velocity field.  
+	
+	\section{Factorized Source→Sink Velocities}
+	
+	Because both the probability path and its velocity factorize over coordinates, we may treat each dimension independently. Writing a full state as \(x=(x_1,\dots,x_d)\) and a proposed next state as \(y=(y_1,\dots,y_d)\), we have
+	\[
+	q_t(x)=\prod_{i=1}^d q^i_t(x_i),
+	\]
+	and the full rate vector
+	\[
+	u_t(y,x)
+	=\sum_{i=1}^d
+	\underbrace{\delta\bigl(y_{\bar i},\,x_{\bar i}\bigr)}_{\displaystyle \prod_{j\neq i}\delta(y_j,x_j)}
+	\;u^i_t\bigl(y_i,\,x\bigr).
+	\]
+	Here
+	\[
+	\delta(y_{\bar i},x_{\bar i})
+	=\prod_{j\neq i}\delta(y_j,x_j)
+	\]
+	ensures that only coordinate \(i\) is allowed to move, and
+	\[
+	u^i_t(y_i,x)\in\mathbb{R}
+	\]
+	is exactly the \emph{source→sink rate} for changing coordinate \(i\) from its current value \(x_i\) (the “source”) to a new value \(y_i\) (the “sink”). By factorizing both \(q_t\) and \(u_t\) this way, we reduce the high-dimensional CTMC rate problem into \(d\) independent scalar rate functions \(u^i_t\).
+	
+	
+\section{Mixture-path Construction}
 
-proof that you can subtract the base so long as it is a function of state alone:
+Introduce an auxiliary coupling \(Z=(X_0,X_1)\).  For each coordinate \(i\in\{1,\dots,d\}\), define the conditional marginal path
+\[
+p^i_{t\mid0,1}(x_i\mid x_0,x_1)
+\;=\;
+\kappa(t)\,\delta\bigl(x_i,x_{1,i}\bigr)
+\;+\;
+\bigl(1-\kappa(t)\bigr)\,\delta\bigl(x_i,x_{0,i}\bigr)\,,
+\]
+where we choose the simple scheduler
+\[
+\kappa(t)=t,
+\qquad
+\dot\kappa(t)=1.
+\]
+Under this choice, at time \(t\) each coordinate \(X^i_t\) equals its “sink” value \(X^i_1\) with probability \(t\), and its “source” value \(X^i_0\) with probability \(1-t\).  In other words,
+\[
+\Pr\bigl[X^i_t = X^i_1 \mid X_0=x_0,\,X_1=x_1\bigr] = t,
+\qquad
+\Pr\bigl[X^i_t = X^i_0 \mid X_0=x_0,\,X_1=x_1\bigr] = 1-t.
+\]
+Thus the full factorized path is
+\[
+p_{t\mid0,1}(x\mid x_0,x_1)
+\;=\;\prod_{i=1}^d p^i_{t\mid0,1}(x_i\mid x_0,x_1)\,. 
+\]
 
+\section{Posterior‐driven Source→Sink Velocities}
 
-$$
-\begin{align*}
-\nabla_{\theta} J(\pi_{\theta}) 
-&= \mathbb{E}_{\tau\sim p_{\pi_{\theta}}(\tau)}\left[
-\sum_{t=0}^{H}\gamma^{t}\nabla_{\theta}\log\pi_{\theta}(a_{t}|s_{t})\left(\sum_{t'=t}^{H}\gamma^{t'-t}r(s_{t'},a_{t'}) - b(s_{t})\right)
-\right]
-\end{align*}
-$$
+Once we have the pure source→sink rates 
+\[
+u^i_t(y_i, x\mid x_0, x_1)
+=\frac{1}{1-t}\Bigl[\delta(y_i,x_{1,i})-\delta(y_i,x_i)\Bigr]
+\]
+for the mixture path, we introduce a learnable per‐coordinate “target–initial” posterior
+\[
+p_{\theta,i,1\mid t}(x_{1,i}\mid x)
+\approx p_{i,1\mid t}(x_{1,i}\mid x)\,.
+\]
+We then assemble the marginal velocity as
+\[
+u^i_t(y_i,x)
+=\sum_{x_{1,i}}
+u^i_t(y_i,x\mid x_0,x_1)\;p_{\theta,i,1\mid t}(x_{1,i}\mid x)
+=\frac{1}{1-t}
+\sum_{x_{1,i}}
+\Bigl[\delta(y_i,x_{1,i})-\delta(y_i,x_i)\Bigr]\,
+p_{\theta,i,1\mid t}(x_{1,i}\mid x).
+\]
+Plugging this into the Euler‐step transition kernel
+\[
+P\bigl(X_{t+h,i}=y_i\mid X_t=x\bigr)
+=\delta(y_i,x_i)+h\,u^i_t(y_i,x)+o(h)
+\]
+yields
+\[
+P\bigl(X_{t+h,i}=y_i\mid X_t=x\bigr)
+=\sum_{x_{1,i}}
+\Bigl[
+\delta(y_i,x_i)
++\tfrac{h}{1-t}\bigl(\delta(y_i,x_{1,i})-\delta(y_i,x_i)\bigr)
+\Bigr]\,
+p_{\theta,i,1\mid t}(x_{1,i}\mid x)
++o(h).
+\]
+In practice, sampling is implemented coordinate‐wise by:
+\begin{enumerate}
+	\item Draw \(x_{1,i}\sim p_{\theta,i,1\mid t}(\cdot\mid x)\).
+	\item With probability \(\frac{h}{1-t}\), set \(X_{t+h,i}=x_{1,i}\); otherwise keep \(X_{t+h,i}=x_i\).
+\end{enumerate}
+This makes explicit how the learned posterior per coordinate drives the source→sink transitions during sampling.
+	
+	
+\section{Coordinate‐wise Euler Sampling}
 
-We explicitly verify that the baseline is unbiased:
+For a small time step \(h\), the CTMC transition kernel factorizes over coordinates:
+\[
+P\bigl(X_{t+h,i}=y_i \mid X_t=x\bigr)
+=\delta(y_i,x_i)+h\,u^i_t(y_i,x)+o(h).
+\]
+Substituting our posterior‐assembled velocity
+\[
+u^i_t(y_i,x)
+=\frac{1}{1-t}
+\sum_{x_{1,i}}
+\bigl[\delta(y_i,x_{1,i})-\delta(y_i,x_i)\bigr]\,
+p_{\theta,i,1\mid t}(x_{1,i}\mid x),
+\]
+we obtain
+\[
+P\bigl(X_{t+h,i}=y_i \mid X_t=x\bigr)
+=\sum_{x_{1,i}}
+\Bigl[
+\delta(y_i,x_i)
++\frac{h}{1-t}\bigl(\delta(y_i,x_{1,i})-\delta(y_i,x_i)\bigr)
+\Bigr]\,
+p_{\theta,i,1\mid t}(x_{1,i}\mid x)
++o(h).
+\]
+Hence the coordinate‐wise sampling algorithm is:
+\begin{enumerate}
+	\item Draw \(x_{1,i}\sim p_{\theta,i,1\mid t}(\,\cdot\mid x)\).
+	\item With probability \(\tfrac{h}{1-t}\), set \(X_{t+h,i}=x_{1,i}\); otherwise keep \(X_{t+h,i}=x_i\).
+\end{enumerate}
+\section{Per‐Coordinate Posterior Parameterization and Training Loss}
 
-$$
-\begin{align*}
-&\mathbb{E}_{\tau\sim p_{\pi_{\theta}}(\tau)}\left[
-\sum_{t=0}^{H}\gamma^{t}\nabla_{\theta}\log\pi_{\theta}(a_{t}|s_{t}) b(s_{t})
-\right] \\
-&\quad= \sum_{t=0}^{H}\gamma^{t}\mathbb{E}_{\tau\sim p_{\pi_{\theta}}(\tau)}\left[
-b(s_{t})\mathbb{E}_{a_{t}\sim\pi_{\theta}(a_{t}|s_{t})}\left[\nabla_{\theta}\log\pi_{\theta}(a_{t}|s_{t})\middle|s_{t}\right]
-\right] \\
-&\quad= \sum_{t=0}^{H}\gamma^{t}\mathbb{E}_{\tau\sim p_{\pi_{\theta}}(\tau)}\left[
-b(s_{t})\int_{a_t}\pi_{\theta}(a_{t}|s_{t})\nabla_{\theta}\log\pi_{\theta}(a_{t}|s_{t})\,da_{t}
-\right] \\
-&\quad= \sum_{t=0}^{H}\gamma^{t}\mathbb{E}_{\tau\sim p_{\pi_{\theta}}(\tau)}\left[
-b(s_{t})\int_{a_t}\nabla_{\theta}\pi_{\theta}(a_{t}|s_{t})\,da_{t}
-\right] \\
-&\quad= \sum_{t=0}^{H}\gamma^{t}\mathbb{E}_{\tau\sim p_{\pi_{\theta}}(\tau)}\left[
-b(s_{t}) \cdot 0
-\right] \\
-&\quad= 0
-\end{align*}
-$$
+We parameterize the marginal “target–initial” posterior per coordinate
+\[
+p_{\theta,i,1\mid t}(x_{1,i}\mid x_t)
+\]
+via a neural network (embedded and flattened as in Section \ref{sec:implementation}).  By Proposition 1 the Conditional Discrete Flow Matching loss over our mixture path reduces to a sum of generalized‐KL Bregman divergences per coordinate:
+\[
+L(\theta)
+=\mathbb{E}_{\,t,X_0,X_1,X_t}\!\Biggl[\sum_{i=1}^d
+D_{\mathrm{gKL}}\!\Bigl(\,u^i_t(\cdot,x_t\mid x_0,x_1)\,,\,
+u^{\theta,i}_t(\cdot,x_t)\Bigr)\Biggr].
+\]
+For the mixture‐path generator
+\[
+u^i_t(y_i,x_t\mid x_0,x_1)
+=\frac{1}{1-t}\bigl[\delta(y_i,x_{1,i})-\delta(y_i,x_{t,i})\bigr],
+\]
+choosing \(D_{\mathrm{gKL}}\) yields the simple cross‐entropy objective
+\[
+L(\theta)
+=-\mathbb{E}_{\,t,X_0,X_1,X_t}\!\sum_{i=1}^d
+\log p_{\theta,i,1\mid t}\bigl(X_{1,i}\mid X_t\bigr)
+\;+\;\mathrm{const}.
+\]
 
+\medskip
+In code, using the library’s generalized‐KL loss wrapper:
+\begin{verbatim}
+from flow_matching.loss import MixturePathGeneralizedKL
 
+loss_fn = MixturePathGeneralizedKL(path=path)
 
-Erratum note: finite‐ to infinite‐horizon carry–over typo
+for x_0, x_1 in dataloader:
+t      = torch.rand(batch_size) * (1.0 - 1e-3)
+sample = path.sample(t=t, x_0=x_0, x_1=x_1)
+logits = model(sample.x_t, sample.t)
+loss   = loss_fn(
+logits=logits,
+x_1=sample.x_1,
+x_t=sample.x_t,
+t=sample.t
+)
+optimizer.zero_grad()
+loss.backward()
+optimizer.step()
+\end{verbatim}
+	
+	
+	
 
-In the finite‐horizon derivation we write
-$$
-\nabla_{\theta}
-= \sum_{t=0}^{H}
-\mathbb{E}_{s_{t}\sim d_{t}^{\pi},\,a_{t}\sim\pi_{\theta}}
-\bigl[\gamma^{t}\,\nabla_{\theta}\log\pi_{\theta}(a_{t}\mid s_{t})\,\hat{A}(s_{t},a_{t})\bigr].
-$$
-
-Here both the state‐distribution (\\(d_{t}^{\pi}\\) and the discount weight \\(\gamma^{t}\\) are explicitly indexed by \\(t\\).
-
-When passing to the infinite‐horizon form, those two pieces are folded into a single “discounted occupancy” measure
-
-$$
-d^{\pi}(s)\;=\;(1-\gamma)\sum_{t=0}^{\infty}\gamma^{t}\,d_{t}^{\pi}(s),
-$$
-
-We can now absorb the discount factor and the sum into the measure \\(d_{t}^{\pi}(s)\\) (tutorial characterizes this as "dropping" the discount factor but this is not really an accurate description)  so that the gradient can be written as
-
-$$
-\nabla_{\theta}J
-= \frac{1}{1-\gamma}\,
-\mathbb{E}_{s\sim d^{\pi},\,a\sim\pi_{\theta}}
-\bigl[\nabla_{\theta}\log\pi_{\theta}(a\mid s)\,\hat{A}(s,a)\bigr].
-$$
-
-The stray subscript “\\(_t\\)” on the state distribution in the infinite‐horizon equation was simply a leftover from the finite‐horizon version. The correct infinite‐horizon line should read
-
-
-$$
-\nabla_{\theta}J
-= \frac{1}{1-\gamma}\,
-\mathbb{E}_{s\sim d^{\pi}(s),\,a\sim\pi_{\theta}(a\mid s)}
-\bigl[\nabla_{\theta}\log\pi_{\theta}(a\mid s)\,\hat{A}(s,a)\bigr],
-$$
-
-with no time index on \\(d^{\pi}\\).
-
-While a simple time-dependent baseline \\(b_t = \frac{1}{N} \sum_{i=1}^N R_{i,t}\\) is often used to reduce variance in Monte Carlo policy gradient estimators, it does not represent a true value function \\(V(s_t) = \mathbb{E}[R_t \mid s_t]\\). This is because \\(b_t\\) marginalizes over all states \\(s_t\\) encountered at time \\(t\\) rather than conditioning on a specific state. Thus, it captures only the average return under the state visitation distribution \\(d_t(s)\\), not the expected return from a particular state \\(s_t = s\\). Although useful for variance reduction, this approach lacks the precision and generalization capabilities of a learned, state-dependent baseline.
-
-
+	
 
 
