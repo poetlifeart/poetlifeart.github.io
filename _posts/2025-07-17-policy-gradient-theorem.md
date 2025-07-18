@@ -24,6 +24,8 @@ layout: post
 - [Introduction](#introduction)
 - [Training Procedure](#training-procedure)
 - [Inference Procedure](#inference-procedure)
+- [Factorized Source→Sink Velocities](#factorized-source-sink-velocities)
+
 
 
 
@@ -101,7 +103,7 @@ During inference, reverse the process:
 $X_i^1$ in formulas is always the data’s coordinate $i$.
 $X_t$ during training is sampled via the chosen mixture path $p_{t|0,1}$, ensuring the model learns the velocity field of this path.
 
-## Factorized Source→Sink Velocities
+## Factorized Source→Sink Velocities {#factorized-source-sink-velocities}
 
 Because probability path and velocity factorize over coordinates, we handle each dimension independently:
 
