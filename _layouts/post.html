@@ -13,7 +13,8 @@ layout: default
     {% if page.categories and page.categories.size > 0 %}
       {% assign cat = page.categories[0] %}
       {% assign posts = site.categories[cat] | sort: 'date' %}
-      {% assign total = posts | size %}
+      {% assign total_posts = posts | size %}
+
       {% assign current = -1 %}
       {% for p in posts %}
         {% if p.url == page.url %}
@@ -23,13 +24,15 @@ layout: default
       {% endfor %}
 
       {% if current >= 0 %}
+        {% assign prev_idx = current | minus: 1 %}
+        {% assign next_idx = current | plus: 1 %}
         <nav class="series-nav">
-          {% if current > 0 %}
-            {% assign prev_post = posts[current | minus: 1] %}
+          {% if prev_idx >= 0 %}
+            {% assign prev_post = posts[prev_idx] %}
             <a class="prev" href="{{ prev_post.url }}">← {{ prev_post.title }}</a>
           {% endif %}
-          {% if current < total | minus: 1 %}
-            {% assign next_post = posts[current | plus: 1] %}
+          {% if next_idx < total_posts %}
+            {% assign next_post = posts[next_idx] %}
             <a class="next" href="{{ next_post.url }}">{{ next_post.title }} →</a>
           {% endif %}
         </nav>
