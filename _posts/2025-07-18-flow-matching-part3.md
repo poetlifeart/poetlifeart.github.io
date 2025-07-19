@@ -1,5 +1,5 @@
 ---
-title: "Discrete Flow Matching-2"
+title: "Discrete Flow Matching-3"
 date: 2025-07-18
 categories:
   - flow-matching

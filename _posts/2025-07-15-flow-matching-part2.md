@@ -1,6 +1,6 @@
 ---
-title: "Discrete Flow Matching-1"
-date: 2025-07-13
+title: "Discrete Flow Matching-2"
+date: 2025-07-15
 categories:
   - flow-matching
 tags:
