@@ -3,6 +3,7 @@ title: "Discrete Flow Matching-3"
 date: 2025-07-18
 categories:
   - flow-matching
+permalink: /flow-matching-theorem/part-3/    
 tags:
 - flow matching 
 - mathematics
