@@ -9,15 +9,11 @@ layout: default
 
   <div class="post-content">
     {{ content }}
-    <pre>
-      Titles: {{ site.categories['policy-gradient'] | map: 'title' | jsonify }}
-      URLs:   {{ site.categories['policy-gradient'] | map: 'url'   | jsonify }}
-      </pre>
 
     {% if page.categories and page.categories.size > 0 %}
       {% assign cat = page.categories[0] %}
-      {% assign posts = site.categories[cat] | sort: 'date' %}
-      {% assign total_posts = posts | size %}
+      {% assign posts = site.categories[cat] | sort: 'date' | reverse %}
+      {% assign total = posts | size %}
 
       {% assign current = -1 %}
       {% for p in posts %}
@@ -35,7 +31,7 @@ layout: default
             {% assign prev_post = posts[prev_idx] %}
             <a class="prev" href="{{ prev_post.url }}">← {{ prev_post.title }}</a>
           {% endif %}
-          {% if next_idx < total_posts %}
+          {% if next_idx < total %}
             {% assign next_post = posts[next_idx] %}
             <a class="next" href="{{ next_post.url }}">{{ next_post.title }} →</a>
           {% endif %}
