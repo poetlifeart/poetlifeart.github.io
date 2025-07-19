@@ -1,7 +1,3 @@
----
-layout: default
----
-
 <article class="post">
   <header>
     <h1>{{ page.title }}</h1>
@@ -9,23 +5,19 @@ layout: default
 
   <div class="entry">
     {{ content }}
-
     {% if page.categories and page.categories.size > 0 %}
       {% assign cat = page.categories[0] %}
       {% assign posts_in_cat = site.categories[cat] | sort: 'date' %}
-
       {% for p in posts_in_cat %}
         {% if p.url == page.url %}
           {% assign index = forloop.index0 %}
         {% endif %}
       {% endfor %}
-
       <nav class="series-nav">
         {% if index > 0 %}
           {% assign prev = posts_in_cat[index | minus: 1] %}
           <a class="prev" href="{{ prev.url }}">← {{ prev.title }}</a>
         {% endif %}
-
         {% if index < posts_in_cat.size | minus: 1 %}
           {% assign next = posts_in_cat[index | plus: 1] %}
           <a class="next" href="{{ next.url }}">{{ next.title }} →</a>
@@ -41,3 +33,4 @@ layout: default
     {% include disqus.html %}
   </footer>
 </article>
+
