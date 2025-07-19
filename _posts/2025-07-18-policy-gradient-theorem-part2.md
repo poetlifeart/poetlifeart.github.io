@@ -3,11 +3,13 @@ title: "Offline RL-2"
 date: 2025-07-18
 categories:
   - policy-gradient
+permalink: /policy-gradient-theorem/part-2/  
 tags:
 - reinforcement learning
 - policy gradient
 - mathematics
 layout: post
+
 ---
 
 
