@@ -14,22 +14,26 @@ layout: default
       {% assign cat = page.categories[0] %}
       {% assign posts = site.categories[cat] | sort: 'date' %}
       {% assign total = posts | size %}
+      {% assign current = -1 %}
       {% for p in posts %}
         {% if p.url == page.url %}
           {% assign current = forloop.index0 %}
+          {% break %}
         {% endif %}
       {% endfor %}
 
-      <nav class="series-nav">
-        {% if current > 0 %}
-          {% assign prev_post = posts[current | minus: 1] %}
-          <a class="prev" href="{{ prev_post.url }}">← {{ prev_post.title }}</a>
-        {% endif %}
-        {% if current < total | minus: 1 %}
-          {% assign next_post = posts[current | plus: 1] %}
-          <a class="next" href="{{ next_post.url }}">{{ next_post.title }} →</a>
-        {% endif %}
-      </nav>
+      {% if current >= 0 %}
+        <nav class="series-nav">
+          {% if current > 0 %}
+            {% assign prev_post = posts[current | minus: 1] %}
+            <a class="prev" href="{{ prev_post.url }}">← {{ prev_post.title }}</a>
+          {% endif %}
+          {% if current < total | minus: 1 %}
+            {% assign next_post = posts[current | plus: 1] %}
+            <a class="next" href="{{ next_post.url }}">{{ next_post.title }} →</a>
+          {% endif %}
+        </nav>
+      {% endif %}
     {% endif %}
   </div>
 
@@ -40,6 +44,7 @@ layout: default
     {% include disqus.html %}
   </footer>
 </article>
+
 
 
 
