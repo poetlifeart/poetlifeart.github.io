@@ -1,5 +1,5 @@
 ---
-title: "Offline RL"
+title: "Offline RL-1"
 date: 2025-07-13
 categories:
   - policy-gradient
