@@ -1,17 +1,14 @@
 ---
-title: "Offline RL-3"
-date: 2025-07-18
+title: "Deriving the Policy Gradient Theorem — Part 3"
+date: 2025-07-20 
+layout: post
 categories:
   - policy-gradient
-permalink: /policy-gradient-theorem/part-3/  
 tags:
-- reinforcement learning
-- policy gradient
-- mathematics
-layout: post
-
+  - reinforcement learning
+  - policy gradient
+  - mathematics
 ---
-
 
 
 
