@@ -9,6 +9,10 @@ layout: default
 
   <div class="post-content">
     {{ content }}
+    <pre>
+      Titles: {{ site.categories['policy-gradient'] | map: 'title' | jsonify }}
+      URLs:   {{ site.categories['policy-gradient'] | map: 'url'   | jsonify }}
+      </pre>
 
     {% if page.categories and page.categories.size > 0 %}
       {% assign cat = page.categories[0] %}
