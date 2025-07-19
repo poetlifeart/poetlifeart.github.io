@@ -1,6 +1,8 @@
 ---
 title: "Discrete Flow Matching"
 date: 2025-07-17
+categories:
+  - flow-matching
 tags:
 - flow matching 
 - mathematics

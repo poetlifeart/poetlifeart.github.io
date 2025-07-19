@@ -1,6 +1,8 @@
 ---
 title: "Offline RL"
 date: 2025-07-13
+categories:
+  - policy-gradient
 tags:
 - reinforcement learning
 - policy gradient
