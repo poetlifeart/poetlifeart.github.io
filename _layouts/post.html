@@ -25,6 +25,7 @@ layout: default
           {% assign prev = posts_in_cat[index | minus: 1] %}
           <a class="prev" href="{{ prev.url }}">← {{ prev.title }}</a>
         {% endif %}
+
         {% if index < posts_in_cat.size | minus: 1 %}
           {% assign next = posts_in_cat[index | plus: 1] %}
           <a class="next" href="{{ next.url }}">{{ next.title }} →</a>
@@ -40,5 +41,6 @@ layout: default
     {% include disqus.html %}
   </footer>
 </article>
+
 
 
