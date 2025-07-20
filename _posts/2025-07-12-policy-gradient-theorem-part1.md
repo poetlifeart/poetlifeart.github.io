@@ -208,7 +208,7 @@ with no time index on \\(d^{\pi}\\).
 
 ## 4. Proof of measure absorption 
 
-Consider carefully:
+If we represent measures as denisties, this is easy to show:
 
 $$
 \frac{1}{1-\gamma}\mathbb{E}_{s\sim d^\pi(s),\,a\sim\pi_{\theta}(a|s)}[f(s,a)]
