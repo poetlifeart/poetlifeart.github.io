@@ -234,7 +234,8 @@ $$
 = \mathbb{E}_{s_{t}\sim d_{t}^{\pi},\,a_{t}\sim\pi_{\theta}(a_{t}|s_{t})}[f(s_{t},a_{t})]
 $$
 
-Hence, indeed:
+The variables in the integrant at his point are just labels and we can replace them
+with any symbol we wish. Hence, indeed:
 
 $$
 = \sum_{t=0}^{\infty}\gamma^{t}\mathbb{E}_{s_{t}\sim d_{t}^{\pi},\,a_{t}\sim\pi_{\theta}(a_{t}|s_{t})}[f(s_{t},a_{t})],
