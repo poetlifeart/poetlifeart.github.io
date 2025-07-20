@@ -206,6 +206,8 @@ $$
 
 with no time index on \\(d^{\pi}\\).
 
+## 4. Proof of measure absorption 
+
 Consider carefully:
 
 $$
