@@ -26,11 +26,12 @@ layout: post
 
 
 In this post, we walk through the step-by-step derivations of some of the math in the 
-paper [ Offline Reinforcement Learning: Tutorial, Review, and Perspectives on Open Problems](https://arxiv.org/abs/2005.01643), at times provide a deeper discussion and correct minor mistakes and typoes in that paper. 
+paper [ Offline Reinforcement Learning: Tutorial, Review, and Perspectives on Open Problems](https://arxiv.org/abs/2005.01643), at times provide a deeper discussion and correct minor mistakes and typoes in that paper. The best way is to read the paper and use this blog to calrify various topics. Our goal is not to replicate the paper but to suppement it. 
 
 ## 1. Objective: Maximizing Expected Return
 
-Let's start with (2) in the paper. We aim to maximize the expected return under a parameterized policy \\(\pi_\theta\\):
+Let's start with (2) on page 4; and provide a detailed proof. 
+We aim to maximize the expected return under a parameterized policy \\(\pi_\theta\\):
 
 $$
 \begin{align}
@@ -204,6 +205,50 @@ $$
 $$
 
 with no time index on \\(d^{\pi}\\).
+
+Consider carefully:
+
+$$
+\frac{1}{1-\gamma}\mathbb{E}_{s\sim d^\pi(s),\,a\sim\pi_{\theta}(a|s)}[f(s,a)]
+= \frac{1}{1-\gamma}\int_{s}\int_{a} d^\pi(s)\pi_{\theta}(a|s)f(s,a)\,da\,ds
+$$
+
+Plug in the definition of \\( d^\pi(s) \\):
+
+$$
+= \frac{1}{1-\gamma}\int_{s}\int_{a}\left[\\(1-\gamma\\)\sum_{t=0}^{\infty}\gamma^{t}d_{t}^{\pi}(s)\right]\pi_{\theta}(a|s)f(s,a)\,da\,ds
+$$
+
+Simplify the factor \\((1-\gamma)\\):
+
+$$
+= \sum_{t=0}^{\infty}\gamma^{t}\int_{s}\int_{a}d_{t}^{\pi}(s)\pi_{\theta}(a|s)f(s,a)\,da\,ds
+$$
+
+Recognize that:
+
+$$
+\int_{s}\int_{a} d_{t}^{\pi}(s)\pi_{\theta}(a|s)f(s,a)\,da\,ds
+= \mathbb{E}_{s_{t}\sim d_{t}^{\pi},\,a_{t}\sim\pi_{\theta}(a_{t}|s_{t})}[f(s_{t},a_{t})]
+$$
+
+Hence, indeed:
+
+$$
+= \sum_{t=0}^{\infty}\gamma^{t}\mathbb{E}_{s_{t}\sim d_{t}^{\pi},\,a_{t}\sim\pi_{\theta}(a_{t}|s_{t})}[f(s_{t},a_{t})],
+$$
+
+which is exactly our starting point.
+
+Thus, we've explicitly verified that:
+
+$$
+\sum_{t=0}^{\infty}\gamma^{t}\mathbb{E}_{s_{t}\sim d_{t}^{\pi},\,a_{t}\sim\pi_{\theta}(a_{t}|s_{t})}[f(s_{t},a_{t})]
+= \frac{1}{1-\gamma}\mathbb{E}_{s\sim d^\pi(s),\,a\sim\pi_{\theta}(a|s)}[f(s,a)],
+$$
+
+proving clearly and explicitly why you can remove the explicit \\(t\\)-index.
+
 
 While a simple time-dependent baseline \\(b_t = \frac{1}{N} \sum_{i=1}^N R_{i,t}\\) is often used to reduce variance in Monte Carlo policy gradient estimators, it does not represent a true value function \\(V(s_t) = \mathbb{E}[R_t \mid s_t]\\). This is because \\(b_t\\) marginalizes over all states \\(s_t\\) encountered at time \\(t\\) rather than conditioning on a specific state. Thus, it captures only the average return under the state visitation distribution \\(d_t(s)\\), not the expected return from a particular state \\(s_t = s\\). Although useful for variance reduction, this approach lacks the precision and generalization capabilities of a learned, state-dependent baseline.
 
