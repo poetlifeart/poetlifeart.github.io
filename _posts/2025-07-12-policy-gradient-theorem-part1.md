@@ -264,3 +264,4 @@ While a simple time-dependent baseline \\(b_t = \frac{1}{N} \sum_{i=1}^N R_{i,t}
 ![Figure 1: Algorithm 1 On-policy policy gradient with Monte Carlo estimator](/images/Algorithm1.png)
 
 
+Here fit \\( b(s_t)\\) to \\({Ri, t}\\) could mean some parameterized function of \\(s_t\\) such as a linear function.
