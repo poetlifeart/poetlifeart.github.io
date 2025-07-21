@@ -251,7 +251,12 @@ $$
 = \frac{1}{1-\gamma}\mathbb{E}_{s\sim d^\pi(s),\,a\sim\pi_{\theta}(a|s)}[f(s,a)],
 $$
 
-proving clearly and explicitly why you can remove the explicit \\(t\\)-index. (We are using \\(H\\) and \\(\infty\\) interchangeably. This can be justified as Thomas points out by assuming that there is only one admissible action in terminal states, and it causes a transition toan absorbing state with zero reward, which we call a postterminal absorbing state, unfifying the treatment of infinite horizon and episodic cases)
+proving clearly and explicitly why you can remove the explicit \\(t\\)-index. We are using \\(H\\) and \\(\infty\\) interchangeably. This can be justified, as Thomas points out, by assuming that there is only one admissible action in terminal states, and it causes a transition to an absorbing state with zero reward, which we call a postterminal absorbing state, unfifying the treatment of infinite horizon and episodic cases (where exit time H is random and
+varies from episode to episode). 
+
+Sutton treats the episodic case without a discount factor directly as well the continuing average case. 
+The deterministic finte time is not covered in the paper or by Sutton but in that case the average measure over 
+the finite time can be used to replicate these results.   
 
 
 While a simple time-dependent baseline \\(b_t = \frac{1}{N} \sum_{i=1}^N R_{i,t}\\) is often used to reduce variance in Monte Carlo policy gradient estimators, it does not represent a true value function \\(V(s_t) = \mathbb{E}[R_t \mid s_t]\\). This is because \\(b_t\\) marginalizes over all states \\(s_t\\) encountered at time \\(t\\) rather than conditioning on a specific state. Thus, it captures only the average return under the state visitation distribution \\(d_t(s)\\), not the expected return from a particular state \\(s_t = s\\). Although useful for variance reduction, this approach lacks the precision and generalization capabilities of a learned, state-dependent baseline.
