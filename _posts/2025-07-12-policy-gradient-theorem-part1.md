@@ -349,3 +349,5 @@ Tutorial bundles:
 2. the fact that DAgger converges to it,
 
 into one boxed statement, calling it “Theorem 2.2 (DAgger error bound).” 
+
+Also note that in both 2.1 and 2.2 of the tutorial, the training is "pointwise". We are encountering state action pairs, we ignore the actions taken and train our model at each state based on the optimal action given by the oracle. We obviously cannot take those actions in supervised training. Also note that empirical risk minimization error is theoratical and over the entire distribution (hence the expectation). We cannot obviously practically test that error on finite data. 
