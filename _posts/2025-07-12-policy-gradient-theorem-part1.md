@@ -281,7 +281,6 @@ Here the behavior policy and target policy are nominally the same, but the data 
 
 ## 6.  Offline Reinforcement Learning 
 
-Note for theorem 2.2. 
 
 ![Theorem 2.2 (DAgger error bound) ](/images/th22.png) 
 
