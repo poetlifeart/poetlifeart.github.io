@@ -26,7 +26,7 @@ layout: post
 
 
 In this post, we walk through the step-by-step derivations of some of the math in the 
-paper [ Offline Reinforcement Learning: Tutorial, Review, and Perspectives on Open Problems](https://arxiv.org/abs/2005.01643), at times provide a deeper discussion and correct minor mistakes and typoes in that paper. The best way is to read the paper and use this blog to calrify various topics. Our goal is not to replicate the paper but to suppement it. 
+paper [ Offline Reinforcement Learning: Tutorial, Review, and Perspectives on Open Problems](https://arxiv.org/abs/2005.01643), at times provide a deeper discussion and correct minor mistakes and typos in that paper. The best way is to read the paper and use this blog to clarify various topics. Our goal is not to replicate the paper but to supplement it. 
 
 ## 1. Objective: Maximizing Expected Return
 
@@ -208,7 +208,7 @@ with no time index on \\(d^{\pi}\\).
 
 ## 4. Proof of measure absorption 
 
-If we represent measures as denisties, this is easy to show:
+If we represent measures as densities, this is easy to show:
 
 $$
 \frac{1}{1-\gamma}\mathbb{E}_{s\sim d^\pi(s),\,a\sim\pi_{\theta}(a|s)}[f(s,a)]
@@ -251,17 +251,18 @@ $$
 = \frac{1}{1-\gamma}\mathbb{E}_{s\sim d^\pi(s),\,a\sim\pi_{\theta}(a|s)}[f(s,a)],
 $$
 
-proving clearly and explicitly why you can remove the explicit \\(t\\)-index. We are using \\(H\\) and \\(\infty\\) interchangeably. This can be justified, as Thomas points out, by assuming that there is only one admissible action in terminal states, and it causes a transition to an absorbing state with zero reward, which we call a postterminal absorbing state, unfifying the treatment of infinite horizon and episodic cases (where exit time H is random and
+proving clearly and explicitly why you can remove the explicit \\(t\\)-index. We are using \\(H\\) and \\(\infty\\) interchangeably. This can be justified, as Thomas points out, by assuming that there is only one admissible action in terminal states, and it causes a transition to an absorbing state with zero reward, which we call a postterminal absorbing state, unifying the treatment of infinite horizon and episodic cases (where exit time H is random and
 varies from episode to episode). 
 
-Sutton treats the episodic case without a discount factor directly as well the continuing average case. 
-The deterministic finte time is not covered in the paper or by Sutton but in that case the average measure over 
+Sutton treats the episodic case without a discount factor directly as well as the continuing average case. 
+The deterministic finite time is not covered in the paper or by Sutton but in that case the average measure over 
 the finite time can be used to replicate these results.   
 
 
-While a simple time-dependent baseline \\(b_t = \frac{1}{N} \sum_{i=1}^N R_{i,t}\\) is often used to reduce variance in Monte Carlo policy gradient estimators, it does not represent a true value function \\(V(s_t) = \mathbb{E}[R_t \mid s_t]\\). This is because \\(b_t\\) marginalizes over all states \\(s_t\\) encountered at time \\(t\\) rather than conditioning on a specific state. Thus, it captures only the average return under the state visitation distribution \\(d_t(s)\\), not the expected return from a particular state \\(s_t = s\\). Although useful for variance reduction, this approach lacks the precision and generalization capabilities of a learned, state-dependent baseline.
+While a simple time-dependent baseline \\(b_t = \frac{1}{N} \sum_{i=1}^N R_{i,t}\\) is often used to reduce variance in Monte Carlo policy gradient estimators, it does not represent a true value function \\(V(s_t) = \mathbb{E}[R_t \mid s_t]\\). This is because \\(b_t\\) marginalizes over all states \\(s_t\\) encountered at time \\(t\\) rather than conditioning on a specific state. Thus, it captures only the average return under the state visitation distribution \\(d_t(s)\\), not the expected return from a particular state \\(s_t = s\\). Although useful for variance reduction, this approach lacks the precision and generalization capabilities of a learned, state-dependent baseline. 
 
 ![Figure 1: Algorithm 1 On-policy policy gradient with Monte Carlo estimator](/images/Algorithm1.png)
 
 
-Here fit \\( b(s_t)\\) to \\({Ri, t}\\) could mean some parameterized function of \\(s_t\\) such as a linear function.
+Here fit \\( b(s_t)\\) to \\({Ri, t}\\) could mean some parameterized function of \\(s_t\\) such as a linear function. With such a fit we are very close to Actor-Critique model. The only difference is that here the state dependent baseline is obtained via monte carlo method while in proper Actor-Critique model, as we shall see, there is bootstrapping. 
+
