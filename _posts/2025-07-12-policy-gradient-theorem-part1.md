@@ -286,9 +286,29 @@ Note for theorem 2.2.
 ![Theorem 2.2 (DAgger error bound) ](/images/th22.png) 
 
 
-The assertion “If we allow for additional data collection” is really only an approximate implication of this theorem.First observe that we need all of the data to be gathered online, not just some "additional data" samples. More precisely, the theorem holds only if the policy learned from the data—when rolled out—behaves exactly the same as the policy that generated its training data, since the assumption is that it’s trained on its own trajectories. This is, of course, not achievable even by purely online on-policy learning algorithms: once we train our policy using the oracle labels on data collected by a policy, the distribution shifts and we can no longer test it under the same assumptions. However, if the training policy remains very close to the data‐generating policy, we can assume the theorem holds approximately. In summary, the theorem requires the policy to be online and on‐policy, with any distributional shifts in the learning loop being negligible. Concisely: The linear‑in‑horizon guarantee
+---
+layout: post            # change/remove if your Jekyll theme uses something else
+title:  "Where Levine’s “DAgger Error Bound” Comes From"
+---
 
-$$ℓ(π)≤C+Hε$$
+## 1  Ideal‑case theorem (Ross et al., 2011, Thm 2.2)
 
-is only for a policy whose classification error ε is evaluated on the same state distribution it will face at test time. Later, Dagger, continuously refreshes the dataset with on‑policy trajectories, and explicitly upper‑bounds the inevitable gap introduced by expert mixing and manages to come up with a procedure that 
-asymptotically achieves this bound. 
+If a policy’s classification error \\( \varepsilon \\) is measured on the **state distribution it induces itself** \\( d_{\pi} \\), then its task‑loss (or cost) obeys the linear‑in‑horizon bound
+
+$$
+\ell(\pi)\; \le\; C \;+\; H\,\varepsilon .
+$$
+
+With \\( u = 1 \\) in the original notation, this is the familiar \\( C + H\varepsilon \\).
+
+---
+
+## 2  What DAgger actually proves (Ross et al., 2011, Thm 3.2)
+
+DAgger is an *iterative* algorithm:
+
+1. **Roll‑out** a mixed policy  
+   $$
+     \pi_i \;=\; \beta_i\,\pi^\star \;+\; (1-\beta_i)\,\hat{\pi}_i ,
+   $$
+   where \\( \beta_i \\)_
