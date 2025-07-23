@@ -266,3 +266,8 @@ While a simple time-dependent baseline \\(b_t = \frac{1}{N} \sum_{i=1}^N R_{i,t}
 
 Here fit \\( b(s_t)\\) to \\({Ri, t}\\) could mean some parameterized function of \\(s_t\\) such as a linear function. With such a fit we are very close to Actor-Critique model. The only difference is that here the state dependent baseline is obtained via monte carlo method while in proper Actor-Critique model, as we shall see, there is bootstrapping. 
 
+## 5. Approximate dynamic programming 
+
+The discussion in this section is pretty straightforward; we are just going to remind ourselves what makes a policy "off-policy".  RL is off-policy  when the behavior policy, used to generate the training data, and the target policy,  the policy we are optimizing using that data, are not the same. So in Q-leanring algorithm below:  
+
+![Figure 2: Q-learning ](/images/qlearn.png) 
