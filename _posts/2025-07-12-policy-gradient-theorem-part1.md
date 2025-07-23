@@ -286,12 +286,7 @@ Note for theorem 2.2.
 ![Theorem 2.2 (DAgger error bound) ](/images/th22.png) 
 
 
----
-layout: post            # change/remove if your Jekyll theme uses something else
-title:  "Where Levine’s “DAgger Error Bound” Comes From"
----
-
-## 1  Ideal‑case theorem (Ross et al., 2011, Thm 2.2)
+##  Ideal‑case theorem (Ross et al., 2011, Thm 2.2)
 
 If a policy’s classification error \\( \varepsilon \\) is measured on the **state distribution it induces itself** \\( d_{\pi} \\), then its task‑loss (or cost) obeys the linear‑in‑horizon bound
 
@@ -303,7 +298,7 @@ With \\( u = 1 \\) in the original notation, this is the familiar \\( C + H\vare
 
 ---
 
-## 2  What DAgger actually proves (Ross et al., 2011, Thm 3.2)
+##  What DAgger actually proves (Ross et al., 2011, Thm 3.2)
 
 DAgger is an *iterative* algorithm:
 
@@ -311,4 +306,49 @@ DAgger is an *iterative* algorithm:
    $$
      \pi_i \;=\; \beta_i\,\pi^\star \;+\; (1-\beta_i)\,\hat{\pi}_i ,
    $$
-   where \\( \beta_i \\)_
+   where \\( \beta_i \\) (decaying) is the probability of following the expert.
+
+2. **Collect** visited states, query the expert for each state, and **aggregate** the data.
+
+3. **Train** a new classifier \\( \hat{\pi}_{i+1} \\) on the growing dataset.
+
+### Key bound on distribution mismatch  
+
+$$
+\bigl\lVert d_{\pi_i} - d_{\hat{\pi}_i}\bigr\rVert_1
+\;\le\;
+2\,H\,\beta_i .
+$$
+
+Because \\( \beta_i \to 0 \\), this mismatch shrinks over iterations.
+
+### DAgger’s finite‑data guarantee  
+
+For some policy in the sequence,
+
+$$
+\ell(\hat{\pi})
+\;\le\;
+C \;+\; H\,\varepsilon_N
+\;+\;
+O\!\bigl(\tfrac{\log H}{N}\bigr),
+$$
+
+where the \\( O(\cdot) \\) term captures  
+
+* the controlled distribution mismatch \\( 2H\beta_i \\), and  
+* online‑learning regret.
+
+With a schedule such as \\( \beta_i \le 1/H \\) and \\( N = \tilde{O}(H) \\), the extra term vanishes, so DAgger **asymptotically achieves the same linear bound** proved in the ideal case.
+
+---
+
+##  Why Levine *et al.* label it “Theorem 2.2 (DAgger error bound)”
+
+In their tutorial (Levine et al., 2020, arXiv:2005.01643) the authors bundle:
+
+1. the *ideal* bound above, and  
+2. the fact that DAgger converges to it,
+
+into one boxed statement, calling it “Theorem 2.2 (DAgger error bound).”  
+Mathematically nothing is incorrect; the label merely merges two results that Ross et al. present separately.
