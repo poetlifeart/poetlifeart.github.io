@@ -295,9 +295,7 @@ $$
 \ell(\pi)\; \le\; C \;+\; H\,\varepsilon .
 $$
 
-With \\( u = 1 \\) in the original notation, this is the familiar \\( C + H\varepsilon \\).
-
-This basically requires  that the policy we train on that policy's own data and using the oracle's labels, will not shift in distribution once unrolled. This is of course not feasible. 
+This basically requires  that the policy we train using that policy's own data (and the oracle's labels), will not shift in distribution once unrolled. This is of course not feasible. 
 
 ---
 
@@ -344,11 +342,8 @@ where the \\( O(\cdot) \\) term captures
 
 With a schedule such as \\( \beta_i \le 1/H \\) and \\( N = \tilde{O}(H) \\), the extra term vanishes, so DAgger **asymptotically achieves the same linear bound** proved in the ideal case.
 
----
 
-##  Why Levine *et al.* label it “Theorem 2.2 (DAgger error bound)”
-
-In tutorial the authors bundle likely for simplicty:
+Tutorial bundles:
 
 1. the *ideal* bound above, and  
 2. the fact that DAgger converges to it,
