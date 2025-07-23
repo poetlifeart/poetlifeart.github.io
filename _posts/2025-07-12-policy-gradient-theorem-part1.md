@@ -285,6 +285,7 @@ Note for theorem 2.2.
 
 ![Theorem 2.2 (DAgger error bound) ](/images/th22.png) 
 
+One has to be careful what Levine is trying to convey here: 
 
 ##  Ideal‑case theorem (Ross et al., 2011, Thm 2.2)
 
@@ -296,9 +297,11 @@ $$
 
 With \\( u = 1 \\) in the original notation, this is the familiar \\( C + H\varepsilon \\).
 
+This basically requires  that the policy we train on that policy's own data and using the oracle's labels, will not shift in distribution once unrolled. This is of course not feasible. 
+
 ---
 
-##  What DAgger actually proves (Ross et al., 2011, Thm 3.2)
+##  What we really need (Ross et al., 2011, Thm 3.2)
 
 DAgger is an *iterative* algorithm:
 
@@ -345,10 +348,9 @@ With a schedule such as \\( \beta_i \le 1/H \\) and \\( N = \tilde{O}(H) \\), th
 
 ##  Why Levine *et al.* label it “Theorem 2.2 (DAgger error bound)”
 
-In their tutorial (Levine et al., 2020, arXiv:2005.01643) the authors bundle:
+In tutorial the authors bundle likely for simplicty:
 
 1. the *ideal* bound above, and  
 2. the fact that DAgger converges to it,
 
-into one boxed statement, calling it “Theorem 2.2 (DAgger error bound).”  
-Mathematically nothing is incorrect; the label merely merges two results that Ross et al. present separately.
+into one boxed statement, calling it “Theorem 2.2 (DAgger error bound).” 
