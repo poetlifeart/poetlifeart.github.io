@@ -350,4 +350,7 @@ Tutorial bundles:
 
 into one boxed statement, calling it “Theorem 2.2 (DAgger error bound).” 
 
-Also note that in both 2.1 and 2.2 of the tutorial, the training is "pointwise". We are encountering state action pairs, we ignore the actions taken and train our model at each state based on the optimal action given by the oracle. We obviously cannot take those actions in supervised training. Also note that empirical risk minimization error is theoratical and over the entire distribution (hence the expectation). We cannot obviously practically test that error on finite data. This is true about supervised training in general. Vapnik provides the statistical machinery that tells you how large a finite sample you need for your empirical loss to be a reliable proxy for that theoretical ε. Look up his text Statistical Learning Theory. 
+Also note that in both 2.1 and 2.2 of the tutorial, the training is "pointwise". We are encountering state action pairs, we ignore the actions taken and train our model at each state based on the optimal action given by the oracle. We obviously cannot take those actions in supervised training. Also note that empirical risk minimization error is theoratical and over the entire distribution (hence the expectation {\\}
+\ell(\pi)\;=\;\mathbb{E}_{\tau\sim p_\pi}\!\Bigl[\;\sum_{t=0}^{H}\mathbf{1}\{\,a_t \neq a_t^\star\,\}\Bigr]
+\\)
+). We cannot obviously practically test that error on finite data. This is true about supervised training in general. Vapnik provides the statistical machinery that tells you how large a finite sample you need for your empirical loss to be a reliable proxy for that theoretical ε. Look up his text Statistical Learning Theory. 
