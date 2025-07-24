@@ -355,3 +355,107 @@ Also note that in both 2.1 and 2.2 of the tutorial, the training is "pointwise".
 $$\ell(\pi)\;=\;\mathbb{E}_{\tau \sim p_\pi}\!\Bigl[\;\sum_{t=0}^{H} \mathbf{1}\{\,a_t \neq a_t^\star\,\}\Bigr].$$
 
  We cannot obviously practically test that error on finite data. This is true about supervised training in general. Vapnik provides the statistical machinery that tells you how large a finite sample you need for your empirical loss to be a reliable proxy for that theoretical ε. Look up his text Statistical Learning Theory. 
+
+
+
+ We want to prove that the **doubly robust estimator** recovers the true expected return \( J(\pi_\theta) \), i.e.:
+
+$$
+J(\pi_\theta) = \mathbb{E}_{\tau \sim \pi_\theta} \left[ \sum_{t=0}^H \gamma^t r_t \right]
+$$
+
+and that the DR estimator:
+
+$$
+\hat J_{\text{DR}} = \mathbb{E}_{\tau \sim \pi_\beta} \left[
+\sum_{t=0}^H \gamma^t \left(
+w_t (r_t - \hat Q(s_t, a_t)) + w_{t-1} \mathbb{E}_{a \sim \pi_\theta(\cdot \mid s_t)} \left[ \hat Q(s_t, a) \right]
+\right)
+\right]
+$$
+
+is equal to it in expectation, assuming the importance weights \( w_t = \prod_{k=0}^t \frac{\pi_\theta(a_k \mid s_k)}{\pi_\beta(a_k \mid s_k)} \) are correct.
+
+---
+
+### Step 1: Split the DR estimator
+
+We split the estimator into two parts:
+
+$$
+\hat J_{\text{DR}} = 
+\underbrace{\mathbb{E}_{\tau \sim \pi_\beta} \left[
+\sum_{t=0}^H \gamma^t w_t r_t \right]}_{\text{(A)}}
++ 
+\underbrace{\mathbb{E}_{\tau \sim \pi_\beta} \left[
+\sum_{t=0}^H \gamma^t \left(
+- w_t \hat Q(s_t, a_t) + w_{t-1} \mathbb{E}_{a \sim \pi_\theta(\cdot \mid s_t)} \left[ \hat Q(s_t, a) \right]
+\right)
+\right]}_{\text{(B)}}
+$$
+
+---
+
+### Step 2: Part (A) gives the true return
+
+By per-decision importance sampling:
+
+$$
+\mathbb{E}_{\tau \sim \pi_\beta} \left[
+\sum_{t=0}^H \gamma^t w_t r_t \right]
+= 
+\mathbb{E}_{\tau \sim \pi_\theta} \left[
+\sum_{t=0}^H \gamma^t r_t \right]
+= J(\pi_\theta)
+$$
+
+---
+
+### Step 3: Show that part (B) is zero
+
+We analyze:
+
+$$
+\mathbb{E}_{\tau \sim \pi_\beta} \left[
+\sum_{t=0}^H \gamma^t \left(
+- w_t \hat Q(s_t, a_t) + w_{t-1} \mathbb{E}_{a \sim \pi_\theta(\cdot \mid s_t)} [\hat Q(s_t, a)]
+\right)
+\right]
+$$
+
+Use the identity:
+
+$$
+\mathbb{E}_{\tau \sim \pi_\beta} \left[ w_t \hat Q(s_t, a_t) \right]
+= \mathbb{E}_{s_t \sim d^{\pi_\theta}_t, a_t \sim \pi_\theta(\cdot \mid s_t)} [\hat Q(s_t, a_t)]
+$$
+
+And similarly:
+
+$$
+\mathbb{E}_{\tau \sim \pi_\beta} \left[
+w_{t-1} \mathbb{E}_{a \sim \pi_\theta(\cdot \mid s_t)} [\hat Q(s_t, a)]
+\right]
+= \mathbb{E}_{s_t \sim d^{\pi_\theta}_t, a \sim \pi_\theta(\cdot \mid s_t)} [\hat Q(s_t, a)]
+$$
+
+Therefore, both terms are equal in expectation, and:
+
+$$
+\text{(B)} = 0
+$$
+
+---
+
+### Final Conclusion
+
+Since part (A) gives the true return and part (B) cancels out, the doubly robust estimator satisfies:
+
+$$
+\mathbb{E}[\hat J_{\text{DR}}] = J(\pi_\theta)
+$$
+
+under the assumption that the importance weights are correct.
+
+Thus, the DR estimator is **unbiased** when either the model is correct or the importance weights are accurate.
+
