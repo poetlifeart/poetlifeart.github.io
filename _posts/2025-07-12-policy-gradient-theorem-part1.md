@@ -360,7 +360,7 @@ Next we prove the doubly stochastic formualtion (6) on page 11 of the paper:
 
 ![Figure 4: doubly stochastic result ](/images/double.png) 
 
- We want to prove that the **doubly robust estimator** recovers the true expected return \( J(\pi_\theta) \), i.e.:
+ We want to prove that the **doubly robust estimator** recovers the true expected return \(( J(\pi_\theta) \)), i.e.:
 
 $$
 J(\pi_\theta) = \mathbb{E}_{\tau \sim \pi_\theta} \left[ \sum_{t=0}^H \gamma^t r_t \right]
@@ -448,7 +448,7 @@ $$
 $$
 
 The result follows. Note the reason in the second part we have \\(w_{t-1}\\) and not \\(w_{t}\\) is that the
-control action is averaged over and the result is a function of the state only. In the path \\(\tau\\) the state transition given an action does not depend on policies so in the importance sampling you can only adjust the sequence of policies that lead to a particular outcome. To compute this outcome all the probability actions up to and including \\(a_{t-1}\\) are multiplied by Markov property but not \\(a_{t}\\) . This is exactly the definition of \\(w_{t-1}\\)
+control action is averaged over and the result is a function of the state only. In the path \\(\tau\\) the state transition given an action does not depend on policies so in the importance sampling you can only adjust the sequence of policies that lead to a particular outcome. To compute this outcome all the probability actions up to and including \\(a_{t-1}\\) are multiplied by Markov property but not \\(a_{t}\\) . This is exactly the definition of \\(w_{t-1}\\).
 
 
 
