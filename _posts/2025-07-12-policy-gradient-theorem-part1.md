@@ -451,8 +451,11 @@ The result follows. Note the reason in the second part we have \\(w_{t-1}\\) and
 control action is averaged over and the result is a function of the state only. In the path \\(\tau\\) the state transition given an action does not depend on policies so in the importance sampling you can only adjust the sequence of policies that lead to a particular outcome. To compute this outcome all the probability actions up to and including \\(a_{t-1}\\) are multiplied by Markov property but not \\(a_{t}\\) . This is exactly the definition of \\(w_{t-1}\\).
 Just to convince ourselves we give the details below:
 
-Let \( g(s_t) := \mathbb{E}_{a \sim \pi_\theta(\cdot \mid s_t)}[\hat Q(s_t,a)] \) and
-\( w_{t-1} := \prod_{i=0}^{t-1}\frac{\pi_\theta(a_i\mid s_i)}{\pi_\beta(a_i\mid s_i)} \).
+Let 
+
+$$ g(s_t) := \mathbb{E}_{a \sim \pi_\theta(\cdot \mid s_t)}[\hat Q(s_t,a)]$$
+
+$$ w_{t-1} := \prod_{i=0}^{t-1}\frac{\pi_\theta(a_i\mid s_i)}{\pi_\beta(a_i\mid s_i)} $$.
 
 ### Step 1: Write the expectation as a sum over prefixes
 
