@@ -447,7 +447,9 @@ $$
 \text{(B)} = 0
 $$
 
-The result follows
+The result follows. Note the reason in the second part we have \\(w_{t-1}\\) and not \\(w_{t}\\) is that the
+control action is averaged over and the result is a function of the state only. In the path \\(\tau\\) the state transition given an action does not depend on policies so in the importance sampling you can only adjust the sequence of policies that lead to a particular outcome. To compute this outcome all the probability actions up to and including \\(a_{t-1}\\) are multiplied by Markov property but not \\(a_{t}\\) . This is exactly the definition of \\(w_{t-1}\\)
+
 
 
 
