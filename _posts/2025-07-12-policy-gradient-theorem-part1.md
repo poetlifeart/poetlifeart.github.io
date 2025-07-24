@@ -449,6 +449,64 @@ $$
 
 The result follows. Note the reason in the second part we have \\(w_{t-1}\\) and not \\(w_{t}\\) is that the
 control action is averaged over and the result is a function of the state only. In the path \\(\tau\\) the state transition given an action does not depend on policies so in the importance sampling you can only adjust the sequence of policies that lead to a particular outcome. To compute this outcome all the probability actions up to and including \\(a_{t-1}\\) are multiplied by Markov property but not \\(a_{t}\\) . This is exactly the definition of \\(w_{t-1}\\).
+Just to convince ourselves we give the details below:
+
+Let \( g(s_t) := \mathbb{E}_{a \sim \pi_\theta(\cdot \mid s_t)}[\hat Q(s_t,a)] \) and
+\( w_{t-1} := \prod_{i=0}^{t-1}\frac{\pi_\theta(a_i\mid s_i)}{\pi_\beta(a_i\mid s_i)} \).
+
+### Step 1: Write the expectation as a sum over prefixes
+
+$$
+\begin{aligned}
+\mathbb{E}_{\tau \sim \pi_\beta}\big[w_{t-1} \, g(s_t)\big]
+&= \sum_{s_{0:t},\, a_{0:t-1}}
+\rho_0(s_0)\,
+\prod_{i=0}^{t-1}
+\big[ \pi_\beta(a_i \mid s_i)\, T(s_{i+1}\mid s_i,a_i) \big]\,
+\left( \prod_{i=0}^{t-1} \frac{\pi_\theta(a_i \mid s_i)}{\pi_\beta(a_i \mid s_i)} \right)
+\, g(s_t) \\
+&= \sum_{s_{0:t},\, a_{0:t-1}}
+\rho_0(s_0)\,
+\prod_{i=0}^{t-1}
+\big[ \pi_\theta(a_i \mid s_i)\, T(s_{i+1}\mid s_i,a_i) \big]\,
+g(s_t),
+\end{aligned}
+$$
+
+since all \( \pi_\beta(a_i \mid s_i) \) cancel.
+
+### Step 2: Recognize the resulting distribution
+
+The remaining product is the prefix probability under \( \pi_\theta \). Marginalizing over the prefix up to time \( t \) yields \( d_t^{\pi_\theta}(s_t) \). Hence
+
+$$
+\mathbb{E}_{\tau \sim \pi_\beta}\big[w_{t-1} \, g(s_t)\big]
+= \sum_{s_t} d_t^{\pi_\theta}(s_t)\, g(s_t)
+= \mathbb{E}_{s_t \sim d_t^{\pi_\theta}}[g(s_t)].
+$$
+
+Now plug back \( g(s_t) = \mathbb{E}_{a \sim \pi_\theta(\cdot \mid s_t)}[\hat Q(s_t,a)] \):
+
+$$
+\mathbb{E}_{\tau \sim \pi_\beta}
+\Big[
+w_{t-1}\,
+\mathbb{E}_{a \sim \pi_\theta(\cdot \mid s_t)}[\hat Q(s_t,a)]
+\Big]
+=
+\mathbb{E}_{s_t \sim d_t^{\pi_\theta}}
+\Big[
+\mathbb{E}_{a \sim \pi_\theta(\cdot \mid s_t)}[\hat Q(s_t,a)]
+\Big].
+$$
+
+By the law of total expectation, this equals
+
+$$
+\mathbb{E}_{s_t \sim d_t^{\pi_\theta},\, a \sim \pi_\theta(\cdot \mid s_t)}
+\big[ \hat Q(s_t,a) \big].
+$$
+
 
 
 
