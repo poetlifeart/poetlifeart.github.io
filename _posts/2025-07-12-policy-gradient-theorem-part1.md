@@ -476,11 +476,11 @@ g(s_t),
 \end{aligned}
 $$
 
-since all \( \pi_\beta(a_i \mid s_i) \) cancel.
+since all \\( \pi_\beta(a_i \mid s_i) \\) cancel.
 
 ### Step 2: Recognize the resulting distribution
 
-The remaining product is the prefix probability under \( \pi_\theta \). Marginalizing over the prefix up to time \( t \) yields \( d_t^{\pi_\theta}(s_t) \). Hence
+The remaining product is the prefix probability under \\( \pi_\theta \\). Marginalizing over the prefix up to time \\( t \\) yields \\( d_t^{\pi_\theta}(s_t) \\). Hence
 
 $$
 \mathbb{E}_{\tau \sim \pi_\beta}\big[w_{t-1} \, g(s_t)\big]
@@ -488,7 +488,7 @@ $$
 = \mathbb{E}_{s_t \sim d_t^{\pi_\theta}}[g(s_t)].
 $$
 
-Now plug back \( g(s_t) = \mathbb{E}_{a \sim \pi_\theta(\cdot \mid s_t)}[\hat Q(s_t,a)] \):
+Now plug back \\( g(s_t) = \mathbb{E}_{a \sim \pi_\theta(\cdot \mid s_t)}[\hat Q(s_t,a)] \\):
 
 $$
 \mathbb{E}_{\tau \sim \pi_\beta}
