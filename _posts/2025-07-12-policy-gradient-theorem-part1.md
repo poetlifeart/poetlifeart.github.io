@@ -356,7 +356,9 @@ $$\ell(\pi)\;=\;\mathbb{E}_{\tau \sim p_\pi}\!\Bigl[\;\sum_{t=0}^{H} \mathbf{1}\
 
  We cannot obviously practically test that error on finite data. This is true about supervised training in general. Vapnik provides the statistical machinery that tells you how large a finite sample you need for your empirical loss to be a reliable proxy for that theoretical ε. Look up his text Statistical Learning Theory. 
 
+Next we prove the doubly stochastic result:
 
+![Figure 4: doubly stochastic result ](/images/double.png) 
 
  We want to prove that the **doubly robust estimator** recovers the true expected return \( J(\pi_\theta) \), i.e.:
 
