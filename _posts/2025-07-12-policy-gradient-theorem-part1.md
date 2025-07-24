@@ -366,7 +366,7 @@ $$
 J(\pi_\theta) = \mathbb{E}_{\tau \sim \pi_\theta} \left[ \sum_{t=0}^H \gamma^t r_t \right]
 $$
 
-and that the DR estimator:
+First observe that the first sum above is Monte Carlo estimation  of the following expectation
 
 $$
 \hat J_{\text{DR}} = \mathbb{E}_{\tau \sim \pi_\beta} \left[
@@ -376,7 +376,7 @@ w_t (r_t - \hat Q(s_t, a_t)) + w_{t-1} \mathbb{E}_{a \sim \pi_\theta(\cdot \mid 
 \right]
 $$
 
-is equal to it in expectation, assuming the importance weights \( w_t = \prod_{k=0}^t \frac{\pi_\theta(a_k \mid s_k)}{\pi_\beta(a_k \mid s_k)} \) are correct.
+which we will develop next. 
 
 ---
 
