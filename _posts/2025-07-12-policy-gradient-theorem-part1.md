@@ -360,7 +360,7 @@ Next we prove the doubly stochastic formualtion (6) on page 11 of the paper:
 
 ![Figure 4: doubly stochastic result ](/images/double.png) 
 
- We want to prove that the **doubly robust estimator** recovers the true expected return \(( J(\pi_\theta) \)), i.e.:
+ We want to prove that the **doubly robust estimator** recovers the true expected return:
 
 $$
 J(\pi_\theta) = \mathbb{E}_{\tau \sim \pi_\theta} \left[ \sum_{t=0}^H \gamma^t r_t \right]
