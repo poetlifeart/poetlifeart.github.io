@@ -503,7 +503,8 @@ w_{t-1}\,
 \Big].
 $$
 
-By the law of total expectation, this equals
+By the law of total expectation (\\( g(s_t)\\) is a function of \\(s_t) \\ only so we 
+can always add expectation over action which will be integrated out), this equals
 
 $$
 \mathbb{E}_{s_t \sim d_t^{\pi_\theta},\, a \sim \pi_\theta(\cdot \mid s_t)}
