@@ -356,7 +356,7 @@ $$\ell(\pi)\;=\;\mathbb{E}_{\tau \sim p_\pi}\!\Bigl[\;\sum_{t=0}^{H} \mathbf{1}\
 
  We cannot obviously practically test that error on finite data. This is true about supervised training in general. Vapnik provides the statistical machinery that tells you how large a finite sample you need for your empirical loss to be a reliable proxy for that theoretical ε. Look up his text Statistical Learning Theory. 
 
-Next we prove the doubly stochastic result:
+Next we prove the doubly stochastic formualtion (6) on page 11 of the paper:
 
 ![Figure 4: doubly stochastic result ](/images/double.png) 
 
@@ -447,17 +447,8 @@ $$
 \text{(B)} = 0
 $$
 
+The result follows
 ---
 
-### Final Conclusion
 
-Since part (A) gives the true return and part (B) cancels out, the doubly robust estimator satisfies:
-
-$$
-\mathbb{E}[\hat J_{\text{DR}}] = J(\pi_\theta)
-$$
-
-under the assumption that the importance weights are correct.
-
-Thus, the DR estimator is **unbiased** when either the model is correct or the importance weights are accurate.
 
