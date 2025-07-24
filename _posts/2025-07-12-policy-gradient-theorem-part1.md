@@ -488,7 +488,7 @@ $$
 = \mathbb{E}_{s_t \sim d_t^{\pi_\theta}}[g(s_t)].
 $$
 
-Now plug back \\( g(s_t) = \mathbb{E}_{a \sim \pi_\theta(\cdot \mid s_t)}[\hat Q(s_t,a)] \\):
+Now plug back $$( g(s_t) = \mathbb{E}_{a \sim \pi_\theta(\cdot \mid s_t)}[\hat Q(s_t,a)] $$:
 
 $$
 \mathbb{E}_{\tau \sim \pi_\beta}
