@@ -511,7 +511,48 @@ $$
 \big[ \hat Q(s_t,a) \big].
 $$
 
-### Fitted‑Q Evaluation (FQE)
+Next note there is a typo where  (Levine and Koltun, 2013) is refrenced; it should be:
+
+$$
+\nabla_{\theta} \,\bar J(\pi_{\theta}) \;\approx\;
+\sum_{i=1}^{n} w_i
+\Biggl(
+  \sum_{t=0}^{H} \gamma^{t}\,
+  \nabla_{\theta}\log\pi_{\theta}(a^{i}_{t}\mid s^{i}_{t})\;
+  \hat A(s^{i}_{t},a^{i}_{t})
+\Biggr)
+\;+\;
+\lambda\,\nabla_{\theta}\log\!\Bigl(\sum_{i=1}^{n} w_i\Bigr).
+$$
+
+
+
+### Approximate Off-Policy Policy Gradients
+
+In this section observe that 
+
+$$
+J_{\pi_\beta}(\pi_\theta)
+\;=\;
+\mathbb{E}_{s \sim d_{\pi_\beta}}\!\bigl[V_{\pi}(s)\bigr]
+$$
+
+is a definition and not developed from first principles. It sort of works in practice. 
+
+Also note  off-policy policy gradient (Degris et al., 2012):
+
+$$
+\mathbb{E}_{\substack{s \sim d_{\pi_\beta}(s)\\ a \sim \pi_\theta(a\mid s)}}\!
+\Bigl[
+   Q_{\pi_\theta}(s,a)\,\nabla_{\theta}\log\pi_\theta(a\mid s)
+\Bigr]
+$$
+
+
+
+really hides an actor-critic type approach as we need to boothstrap \\( Q \\) function here. \\( Q \\) itself
+requires target policy data which we don't have but something like this might work using the off-line data: 
+
 
 1. **Initialisation**  
    Choose a differentiable function class  
