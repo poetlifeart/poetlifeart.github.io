@@ -519,10 +519,10 @@ $$
    (e.g. a neural network) and set the critic parameters  
    $$\phi_{0}\gets \text{RandomInit}().$$  
 
-2. **Iterative Bellman regression** for \\(k = 1,2,\dots,K\\):
+2. **Iterative Bellman regression** for \(k = 1,2,\dots,K\):
 
    1. **Target construction**  
-      For every logged transition \\((s_i,a_i,r_i,s'_i)\\) define  
+      For every logged transition \((s_i,a_i,r_i,s'_i)\) define  
       $$y_i \;=\; r_i + \gamma\,Q^{\pi_{\theta}}_{\phi_{k-1}}\bigl(s'_i,\,\pi_{\theta}(s'_i)\bigr).$$
 
    2. **Supervised fit**  
@@ -538,5 +538,6 @@ $$
    $$C_{\pi_{\theta}}(s)\;\approx\;Q^{\pi_{\theta}}_{\phi_{K}}\bigl(s,\pi_{\theta}(s)\bigr).$$  
 
 All targets and losses use only the fixed offline batch  
-$$ \mathcal D = \{(s_i,a_i,r_i,s'_i)\}$$ and the current policy  
+$$ \mathcal D = \{(s_i,a_i,r_i,s'_i)\} $$ and the current policy  
 $$ \pi_{\theta} $$; no fresh interaction with the environment is required.
+
