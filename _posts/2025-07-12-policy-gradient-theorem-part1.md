@@ -511,12 +511,11 @@ $$
 \big[ \hat Q(s_t,a) \big].
 $$
 
-
 ### Fitted‑Q Evaluation (FQE)
 
 1. **Initialisation**  
    Choose a differentiable function class  
-   $$\{\,Q_{\phi}(s,a)\mid \phi\in\Phi\}$$  
+   $$\{\,Q^{\pi_{\theta}}_{\phi}(s,a)\mid \phi\in\Phi\}$$  
    (e.g. a neural network) and set the critic parameters  
    $$\phi_{0}\gets \text{RandomInit}().$$  
 
@@ -524,20 +523,20 @@ $$
 
    1. **Target construction**  
       For every logged transition \\((s_i,a_i,r_i,s'_i)\\) define  
-      $$y_i \;=\; r_i + \gamma\,Q_{\phi_{k-1}}\bigl(s'_i,\,\pi_{\theta}(s'_i)\bigr).$$
+      $$y_i \;=\; r_i + \gamma\,Q^{\pi_{\theta}}_{\phi_{k-1}}\bigl(s'_i,\,\pi_{\theta}(s'_i)\bigr).$$
 
    2. **Supervised fit**  
       Update the critic by least‑squares regression  
       $$\phi_k \;=\;
         \arg\min_{\phi\in\Phi}\;
         \frac{1}{|\mathcal D|}\sum_{i}
-        \bigl(Q_{\phi}(s_i,a_i)-y_i\bigr)^2.$$
+        \bigl(Q^{\pi_{\theta}}_{\phi}(s_i,a_i)-y_i\bigr)^2.$$
 
 3. **Return the critic for the current policy**  
-   $$Q_{\theta}(s,a)\;\approx\; Q_{\phi_{K}}(s,a)$$  
+   $$Q^{\pi_{\theta}}_{\phi_{K}}(s,a)\;\approx\;Q^{\pi_{\theta}}(s,a)$$  
    and the state‑value estimate  
-   $$C_{\pi_{\theta}}(s)\;\approx\; Q_{\phi_{K}}\bigl(s,\pi_{\theta}(s)\bigr).$$  
+   $$C_{\pi_{\theta}}(s)\;\approx\;Q^{\pi_{\theta}}_{\phi_{K}}\bigl(s,\pi_{\theta}(s)\bigr).$$  
 
 All targets and losses use only the fixed offline batch  
-$$ \mathcal D = \{(s_i,a_i,r_i,s'_i)\} $$ and the current policy  
-$$( \pi_{\theta} $$; no fresh interaction with the environment is required.
+$$ \mathcal D = \{(s_i,a_i,r_i,s'_i)\}$$ and the current policy  
+$$ \pi_{\theta} $$; no fresh interaction with the environment is required.
