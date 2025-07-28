@@ -519,10 +519,10 @@ $$
    (e.g. a neural network) and set the critic parameters  
    $$\phi_{0}\gets \text{RandomInit}().$$  
 
-2. **Iterative Bellman regression** for \(k = 1,2,\dots,K\):
+2. **Iterative Bellman regression** for \\(k = 1,2,\dots,K\\):
 
    1. **Target construction**  
-      For every logged transition \((s_i,a_i,r_i,s'_i)\) define  
+      For every logged transition \\((s_i,a_i,r_i,s'_i)\\) define  
       $$y_i \;=\; r_i + \gamma\,Q^{\pi_{\theta}}_{\phi_{k-1}}\bigl(s'_i,\,\pi_{\theta}(s'_i)\bigr).$$
 
    2. **Supervised fit**  
