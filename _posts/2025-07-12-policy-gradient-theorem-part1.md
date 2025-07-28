@@ -539,5 +539,5 @@ $$
    $$C_{\pi_{\theta}}(s)\;\approx\; Q_{\phi_{K}}\bigl(s,\pi_{\theta}(s)\bigr).$$  
 
 > All targets and losses use only the fixed offline batch  
-> \\( \mathcal D = \{(s_i,a_i,r_i,s'_i)\} \\) and the current policy  
-> \\( \pi_{\theta} \\); no fresh interaction with the environment is required.
+> $$ \mathcal D = \{(s_i,a_i,r_i,s'_i)\} $$ and the current policy  
+> $$( \pi_{\theta} $$; no fresh interaction with the environment is required.
