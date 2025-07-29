@@ -582,3 +582,53 @@ All targets and losses use only the fixed offline batch
 $$ \mathcal D = \{(s_i,a_i,r_i,s'_i)\} $$ and the current policy  
 $$ \pi_{\theta} $$; no fresh interaction with the environment is required.
 
+
+
+% Define the parameter
+$$
+\theta \;=\; d_{\pi_\beta}(s')\,\rho_\pi(s')
+$$
+% Forward‐Bellman as a root‐finding condition
+$$
+M(\theta)
+\;=\;
+(1-\gamma)\,d_0(s')
+\;+\;
+\gamma\sum_{s,a}d_{\pi_\beta}(s)\,\rho_\pi(s)\,\pi(a\mid s)\,T(s'\mid s,a)
+\;-\;\theta
+\;=\;0
+$$
+% Noisy single‐sample observation
+$$
+N(\theta_n)
+=
+(1-\gamma)\,d_0(s')
+\;+\;
+\gamma\,d_{\pi_\beta}(s)\,\rhohat_\pi(s)\,\frac{\pi(a\mid s)}{\pi_\beta(a\mid s)}\,T(s'\mid s,a)
+\;-\;\theta_n
+$$
+% Robbins–Monro update
+$$
+\theta_{n+1}
+=\theta_n - a_n\bigl(N(\theta_n)\bigr)
+=\theta_n
++ a_n\Bigl[
+(1-\gamma)\,d_0(s')
++\gamma\,d_{\pi_\beta}(s)\,\rhohat_\pi(s)\,\tfrac{\pi(a\mid s)}{\pi_\beta(a\mid s)}\,T(s'\mid s,a)
+-\theta_n
+\Bigr]
+$$
+% Final ρ‐update after dividing by d_{π_β}(s')
+$$
+\rhohat_\pi(s')
+\;\leftarrow\;
+\rhohat_\pi(s')
++\;\alpha\,
+\Bigl[
+(1-\gamma)
++\gamma\,\tfrac{\pi(a\mid s)}{\pi_\beta(a\mid s)}\,\rhohat_\pi(s)
+-\rhohat_\pi(s')
+\Bigr]
+$$
+
+
