@@ -623,6 +623,5 @@ $$
 $$
 Compared to the SA of (7), Eq. (8) replaces the state‑dependent term \\((1-\gamma)\,\tfrac{d_0(S')}{d_\beta(S')}\\) by the constant \\((1-\gamma)\\), and drops the explicit \\(1/d_\beta(S')\\) from the second term. Therefore, Eq. (8) is **not** a recursion of (7); it corresponds to a surrogate “reset‑to‑behavior” operator. It is chosen because it is a \\(\gamma\\)‑contraction and works well empirically. When \\(d_0=d_\beta\\), the first terms coincide, but the second‑term difference remains.
 
-**References.**  
-S. Levine, A. Kumar, G. Tucker, J. Fu (2020), *Offline Reinforcement Learning: Tutorial, Review, and Perspectives on Open Problems*.  
+
 C. Gelada, M. Bellemare (2019), *Off‑Policy Deep Reinforcement Learning by Bootstrapping the Covariate Shift*.
