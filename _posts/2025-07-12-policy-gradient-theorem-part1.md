@@ -584,50 +584,54 @@ $$ \pi_{\theta} $$; no fresh interaction with the environment is required.
 
 
 
+\section*{From (7) to a coordinate-wise SA, and why it is not (8)}
+
+\paragraph{Forward balance (correct).}
 $$
-\theta \;=\; d_{\pi_\beta}(s')\,\rho_\pi(s')
+d_\beta(s')\,\rho(s')
+=(1-\gamma)\,d_0(s')
++\gamma\sum_{s,a} d_\beta(s)\,\rho(s)\,\pi(a\mid s)\,T(s'\mid s,a).
+\qquad (7)
 $$
 
+\noindent Divide by \(d_\beta(s')\) (do \emph{not} move it inside the sum):
 $$
-M(\theta)
-\;=\;
-(1-\gamma)\,d_0(s')
-\;+\;
-\gamma\sum_{s,a}d_{\pi_\beta}(s)\,\rho_\pi(s)\,\pi(a\mid s)\,T(s'\mid s,a)
-\;-\;\theta
-\;=\;0
-$$
-
-$$
-N(\theta_n)
-=
-(1-\gamma)\,d_0(s')
-\;+\;
-\gamma\,d_{\pi_\beta}(s)\,\hat{\rho}_\pi(s)\,\frac{\pi(a\mid s)}{\pi_\beta(a\mid s)}\,T(s'\mid s,a)
-\;-\;\theta_n
+\rho(s')
+=(1-\gamma)\,\frac{d_0(s')}{d_\beta(s')}
++\frac{\gamma}{d_\beta(s')}
+\sum_{s,a} d_\beta(s)\,\rho(s)\,\pi(a\mid s)\,T(s'\mid s,a).
+\qquad (\ast)
 $$
 
+\paragraph{Coordinate-wise stochastic approximation of \((\ast)\).}
+Given a logged tuple \((S,A,S')\) with \(S\sim d_\beta\), \(A\sim \pi_\beta(\cdot\mid S)\), \(S'\sim T(\cdot\mid S,A)\),
+\emph{update only the observed coordinate \(s'=S'\)}:
 $$
-\theta_{n+1}
-=\theta_n - a_n\,N(\theta_n)
-=\theta_n
-+ a_n\Bigl[
-(1-\gamma)\,d_0(s')
-+\gamma\,d_{\pi_\beta}(s)\,\hat{\rho}_\pi(s)\,\tfrac{\pi(a\mid s)}{\pi_\beta(a\mid s)}\,T(s'\mid s,a)
--\theta_n
-\Bigr]
-$$
-
-$$
-\hat{\rho}_\pi(s')
-\;\leftarrow\;
-\hat{\rho}_\pi(s')
-+\;\alpha\,
-\Bigl[
-(1-\gamma)
-+\gamma\,\tfrac{\pi(a\mid s)}{\pi_\beta(a\mid s)}\,\hat{\rho}_\pi(s)
--\hat{\rho}_\pi(s')
-\Bigr]
+\boxed{\
+\rho(S')\ \leftarrow\ \rho(S')\ +\ \alpha\Big[
+(1-\gamma)\,\frac{d_0(S')}{d_\beta(S')}
++\frac{\gamma}{d_\beta(S')}\,\frac{\pi(A\mid S)}{\pi_\beta(A\mid S)}\,\rho(S)
+-\rho(S')\Big].\
+}
 $$
 
+\noindent Here, \(T(s'\mid s,a)\) is replaced by sampling \(S'\) under the logged dynamics; the \emph{second} factor \(1/d_\beta(S')\) is \emph{kept} exactly as it appears in \((\ast)\).
+This is the direct coordinate-wise SA for \((7)\).
 
+\paragraph{What Eq.\ (8) does instead (and why it is not derived from (7)).}
+The practical update used in the literature is
+$$
+\rho(S') \ \leftarrow\ \rho(S') \ + \ \alpha\Big[
+(1-\gamma) \ + \ \gamma\,\tfrac{\pi(A\mid S)}{\pi_\beta(A\mid S)}\,\rho(S) \ - \ \rho(S')\Big].
+\qquad (8)
+$$
+Compared to the SA of \((7)\) above, Eq.\ (8)
+\begin{itemize}
+\item replaces the state-dependent term \((1-\gamma)\,\tfrac{d_0(S')}{d_\beta(S')}\) by the constant \((1-\gamma)\);
+\item drops the explicit \(1/d_\beta(S')\) from the second term.
+\end{itemize}
+Therefore, Eq.\ (8) is \emph{not} a recursion of \((7)\); it corresponds to a surrogate ``reset-to-behavior'' operator. It is chosen because it is a \(\gamma\)-contraction and works well empirically. When \(d_0=d_\beta\), the first terms coincide, but the second-term difference remains.
+
+\paragraph{References.}
+
+C.~Gelada and M.~Bellemare (2019), \emph{Off-Policy Deep Reinforcement Learning by Bootstrapping the Covariate Shift}.
