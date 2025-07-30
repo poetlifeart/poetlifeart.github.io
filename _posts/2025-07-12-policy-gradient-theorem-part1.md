@@ -606,6 +606,11 @@ $$
 \quad \text{(*)}
 $$
 
+$$
+\rho(s') \;=\; (1-\gamma)\,\frac{d_0(s')}{d_\beta(s')} \;+\; \frac{\gamma}{d_\beta(s')}\,\mathbb{E}_{\substack{S\sim d_\beta\\ A\sim \pi_\beta(\cdot\mid S)}}\!\left[ \frac{\pi(A\mid S)}{\pi_\beta(A\mid S)}\,\rho(S)\,T(s'\mid S,A) \right].
+$$
+
+
 **Coordinate‑wise stochastic approximation of (*)**  
 Given a logged tuple \\((S,A,S')\\) with \\(S\sim d_\beta\\), \\(A\sim \pi_\beta(\cdot\mid S)\\), \\(S'\sim T(\cdot\mid S,A)\\), update only the observed coordinate \\(s'=S'\\):
 $$
