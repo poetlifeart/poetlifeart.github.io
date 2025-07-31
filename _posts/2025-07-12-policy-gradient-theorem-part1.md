@@ -632,3 +632,83 @@ $$
 Compared to the SA of (7), Eq. (8) replaces the state‑dependent term \\((1-\gamma)\,\tfrac{d_0(S')}{d_\beta(S')}\\) by the constant \\((1-\gamma)\\), and drops the explicit \\(1/d_\beta(S')\\) from the second term. Therefore, Eq. (8) is **not** a recursion of (7); it corresponds to a surrogate “reset‑to‑behavior” operator. It is chosen because it is a \\(\gamma\\)‑contraction and works well empirically. When \\(d_0=d_\beta\\), the first terms coincide, but the second‑term difference remains. In fact, C. Gelada, M. Bellemare (2019), make it clear (7) is a *definition*. 
 
 Not every equation gives rise to a recursive solution obviously and here \\(d_\beta(s')\\) inverse can be a large number. So why does dropping it work? C. Gelada, M. Bellemare (2019) show it is meaningful, has nice properties and works in practice. A rough idea might be that from the point of view of sample paths, we could drop \\(d_\beta(s')\\) if we could draw according to it. We are; however, already drawing  \\(s'\\) conditionally correctly and can assume we are also drawing it according to \\(d_\beta(s')\\) after some iterations, so it was sort of there and got cancelled by dividing by \\(d_\beta(s')\\). In other words we are assuming we are drawing approximately according to \\(d_\beta(s')\\) already even though we are not. 
+
+**3.2 Derivation**
+
+**Technical observation.**  
+For scalars \(m>0\) and \(n\ge 0\),
+$$
+\min_{x\in\mathbb{R}} \; J(x):=\tfrac12\,m\,x^2 - n\,x
+\quad\text{has the unique minimizer}\quad
+x^\star=\frac{n}{m}.
+$$
+
+**Least-squares ratio objective.**  
+Let \( \mathcal{C} \subset \mathbb{R} \) be a bounded set (e.g., containing \([0,C]\)). Consider
+$$
+\min_{x:S\times A\to \mathcal{C}}
+\quad
+J_1(x)
+:=\tfrac12\,\mathbb{E}_{(s,a)\sim d_D}\!\big[x(s,a)^2\big]
+\;-\;\mathbb{E}_{(s,a)\sim d_\pi}\!\big[x(s,a)\big].
+\qquad (8)
+$$
+By applying the observation pointwise in \((s,a)\), the optimizer is
+$$
+x^\star(s,a)\;=\;\frac{d_\pi(s,a)}{d_D(s,a)}\;=:\;w_{\pi/D}(s,a),
+$$
+i.e., the discounted stationary distribution ratio.  
+The catch: the second term uses an expectation under \(d_\pi\), which we cannot sample off-policy.
+
+**Change of variables via the Bellman residual.**  
+Define the policy-evaluation operator
+$$
+(B_\pi \nu)(s,a)
+:=\gamma\,\mathbb{E}_{s'\sim T(s,a),\,a'\sim \pi(\cdot\mid s')}[\nu(s',a')].
+$$
+Since \(0\le\gamma<1\), \(B_\pi\) is a \(\gamma\)-contraction on bounded functions, and \(I-B_\pi\) is invertible with
+$$
+(I-B_\pi)^{-1} \;=\; \sum_{k=0}^\infty B_\pi^k
+\quad\text{(Neumann series)}.
+$$
+Now **re-parameterize** the free variable \(x\) as a Bellman residual:
+$$
+x \;=\; (I-B_\pi)\,\nu
+\quad\Longleftrightarrow\quad
+\nu \;=\; (I-B_\pi)^{-1}x \;=\; \sum_{k=0}^\infty B_\pi^k x.
+\qquad (9)
+$$
+Because \(x\in\mathcal{C}\) is bounded and \(\gamma<1\), \(\nu\) is well-defined and bounded.
+
+**Pushing \(d_\pi\) to \(\beta\).**  
+Using the discounted flow identity,
+$$
+\mathbb{E}_{(s,a)\sim d_\pi}\!\big[(I-B_\pi)\nu(s,a)\big]
+\;=\;
+(1-\gamma)\,\mathbb{E}_{s_0\sim\beta,\,a_0\sim\pi(\cdot\mid s_0)}\![\,\nu(s_0,a_0)\,].
+$$
+Therefore, with \(x=(I-B_\pi)\nu\),
+$$
+\mathbb{E}_{d_\pi}[x]
+\;=\;
+(1-\gamma)\,\mathbb{E}_{\beta,\pi}[\nu].
+$$
+
+**Back to a sampleable objective (Eq. 6).**  
+Substituting \(x=(I-B_\pi)\nu\) into \(J_1(x)\) yields
+$$
+J(\nu)
+\;=\;
+\tfrac12\,\mathbb{E}_{(s,a)\sim d_D}\!\big[(\nu-B_\pi\nu)(s,a)\big]^2
+\;-\;(1-\gamma)\,\mathbb{E}_{s_0\sim\beta,\,a_0\sim\pi(\cdot\mid s_0)}[\nu(s_0,a_0)],
+\qquad (6)
+$$
+which depends only on expectations under \(d_D\) (the logged data) and \(\beta\) (initial states), plus the known \(\pi,T\).
+
+For reference, the state visitation distribution at step \(t\) under \(\pi\) is
+$$
+\beta_t(s)
+\;:=\;
+\Pr\!\big(s_t=s \,\big|\, s_0\sim\beta,\; a_k\sim\pi(s_k),\; s_{k+1}\sim T(s_k,a_k),\; 0\le k<t\big),
+$$
+with \(\beta_0=\beta\).
