@@ -712,3 +712,82 @@ $$
 \Pr\!\big(s_t=s \,\big|\, s_0\sim\beta,\; a_k\sim\pi(s_k),\; s_{k+1}\sim T(s_k,a_k),\; 0\le k<t\big),
 $$
 with \(\beta_0=\beta\).
+
+**Scalar lemma (intuition)**  
+For \(m>0,\; n\ge 0\):
+$$
+\min_{x\in\mathbb R}\;\Bigl(\tfrac12\,m\,x^{2}-n\,x\Bigr)
+\quad\Longrightarrow\quad
+x^{\star}=\frac{n}{m}.
+$$
+
+---
+
+**Ideal least-squares ratio objective**  
+$$
+J_{1}(x)=\tfrac12\,\mathbb E_{(s,a)\sim d_{D}}\!\bigl[x(s,a)^{2}\bigr]
+-\mathbb E_{(s,a)\sim d_{\pi}}\!\bigl[x(s,a)\bigr].
+$$
+Pointwise application of the lemma gives the (unsampleable) minimiser  
+\(x^{\star}=d_{\pi}/d_{D}=w_{\pi/D}\).
+
+---
+
+**Change of variables**  
+Introduce a potential \(\nu\) and set
+$$
+x=(I-B_{\pi})\,\nu,
+\qquad
+(B_{\pi}\nu)(s,a)=\gamma\,
+\mathbb E_{s'\!,a'}\bigl[\nu(s',a')\bigr].
+$$
+Because \(0\le\gamma<1\), \(I-B_{\pi}\) is invertible on bounded functions;  
+\(\nu=(I-B_{\pi})^{-1}x\) is well-defined and bounded.
+
+Discounted flow identity:
+$$
+\mathbb E_{d_{\pi}}\!\bigl[(I-B_{\pi})\nu\bigr]
+=(1-\gamma)\,
+\mathbb E_{s_{0}\sim\beta,\;a_{0}\sim\pi}\!\bigl[\nu(s_{0},a_{0})\bigr].
+$$
+Hence
+$$
+\mathbb E_{d_{\pi}}[x]
+=(1-\gamma)\,
+\mathbb E_{s_{0}\sim\beta,\;a_{0}\sim\pi}[\nu].
+$$
+
+---
+
+**Fenchel transformation**  
+For any scalar \(z\),
+\(\tfrac12\,z^{2}=\max_{w}\{\,w z-\tfrac12\,w^{2}\}\).  
+Apply pointwise, integrate under \(d_{D}\):
+$$
+\tfrac12\,\mathbb E_{d_{D}}[x^{2}]
+=\max_{w}\Bigl\{
+\mathbb E_{d_{D}}[w\,x]-\tfrac12\,\mathbb E_{d_{D}}[w^{2}]
+\Bigr\}.
+$$
+Substitute \(x=(I-B_{\pi})\nu\) and swap \(\min\nu\) / \(\max w\):
+$$
+\min_{\nu}\;\max_{w}\;
+\Bigl\{
+\mathbb E_{d_{D}}\!\bigl[w\,(\nu-B_{\pi}\nu)\bigr]
+-\tfrac12\,\mathbb E_{d_{D}}[w^{2}]
+-(1-\gamma)\,\mathbb E_{s_{0}\sim\beta,\,a_{0}\sim\pi}[\nu]
+\Bigr\}.
+$$
+
+---
+
+**Saddle-point optimality**  
+At the saddle point
+\[
+w^{\star}=(\nu^{\star}-B_{\pi}\nu^{\star})=\frac{d_{\pi}}{d_{D}},
+\]
+so \(\mathbb E_{d_{D}}[w^{\star}\,r]=\rho(\pi)\).  
+All expectations involve either \(d_{D}\) (logged data) or \(\beta\) (initial states);  
+no samples are required from \(d_{\pi}\).
+
+
