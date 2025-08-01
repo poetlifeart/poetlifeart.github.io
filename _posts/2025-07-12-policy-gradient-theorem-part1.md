@@ -709,7 +709,7 @@ $$
 
 Minimizing \\(J_1\\) over \\(x\\) is equivalent to minimizing \\(J\\) over \\(\nu\\).
 
-### 4. Telescoping-Sum Derivation of \\( \mathbb{E}_{d_\pi}[x] \\) 
+### 4. Telescoping-Sum Derivation 
 Starting point:
 
 $$
@@ -717,7 +717,7 @@ $$
 = (1-\gamma)\sum_{t=0}^\infty \gamma^t\,\mathbb{E}_{s\sim\beta_t,\,a\sim\pi}\bigl[x(s,a)\bigr].
 $$
 
-Since \(x(s,a)=\nu(s,a)-\gamma\,\mathbb{E}_{s',a'}[\nu(s',a')]\),
+Since \\(x(s,a)=\nu(s,a)-\gamma\,\mathbb{E}_{s',a'}[\nu(s',a')]\\),
 
 $$
 \begin{aligned}
@@ -731,7 +731,7 @@ $$
 \end{aligned}
 $$
 
-Re-indexing (\(t\to t-1\)) gives
+Re-indexing \\(t\\)to \\(t-1\\) gives
 
 $$
 \begin{aligned}
@@ -783,7 +783,7 @@ $$
 \int[x^*(s,a)-w_{\pi/D}(s,a)]\,h(s,a)\,d_D(s,a) = 0\;\forall h\;\Longrightarrow\;x^*(s,a) = w_{\pi/D}(s,a).
 $$
 
-### 7. Recovering \(\nu^*\) via Bellman-Residual Definition
+### 7. Recovering \\(\nu^*\\) via Bellman-Residual Definition
 Finally, define \\(\nu^*\\) by
 
 $$
@@ -797,9 +797,4 @@ $$
 
 ---
 
-**Summary**
-1. Prove equivalence of (6) and (8) under \\(x=(I-B^\pi)\nu\\).  
-2. Obtain a telescoping-sum form for \\(\mathbb{E}_{d_\pi}[x] \\)
-in terms of \\(\beta\\) and \\(\pi\\).  
-3. Present the double-integral \\(J_1(x)\\) for unbiased sample optimization.  
-4. Solve \\(J_1(x)\\) to get \\(x^* = d_\pi/d_D\\), then recover \\(\nu^*\\) by the Bellman-residual definition—no infinite sums explicitly computed.
+
