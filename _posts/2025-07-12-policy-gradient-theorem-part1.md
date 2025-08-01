@@ -639,169 +639,135 @@ Not every equation gives rise to a recursive solution obviously and here \\(d_\b
 
 ## A Full, Self-Contained Proof of the DualDICE Objective
 
-This note provides a clean, rigorous derivation showing how the off-policy density-ratio correction objective (equation 6) admits a unique solution, and how the change of variables to \$x\$ (equation 8) makes it practically computable from data.
+This note provides a clean, rigorous derivation showing how the off-policy density-ratio correction objective (equation 6) admits a unique solution, and how the change of variables to \(x\) (equation 8) makes it practically computable from data.
 
 ### 1. Setting and Definitions
+- **Spaces and measures**: Let \\((S, A)\\) be the state–action space. Define:
+  - \\(d_D(s,a)\\): the known behavior-data distribution (assumed \\(d_\pi \ll d_D\)).
+  - 
+    $$
+    d_\pi(s,a) = (1-\gamma)\sum_{t=0}^\infty \gamma^t\bigl[\beta_t(s)\,\pi(a\mid s)\bigr],
+    $$
+    the unnormalized visitation measure under \\(\pi\\), starting from \\(\beta_0=\beta\\).
 
-* **Spaces and measures**: Let \$(S, A)\$ be the state–action space. Define:
-
-  * \$d\_D(s,a)\$: the known behavior-data distribution (assumed \$d\_\pi \ll d\_D\$).
-  * $d_\pi(s,a) = (1-\gamma)\sum_{t=0}^\infty \gamma^t\bigl[\beta_t(s)\,\pi(a\mid s)\bigr],$ the unnormalized visitation measure under \$\pi\$, starting from \$\beta\_0=\beta\$.
-
-* **Bellman-transition operator** \$B^\pi: L^2(d\_D)\to L^2(d\_D)\$:
-
+- **Bellman-transition operator** \\(B^\pi: L^2(d_D)\to L^2(d_D)\\):
   $$
     (B^\pi\nu)(s,a) = \gamma\,\mathbb{E}_{s'\sim T(s,a),\,a'\sim\pi(\cdot\mid s')}\bigl[\nu(s',a')\bigr].
   $$
+  Since \\(\|B^\pi\|\le\gamma<1\\), the operator \\(I - B^\pi\\) is invertible on \\(L^2(d_D)\\) with bounded inverse.
 
-  Since \$|B^\pi|\le\gamma<1\$, the operator \$I - B^\pi\$ is invertible on \$L^2(d\_D)\$ with bounded inverse.
-
-### 2. The Original Objective (Equation 6)
-
-We work in the Hilbert space \$\mathcal H = L^2(d\_D)\$ with inner product \$\langle f,g\rangle = \int f(s,a),g(s,a),d\_D(s,a)\$.  Define:
-
+### 2. The Original Objective (Equation 6)
+We work in the Hilbert space \\(\mathcal H = L^2(d_D)\\) with inner product
 $$
-J(\nu) = \frac12\,\mathbb{E}_{d_D}\bigl[(\nu - B^\pi\nu)^2\bigr] - (1-\gamma)\,\mathbb{E}_{\beta,\pi}[\nu],
+\langle f,g\rangle = \int_{S\times A} f(s,a)\,g(s,a)\,d_D(s,a).
 $$
-
+Define:
+$$
+J(\nu)
+= \tfrac12\,\mathbb{E}_{d_D}\bigl[(\nu - B^\pi\nu)^2\bigr]
+  - (1-\gamma)\,\mathbb{E}_{\beta,\pi}[\nu],
+$$
 where
-
 $$
-\mathbb{E}_{\beta,\pi}[\nu] = \int_{S\times A} \nu(s,a)\,[\beta(s)\,\pi(a\mid s)]\,ds\,da.
-$$
-
-1. **Convexity and coercivity:** the quadratic term is strictly convex and coercive (since \$|I - B^\pi|>0\$); the second term is a bounded linear functional.
-2. **Existence & uniqueness:** by standard Hilbert-space theory, \$J(\nu)\$ has a unique minimizer \$\nu^\*\$.  The Euler–Lagrange condition is
-
-$$
-  (I - B^\pi)^*(I - B^\pi)\,\nu^* = (1-\gamma)\,\frac{d_\pi}{d_D},
+\mathbb{E}_{\beta,\pi}[\nu]
+= \int_{S\times A} \nu(s,a)\,\bigl[\beta(s)\,\pi(a\mid s)\bigr]\,ds\,da.
 $$
 
-so formally
+1. **Convexity and coercivity:** the quadratic term is strictly convex and coercive (since \\(\|I - B^\pi\|>0\\)); the second term is a bounded linear functional.  
+2. **Existence & uniqueness:** by standard Hilbert-space theory, \\(J(\nu)\\) has a unique minimizer \\(\nu^*\\). The Euler–Lagrange condition is
+   $$
+   (I - B^\pi)^*(I - B^\pi)\,\nu^* = (1-\gamma)\,\tfrac{d_\pi}{d_D},
+   $$
+   so formally
+   $$
+   \nu^* = (I - B^\pi)^{-1}\Bigl[(1-\gamma)\,\tfrac{d_\pi}{d_D}\Bigr].
+   $$
+   This form is not directly computable from data due to nested expectations and unknown \(d_\pi\).
 
-$$
-  \nu^* = (I - B^\pi)^{-1}\Bigl[(1-\gamma)\,\tfrac{d_\pi}{d_D}\Bigr].
-$$
-
-This form is not directly computable from data due to nested expectations and unknown \$d\_\pi\$.
-
-### 3. Change of Variables to \$x\$
-
+### 3. Change of Variables to \(x\)
 Define
-
 $$
-  x(s,a) := (I - B^\pi)\nu(s,a) = \nu(s,a) - (B^\pi\nu)(s,a).
+x(s,a) := (I - B^\pi)\nu(s,a)
+         = \nu(s,a) - (B^\pi\nu)(s,a).
 $$
-
-Since \$|B^\pi|<1\$, \$I - B^\pi\$ is invertible on \$L^2(d\_D)\$, giving a bijection
-
+Since \\(\|B^\pi\|<1\\), \\(I - B^\pi\\) is invertible on \\(L^2(d_D)\\), giving
 $$
-  x \longleftrightarrow \nu = (I - B^\pi)^{-1} x,
+x \longleftrightarrow \nu = (I - B^\pi)^{-1} x,
+\quad
+\|x\|_{d_D}<\infty \iff \|\nu\|_{d_D}<\infty.
 $$
-
-and equivalently
-
+Substitute into \\(J(\nu)\\) to obtain the quadratic in \\(x\\) (equation 8):
 $$
-  \|x\|_{d_D}<\infty \iff \|\nu\|_{d_D}<\infty.
+J_1(x) = \tfrac12\,\mathbb{E}_{d_D}[x^2] - \mathbb{E}_{d_\pi}[x].
 $$
+Minimizing \\(J_1\\) over \\(x\\) is equivalent to minimizing \\(J\\) over \\(\nu\\).
 
-Substitute into \$J(\nu)\$ to obtain the quadratic in \$x\$ (equation 8):
-
-$$
-J_1(x) = \frac12\,\mathbb{E}_{d_D}[x^2] - \mathbb{E}_{d_\pi}[x].
-$$
-
-Minimizing \$J\_1\$ over \$x\$ is equivalent to minimizing \$J\$ over \$\nu\$.
-
-### 4. Telescoping-Sum Derivation of \$\mathbb{E}*{d*\pi}\[x]\$
-
+### 4. Telescoping-Sum Derivation of \\(\mathbb{E}_{d_\pi}[x]\\)
 Starting point:
-
 $$
-\mathbb{E}_{d_\pi}[x] = (1-\gamma)\sum_{t=0}^\infty\gamma^t\,\mathbb{E}_{s\sim\beta_t,\,a\sim\pi}\bigl[x(s,a)\bigr].
+\mathbb{E}_{d_\pi}[x]
+= (1-\gamma)\sum_{t=0}^\infty \gamma^t\,\mathbb{E}_{s\sim\beta_t,\,a\sim\pi}\bigl[x(s,a)\bigr].
 $$
-
-But \$x(s,a)=\nu(s,a)-\gamma,\mathbb{E}\_{s',a'}\[\nu(s',a')]\$, so:
-
+Since \(x(s,a)=\nu(s,a)-\gamma\,\mathbb{E}_{s',a'}[\nu(s',a')]\),
 $$
 \begin{aligned}
-\mathbb{E}_{d_\pi}[x] &= (1-\gamma)\sum_{t=0}^\infty\gamma^t\Bigl(\mathbb{E}_{\beta_t,\pi}[\nu] - \gamma\,\mathbb{E}_{\beta_t,\pi}[\,\mathbb{E}_{s',a'}[\nu(s',a')]\bigr]\Bigr)\\
-&= (1-\gamma)\sum_{t=0}^\infty\gamma^t\,\mathbb{E}_{\beta_t,\pi}[\nu]
-  - (1-\gamma)\sum_{t=0}^\infty\gamma^{t+1}\,\mathbb{E}_{\beta_{t+1},\pi}[\nu].
+\mathbb{E}_{d_\pi}[x]
+&= (1-\gamma)\sum_{t=0}^\infty \gamma^t\Bigl(
+    \mathbb{E}_{\beta_t,\pi}[\nu]
+    - \gamma\,\mathbb{E}_{\beta_t,\pi}\bigl[\mathbb{E}_{s',a'}[\nu(s',a')]\bigr]
+  \Bigr)\\
+&= (1-\gamma)\sum_{t=0}^\infty \gamma^t\,\mathbb{E}_{\beta_t,\pi}[\nu]
+  - (1-\gamma)\sum_{t=0}^\infty \gamma^{t+1}\,\mathbb{E}_{\beta_{t+1},\pi}[\nu].
 \end{aligned}
 $$
-
-Re-index the second sum (\$t\to t-1\$):
-
+Re-indexing (\(t\to t-1\)) gives
 $$
 \begin{aligned}
 \mathbb{E}_{d_\pi}[x]
 &= (1-\gamma)\,\mathbb{E}_{\beta_0,\pi}[\nu]
-  + (1-\gamma)\sum_{t=1}^\infty\bigl(\gamma^t - \gamma^t\bigr)\,\mathbb{E}_{\beta_t,\pi}[\nu]\\
-&= (1-\gamma)\,\mathbb{E}_{s_0\sim\beta,\,a_0\sim\pi}\bigl[\nu(s_0,a_0)\bigr].
+  + (1-\gamma)\sum_{t=1}^\infty (\gamma^t - \gamma^t)\,\mathbb{E}_{\beta_t,\pi}[\nu]\\
+&= (1-\gamma)\,\mathbb{E}_{s_0\sim\beta,\,a_0\sim\pi}[\nu(s_0,a_0)].
 \end{aligned}
 $$
-
 Thus
-
 $$
 \mathbb{E}_{d_\pi}[x] = (1-\gamma)\,\mathbb{E}_{\beta,\pi}[\nu].
 $$
 
-This replaces the intractable expectation under \$d\_\pi\$ with a simple expectation under \$\beta\$ and \$\pi\$.
-
 ### 5. Double-Integral Form for Practical Estimation
-
 Putting both terms together:
-
 $$
 \begin{aligned}
 J_1(x)
-&= \tfrac12\int_{S\times A} x(s,a)^2\,d_D(s,a) \\[-2pt]
-&\quad - (1-\gamma)\sum_{t=0}^\infty\gamma^t
-  \int_{S\times A} x(s,a)\,[\beta_t(s)\,\pi(a\mid s)]\,ds\,da.
+&= \tfrac12\int_{S\times A} x(s,a)^2\,d_D(s,a) \\
+&\quad - (1-\gamma)\sum_{t=0}^\infty \gamma^t
+   \int_{S\times A} x(s,a)\,[\beta_t(s)\,\pi(a\mid s)]\,ds\,da.
 \end{aligned}
 $$
-
 Unbiased estimation:
+- **First term:** sample \\((s,a)\sim d_D\\), evaluate \\(x(s,a)^2\\).
+- **Second term:** sample \\(t\sim\mathrm{Geom}(1-\gamma)\\), then \\((s,a)\sim\beta_t\otimes\pi\\), evaluate \\(x(s,a)\\).
 
-* **First term**: sample \$(s,a)\sim d\_D\$, evaluate \$x(s,a)^2\$.
-* **Second term**: sample \$t\sim\mathrm{Geom}(1-\gamma)\$, then \$(s,a)\sim\beta\_t\otimes\pi\$, evaluate \$x(s,a)\$.
-
-### 6. Existence and Closed-Form Solution for \$x\$
-
-On \$L^2(d\_D)\$,
-
+### 6. Existence and Closed-Form Solution for \\(x\\)
+On \\(L^2(d_D)\\),
 $$
 J_1(x) = \tfrac12\int x^2\,d_D - \int x\,d_\pi
 $$
-
-is strictly convex.  Its first-order condition at \$x^\*\$ is:
-
+is strictly convex. Its first-order condition at \\(x^*\\) is:
 $$
-0 = \int x^*\,h\,d_D - \int h\,d_\pi,\quad\forall h\in L^2(d_D).
+0 = \int x^*\,h\,d_D - \int h\,d_\pi,\quad \forall h\in L^2(d_D).
 $$
-
-Assuming \$d\_\pi\ll d\_D\$, write \$d\_\pi = w\_{\pi/D},d\_D\$.  Then
-
+Assuming \\(d_\pi\ll d_D\\), write \\(d_\pi = w_{\pi/D}\,d_D\\). Then
 $$
-\int\bigl[x^*(s,a)-w_{\pi/D}(s,a)\bigr]\,h(s,a)\,d_D(s,a) = 0
-  \;\forall h
-  \;\Longrightarrow\;
-  x^*(s,a) = w_{\pi/D}(s,a).
+\int[x^*(s,a)-w_{\pi/D}(s,a)]\,h(s,a)\,d_D(s,a) = 0\;\forall h\;\Longrightarrow\;x^*(s,a) = w_{\pi/D}(s,a).
 $$
 
-### 7. Recovering \$\nu^\*\$ via Bellman-Residual Definition
-
-Finally, define \$\nu^\*\$ by
-
+### 7. Recovering \(\nu^*\) via Bellman-Residual Definition
+Finally, define \\(\nu^*\\) by
 $$
-\nu(s,a) = x^*(s,a)
-  + \gamma\,\mathbb{E}_{s'\sim T(s,a),\,a'\sim\pi}[\nu(s',a')],
+\nu(s,a) = x^*(s,a) + \gamma\,\mathbb{E}_{s'\sim T(s,a),\,a'\sim\pi}[\nu(s',a')],
 $$
-
-which uniquely defines a bounded solution in \$L^2(d\_D)\$.  By construction,
-
+which uniquely defines a bounded solution in \\(L^2(d_D)\\). By construction,
 $$
 (\nu^* - B^\pi\nu^*)(s,a) = x^*(s,a) = \frac{d_\pi(s,a)}{d_D(s,a)}.
 $$
@@ -809,8 +775,7 @@ $$
 ---
 
 **Summary**
-
-1. Prove equivalence of (6) and (8) under \$x=(I-B^\pi)\nu\$.
-2. Obtain a telescoping-sum form for \$\mathbb{E}*{d*\pi}\[x]\$ in terms of \$\beta\$ and \$\pi\$.
-3. Present the double-integral \$J\_1(x)\$ for unbiased sample optimization.
-4. Solve \$J\_1(x)\$ to get \$x^\* = d\_\pi/d\_D\$, then recover \$\nu^\*\$ by the Bellman-residual definition—no infinite sums explicitly computed.
+1. Prove equivalence of (6) and (8) under \\(x=(I-B^\pi)\nu\\).  
+2. Obtain a telescoping-sum form for \\(\mathbb{E}_{d_\pi}[x]\\) in terms of \\(\beta\\) and \\(\pi\\).  
+3. Present the double-integral \\(J_1(x)\\) for unbiased sample optimization.  
+4. Solve \\(J_1(x)\\) to get \\(x^* = d_\pi/d_D\\), then recover \\(\nu^*\\) by the Bellman-residual definition—no infinite sums explicitly computed.
