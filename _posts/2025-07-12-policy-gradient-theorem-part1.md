@@ -633,161 +633,162 @@ Compared to the SA of (7), Eq. (8) replaces the state‑dependent term \\((1-\ga
 
 Not every equation gives rise to a recursive solution obviously and here \\(d_\beta(s')\\) inverse can be a large number. So why does dropping it work? C. Gelada, M. Bellemare (2019) show it is meaningful, has nice properties and works in practice. A rough idea might be that from the point of view of sample paths, we could drop \\(d_\beta(s')\\) if we could draw according to it. We are; however, already drawing  \\(s'\\) conditionally correctly and can assume we are also drawing it according to \\(d_\beta(s')\\) after some iterations, so it was sort of there and got cancelled by dividing by \\(d_\beta(s')\\). In other words we are assuming we are drawing approximately according to \\(d_\beta(s')\\) already even though we are not. 
 
-**3.2 Derivation**
 
-**Technical observation.**  
-For scalars \(m>0\) and \(n\ge 0\),
+
+### 2) Backward Bellman equation based approaches via convex duality 
+
+## A Full, Self-Contained Proof of the DualDICE Objective
+
+This note provides a clean, rigorous derivation showing how the off-policy density-ratio correction objective (equation 6) admits a unique solution, and how the change of variables to \\(x\\) (equation 8) makes it practically computable from data.
+
+### 1. Setting and Definitions
+- **Spaces and measures**: Let \\((S, A)\\) be the state–action space. Define:
+  - \\(d_D(s,a)\\): the known behavior-data distribution (assumed \\(d_\\pi \\ll d_D\\)).
+  - 
+  $$
+  d_\\pi(s,a) = (1-\\gamma)\\sum_{t=0}^\\infty \\gamma^t\\bigl[\\beta_t(s)\\,\\pi(a\\mid s)\\bigr],
+  $$
+  the unnormalized visitation measure under \\(\\pi\\), starting from \\(\\beta_0=\\beta\\).
+
+- **Bellman-transition operator** \\(B^\\pi: L^2(d_D)\\to L^2(d_D)\\):
+  $$
+  (B^\\pi\\nu)(s,a)
+    = \\gamma\\,\\mathbb{E}_{s'\\sim T(s,a),\\,a'\\sim\\pi(\\cdot\\mid s')}[\\nu(s',a')].
+  $$
+  Since \\(\\|B^\\pi\\|\\le\\gamma<1\\), the operator \\(I - B^\\pi\\) is invertible on \\(L^2(d_D)\\) with bounded inverse.
+
+### 2. The Original Objective (Equation 6)
+We work in the Hilbert space \\(\\mathcal H = L^2(d_D)\\) with inner product  
+\\(\\langle f,g\\rangle = \\int f(s,a)\\,g(s,a)\\,d_D(s,a)\\). Define:
 $$
-\min_{x\in\mathbb{R}} \; J(x):=\tfrac12\,m\,x^2 - n\,x
-\quad\text{has the unique minimizer}\quad
-x^\star=\frac{n}{m}.
+J(\\nu)
+= \\frac12\\,\\mathbb{E}_{d_D}\\bigl[(\\nu - B^\\pi\\nu)^2\\bigr]
+  - (1-\\gamma)\\,\\mathbb{E}_{\\beta,\\pi}[\\nu],
+$$
+where
+$$
+\\mathbb{E}_{\\beta,\\pi}[\\nu]
+= \\int_{S\\times A} \\nu(s,a)\\,[\\beta(s)\\,\\pi(a\\mid s)]\\,ds\\,da.
 $$
 
-**Least-squares ratio objective.**  
-Let \( \mathcal{C} \subset \mathbb{R} \) be a bounded set (e.g., containing \([0,C]\)). Consider
+1. **Convexity and coercivity:** the quadratic term is strictly convex and coercive (since \\(\\|I-B^\\pi\\|>0\\)); the second term is a bounded linear functional.  
+2. **Existence & uniqueness:** by standard Hilbert-space theory, \\(J(\\nu)\\) has a unique minimizer \\(\\nu^*\\). The Euler–Lagrange condition is
+   $$
+   (I - B^\\pi)^*(I - B^\\pi)\\,\\nu^*
+   = (1-\\gamma)\\,\\frac{d_\\pi}{d_D},
+   $$
+   so formally
+   $$
+   \\nu^*
+   = (I - B^\\pi)^{-1}\\Bigl[(1-\\gamma)\\,\\tfrac{d_\\pi}{d_D}\\Bigr].
+   $$
+   This form is not directly computable from data due to nested expectations and unknown \\(d_\\pi\\).
+
+### 3. Change of Variables to \\(x\\)
+Define
 $$
-\min_{x:S\times A\to \mathcal{C}}
+x(s,a) := (I - B^\\pi)\\nu(s,a)
+       = \\nu(s,a) - (B^\\pi\\nu)(s,a).
+$$
+Since \\(\\|B^\\pi\\|<1\\), \\(I - B^\\pi\\) is invertible on \\(L^2(d_D)\\), giving
+$$
+x \\longleftrightarrow \\nu = (I - B^\\pi)^{-1}x,
 \quad
+\\|x\\|_{d_D}<\\infty \\iff \\|\\nu\\|_{d_D}<\\infty.
+$$
+Substitute into \\(J(\\nu)\\) to get the quadratic in \\(x\\) (equation 8):
+$$
 J_1(x)
-:=\tfrac12\,\mathbb{E}_{(s,a)\sim d_D}\!\big[x(s,a)^2\big]
-\;-\;\mathbb{E}_{(s,a)\sim d_\pi}\!\big[x(s,a)\big].
-\qquad (8)
+= \\frac12\\,\\mathbb{E}_{d_D}[x^2]
+  - \\mathbb{E}_{d_\\pi}[x].
 $$
-By applying the observation pointwise in \((s,a)\), the optimizer is
-$$
-x^\star(s,a)\;=\;\frac{d_\pi(s,a)}{d_D(s,a)}\;=:\;w_{\pi/D}(s,a),
-$$
-i.e., the discounted stationary distribution ratio.  
-The catch: the second term uses an expectation under \(d_\pi\), which we cannot sample off-policy.
+Minimizing \\(J_1\\) over \\(x\\) is equivalent to minimizing \\(J\\) over \\(\\nu\\).
 
-**Change of variables via the Bellman residual.**  
-Define the policy-evaluation operator
+### 4. Telescoping-Sum Derivation of \\(\\mathbb{E}_{d_\\pi}[x]\\)
+Starting point:
 $$
-(B_\pi \nu)(s,a)
-:=\gamma\,\mathbb{E}_{s'\sim T(s,a),\,a'\sim \pi(\cdot\mid s')}[\nu(s',a')].
+\\mathbb{E}_{d_\\pi}[x]
+= (1-\\gamma)\\sum_{t=0}^\\infty \\gamma^t\\,\\mathbb{E}_{s\\sim\\beta_t,\\,a\\sim\\pi}[x(s,a)].
 $$
-Since \(0\le\gamma<1\), \(B_\pi\) is a \(\gamma\)-contraction on bounded functions, and \(I-B_\pi\) is invertible with
+But \\(x(s,a)=\\nu(s,a)-\\gamma\\,\\mathbb{E}_{s',a'}[\\nu(s',a')]\\), so
 $$
-(I-B_\pi)^{-1} \;=\; \sum_{k=0}^\infty B_\pi^k
-\quad\text{(Neumann series)}.
+\\begin{aligned}
+\\mathbb{E}_{d_\\pi}[x]
+&= (1-\\gamma)\\sum_{t=0}^\\infty \\gamma^t\\Bigl(
+    \\mathbb{E}_{\\beta_t,\\pi}[\\nu]
+    - \\gamma\\,\\mathbb{E}_{\\beta_t,\\pi}[\\,\\mathbb{E}_{s',a'}[\\nu(s',a')]\\bigr]\\Bigr)\\\\
+&= (1-\\gamma)\\sum_{t=0}^\\infty \\gamma^t\\,\\mathbb{E}_{\\beta_t,\\pi}[\\nu]
+  - (1-\\gamma)\\sum_{t=0}^\\infty \\gamma^{t+1}\\,\\mathbb{E}_{\\beta_{t+1},\\pi}[\\nu].
+\\end{aligned}
 $$
-Now **re-parameterize** the free variable \(x\) as a Bellman residual:
+Re-index the second sum (\\(t\\to t-1\\)):
 $$
-x \;=\; (I-B_\pi)\,\nu
-\quad\Longleftrightarrow\quad
-\nu \;=\; (I-B_\pi)^{-1}x \;=\; \sum_{k=0}^\infty B_\pi^k x.
-\qquad (9)
+\\begin{aligned}
+\\mathbb{E}_{d_\\pi}[x]
+&= (1-\\gamma)\\,\\mathbb{E}_{\\beta_0,\\pi}[\\nu]
+  + (1-\\gamma)\\sum_{t=1}^\\infty \\bigl(\\gamma^t - \\gamma^t\\bigr)\\,\\mathbb{E}_{\\beta_t,\\pi}[\\nu]\\\\
+&= (1-\\gamma)\\,\\mathbb{E}_{s_0\\sim\\beta,\\,a_0\\sim\\pi}[\\nu(s_0,a_0)].
+\\end{aligned}
 $$
-Because \(x\in\mathcal{C}\) is bounded and \(\gamma<1\), \(\nu\) is well-defined and bounded.
-
-**Pushing \(d_\pi\) to \(\beta\).**  
-Using the discounted flow identity,
+Thus
 $$
-\mathbb{E}_{(s,a)\sim d_\pi}\!\big[(I-B_\pi)\nu(s,a)\big]
-\;=\;
-(1-\gamma)\,\mathbb{E}_{s_0\sim\beta,\,a_0\sim\pi(\cdot\mid s_0)}\![\,\nu(s_0,a_0)\,].
-$$
-Therefore, with \(x=(I-B_\pi)\nu\),
-$$
-\mathbb{E}_{d_\pi}[x]
-\;=\;
-(1-\gamma)\,\mathbb{E}_{\beta,\pi}[\nu].
+\\mathbb{E}_{d_\\pi}[x]
+= (1-\\gamma)\\,\\mathbb{E}_{\\beta,\\pi}[\\nu].
 $$
 
-**Back to a sampleable objective (Eq. 6).**  
-Substituting \(x=(I-B_\pi)\nu\) into \(J_1(x)\) yields
+### 5. Double-Integral Form for Practical Estimation
+Putting both terms together:
 $$
-J(\nu)
-\;=\;
-\tfrac12\,\mathbb{E}_{(s,a)\sim d_D}\!\big[(\nu-B_\pi\nu)(s,a)\big]^2
-\;-\;(1-\gamma)\,\mathbb{E}_{s_0\sim\beta,\,a_0\sim\pi(\cdot\mid s_0)}[\nu(s_0,a_0)],
-\qquad (6)
+\\begin{aligned}
+J_1(x)
+&= \\tfrac12\\int_{S\\times A} x(s,a)^2\\,d_D(s,a) \\\\
+&\\quad - (1-\\gamma)\\sum_{t=0}^\\infty \\gamma^t
+  \\int_{S\\times A} x(s,a)\\,[\\beta_t(s)\\,\\pi(a\\mid s)]\\,ds\\,da.
+\\end{aligned}
 $$
-which depends only on expectations under \(d_D\) (the logged data) and \(\beta\) (initial states), plus the known \(\pi,T\).
+Unbiased estimation:
+- **First term**: sample \\((s,a)\\sim d_D\\), evaluate \\(x(s,a)^2\\).  
+- **Second term**: sample \\(t\\sim\\mathrm{Geom}(1-\\gamma)\\), then \\((s,a)\\sim\\beta_t\\otimes\\pi\\), evaluate \\(x(s,a)\\).
 
-For reference, the state visitation distribution at step \(t\) under \(\pi\) is
+### 6. Existence and Closed-Form Solution for \\(x\\)
+On \\(L^2(d_D)\\),
 $$
-\beta_t(s)
-\;:=\;
-\Pr\!\big(s_t=s \,\big|\, s_0\sim\beta,\; a_k\sim\pi(s_k),\; s_{k+1}\sim T(s_k,a_k),\; 0\le k<t\big),
+J_1(x)
+= \\tfrac12\\int x^2\\,d_D
+  - \\int x\\,d_\\pi
 $$
-with \(\beta_0=\beta\).
+is strictly convex. Its first-order condition at \\(x^*\\) is:
+$$
+0 = \\int x^*\\,h\\,d_D
+  - \\int h\\,d_\\pi,
+  \\quad\\forall h\\in L^2(d_D).
+$$
+Assuming \\(d_\\pi\\ll d_D\\), write \\(d_\\pi = w_{\\pi/D}\\,d_D\\). Then
+$$
+\\int [x^*(s,a)-w_{\\pi/D}(s,a)]\,h(s,a)\,d_D(s,a)=0
+  \\;\\forall h
+  \\;\\Longrightarrow\\;
+  x^*(s,a) = w_{\\pi/D}(s,a).
+$$
 
-**Scalar lemma (intuition)**  
-For \(m>0,\; n\ge 0\):
+### 7. Recovering \\(\\nu^*\\) via Bellman-Residual Definition
+Finally, define \\(\\nu^*\\) by
 $$
-\min_{x\in\mathbb R}\;\Bigl(\tfrac12\,m\,x^{2}-n\,x\Bigr)
-\quad\Longrightarrow\quad
-x^{\star}=\frac{n}{m}.
+\\nu(s,a)
+= x^*(s,a)
+  + \\gamma\\,\\mathbb{E}_{s'\\sim T(s,a),\\,a'\\sim\\pi}[\\nu(s',a')],
 $$
-
----
-
-**Ideal least-squares ratio objective**  
+which uniquely defines a bounded solution in \\(L^2(d_D)\\). By construction,
 $$
-J_{1}(x)=\tfrac12\,\mathbb E_{(s,a)\sim d_{D}}\!\bigl[x(s,a)^{2}\bigr]
--\mathbb E_{(s,a)\sim d_{\pi}}\!\bigl[x(s,a)\bigr].
-$$
-Pointwise application of the lemma gives the (unsampleable) minimiser  
-\(x^{\star}=d_{\pi}/d_{D}=w_{\pi/D}\).
-
----
-
-**Change of variables**  
-Introduce a potential \(\nu\) and set
-$$
-x=(I-B_{\pi})\,\nu,
-\qquad
-(B_{\pi}\nu)(s,a)=\gamma\,
-\mathbb E_{s'\!,a'}\bigl[\nu(s',a')\bigr].
-$$
-Because \(0\le\gamma<1\), \(I-B_{\pi}\) is invertible on bounded functions;  
-\(\nu=(I-B_{\pi})^{-1}x\) is well-defined and bounded.
-
-Discounted flow identity:
-$$
-\mathbb E_{d_{\pi}}\!\bigl[(I-B_{\pi})\nu\bigr]
-=(1-\gamma)\,
-\mathbb E_{s_{0}\sim\beta,\;a_{0}\sim\pi}\!\bigl[\nu(s_{0},a_{0})\bigr].
-$$
-Hence
-$$
-\mathbb E_{d_{\pi}}[x]
-=(1-\gamma)\,
-\mathbb E_{s_{0}\sim\beta,\;a_{0}\sim\pi}[\nu].
+(\\nu^* - B^\\pi\\nu^*)(s,a)
+= x^*(s,a)
+= \\frac{d_\\pi(s,a)}{d_D(s,a)}.
 $$
 
 ---
 
-**Fenchel transformation**  
-For any scalar \(z\),
-\(\tfrac12\,z^{2}=\max_{w}\{\,w z-\tfrac12\,w^{2}\}\).  
-Apply pointwise, integrate under \(d_{D}\):
-$$
-\tfrac12\,\mathbb E_{d_{D}}[x^{2}]
-=\max_{w}\Bigl\{
-\mathbb E_{d_{D}}[w\,x]-\tfrac12\,\mathbb E_{d_{D}}[w^{2}]
-\Bigr\}.
-$$
-Substitute \(x=(I-B_{\pi})\nu\) and swap \(\min\nu\) / \(\max w\):
-$$
-\min_{\nu}\;\max_{w}\;
-\Bigl\{
-\mathbb E_{d_{D}}\!\bigl[w\,(\nu-B_{\pi}\nu)\bigr]
--\tfrac12\,\mathbb E_{d_{D}}[w^{2}]
--(1-\gamma)\,\mathbb E_{s_{0}\sim\beta,\,a_{0}\sim\pi}[\nu]
-\Bigr\}.
-$$
-
----
-
-**Saddle-point optimality**  
-At the saddle point
-\[
-w^{\star}=(\nu^{\star}-B_{\pi}\nu^{\star})=\frac{d_{\pi}}{d_{D}},
-\]
-so \(\mathbb E_{d_{D}}[w^{\star}\,r]=\rho(\pi)\).  
-All expectations involve either \(d_{D}\) (logged data) or \(\beta\) (initial states);  
-no samples are required from \(d_{\pi}\).
-
-
+**Summary**
+1. Prove equivalence of (6) and (8) under \\(x=(I-B^\\pi)\\nu\\).  
+2. Obtain a telescoping-sum form for \\(\\mathbb{E}_{d_\\pi}[x]\\) in terms of \\(\\beta\\) and \\(\\pi\\).  
+3. Present the double-integral \\(J_1(x)\\) for unbiased sample optimization.  
+4. Solve \\(J_1(x)\\) to get \\(x^* = d_\\pi/d_D\\), then recover \\(\\nu^*\\) by the Bellman-residual definition—no infinite sums explicitly computed.
