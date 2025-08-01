@@ -639,7 +639,7 @@ Not every equation gives rise to a recursive solution obviously and here \\(d_\b
 
 ## A Full, Self-Contained Proof of the DualDICE Objective
 
-This note provides a clean, rigorous derivation showing how the off-policy density-ratio correction objective (equation 6) admits a unique solution, and how the change of variables to \(x\) (equation 8) makes it practically computable from data.
+This note provides a clean, rigorous derivation showing how the off-policy density-ratio correction objective (equation 6) admits a unique solution, and how the change of variables to \\(x\\) (equation 8) makes it practically computable from data.
 
 ### 1. Setting and Definitions
 - **Spaces and measures**: Let \\((S, A)\\) be the state–action space. Define:
@@ -684,9 +684,10 @@ $$
    $$
    \nu^* = (I - B^\pi)^{-1}\Bigl[(1-\gamma)\,\tfrac{d_\pi}{d_D}\Bigr].
    $$
-   This form is not directly computable from data due to nested expectations and unknown \(d_\pi\).
 
-### 3. Change of Variables to \(x\)
+   This form is not directly computable from data due to nested expectations and unknown \\(d_\pi\\).
+
+### 3. Change of Variables to \\(x\\)
 Define
 
 $$
@@ -798,6 +799,10 @@ $$
 
 **Summary**
 1. Prove equivalence of (6) and (8) under \\(x=(I-B^\pi)\nu\\).  
-2. Obtain a telescoping-sum form for \\( \mathbb{E}_{d_\pi}[x] \\) in terms of \\(\beta\\) and \\(\pi\\).  
+2. Obtain a telescoping-sum form for 
+
+$$ \mathbb{E}_{d_\pi}[x] $$
+
+in terms of \\(\beta\\) and \\(\pi\\).  
 3. Present the double-integral \\(J_1(x)\\) for unbiased sample optimization.  
 4. Solve \\(J_1(x)\\) to get \\(x^* = d_\pi/d_D\\), then recover \\(\nu^*\\) by the Bellman-residual definition—no infinite sums explicitly computed.
