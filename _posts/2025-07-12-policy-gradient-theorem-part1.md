@@ -731,6 +731,7 @@ $$
 $$
 
 Re-indexing (\(t\to t-1\)) gives
+
 $$
 \begin{aligned}
 \mathbb{E}_{d_\pi}[x]
@@ -739,13 +740,16 @@ $$
 &= (1-\gamma)\,\mathbb{E}_{s_0\sim\beta,\,a_0\sim\pi}[\nu(s_0,a_0)].
 \end{aligned}
 $$
+
 Thus
+
 $$
 \mathbb{E}_{d_\pi}[x] = (1-\gamma)\,\mathbb{E}_{\beta,\pi}[\nu].
 $$
 
 ### 5. Double-Integral Form for Practical Estimation
 Putting both terms together:
+
 $$
 \begin{aligned}
 J_1(x)
@@ -754,29 +758,37 @@ J_1(x)
    \int_{S\times A} x(s,a)\,[\beta_t(s)\,\pi(a\mid s)]\,ds\,da.
 \end{aligned}
 $$
+
 Unbiased estimation:
 - **First term:** sample \\((s,a)\sim d_D\\), evaluate \\(x(s,a)^2\\).
 - **Second term:** sample \\(t\sim\mathrm{Geom}(1-\gamma)\\), then \\((s,a)\sim\beta_t\otimes\pi\\), evaluate \\(x(s,a)\\).
 
 ### 6. Existence and Closed-Form Solution for \\(x\\)
 On \\(L^2(d_D)\\),
+
 $$
 J_1(x) = \tfrac12\int x^2\,d_D - \int x\,d_\pi
 $$
+
 is strictly convex. Its first-order condition at \\(x^*\\) is:
+
 $$
 0 = \int x^*\,h\,d_D - \int h\,d_\pi,\quad \forall h\in L^2(d_D).
 $$
+
 Assuming \\(d_\pi\ll d_D\\), write \\(d_\pi = w_{\pi/D}\,d_D\\). Then
+
 $$
 \int[x^*(s,a)-w_{\pi/D}(s,a)]\,h(s,a)\,d_D(s,a) = 0\;\forall h\;\Longrightarrow\;x^*(s,a) = w_{\pi/D}(s,a).
 $$
 
 ### 7. Recovering \(\nu^*\) via Bellman-Residual Definition
 Finally, define \\(\nu^*\\) by
+
 $$
 \nu(s,a) = x^*(s,a) + \gamma\,\mathbb{E}_{s'\sim T(s,a),\,a'\sim\pi}[\nu(s',a')],
 $$
+
 which uniquely defines a bounded solution in \\(L^2(d_D)\\). By construction,
 $$
 (\nu^* - B^\pi\nu^*)(s,a) = x^*(s,a) = \frac{d_\pi(s,a)}{d_D(s,a)}.
