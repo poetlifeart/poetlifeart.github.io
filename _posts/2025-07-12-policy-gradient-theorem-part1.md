@@ -661,13 +661,11 @@ We work in the Hilbert space \\(\mathcal H = L^2(d_D)\\) with inner product
 $$
 \langle f,g\rangle = \int_{S\times A} f(s,a)\,g(s,a)\,d_D(s,a).
 $$
+
 Define:
-$$
-J(\nu)
-= \tfrac12\,\mathbb{E}_{d_D}\bigl[(\nu - B^\pi\nu)^2\bigr]
-  - (1-\gamma)\,\mathbb{E}_{\beta,\pi}[\nu],
-$$
+$$J(\nu) = \tfrac12\,\mathbb{E}_{d_D}\bigl[(\nu - B^\pi\nu)^2\bigr] - (1-\gamma)\,\mathbb{E}_{\beta,\pi}[\nu],$$
 where
+
 $$
 \mathbb{E}_{\beta,\pi}[\nu]
 = \int_{S\times A} \nu(s,a)\,\bigl[\beta(s)\,\pi(a\mid s)\bigr]\,ds\,da.
@@ -675,10 +673,13 @@ $$
 
 1. **Convexity and coercivity:** the quadratic term is strictly convex and coercive (since \\(\|I - B^\pi\|>0\\)); the second term is a bounded linear functional.  
 2. **Existence & uniqueness:** by standard Hilbert-space theory, \\(J(\nu)\\) has a unique minimizer \\(\nu^*\\). The Euler–Lagrange condition is
+
    $$
    (I - B^\pi)^*(I - B^\pi)\,\nu^* = (1-\gamma)\,\tfrac{d_\pi}{d_D},
    $$
+
    so formally
+
    $$
    \nu^* = (I - B^\pi)^{-1}\Bigl[(1-\gamma)\,\tfrac{d_\pi}{d_D}\Bigr].
    $$
@@ -686,29 +687,36 @@ $$
 
 ### 3. Change of Variables to \(x\)
 Define
+
 $$
 x(s,a) := (I - B^\pi)\nu(s,a)
          = \nu(s,a) - (B^\pi\nu)(s,a).
 $$
 Since \\(\|B^\pi\|<1\\), \\(I - B^\pi\\) is invertible on \\(L^2(d_D)\\), giving
+
 $$
 x \longleftrightarrow \nu = (I - B^\pi)^{-1} x,
 \quad
 \|x\|_{d_D}<\infty \iff \|\nu\|_{d_D}<\infty.
 $$
+
 Substitute into \\(J(\nu)\\) to obtain the quadratic in \\(x\\) (equation 8):
 $$
 J_1(x) = \tfrac12\,\mathbb{E}_{d_D}[x^2] - \mathbb{E}_{d_\pi}[x].
 $$
+
 Minimizing \\(J_1\\) over \\(x\\) is equivalent to minimizing \\(J\\) over \\(\nu\\).
 
 ### 4. Telescoping-Sum Derivation of \\(\mathbb{E}_{d_\pi}[x]\\)
 Starting point:
+
 $$
 \mathbb{E}_{d_\pi}[x]
 = (1-\gamma)\sum_{t=0}^\infty \gamma^t\,\mathbb{E}_{s\sim\beta_t,\,a\sim\pi}\bigl[x(s,a)\bigr].
 $$
+
 Since \(x(s,a)=\nu(s,a)-\gamma\,\mathbb{E}_{s',a'}[\nu(s',a')]\),
+
 $$
 \begin{aligned}
 \mathbb{E}_{d_\pi}[x]
@@ -720,6 +728,7 @@ $$
   - (1-\gamma)\sum_{t=0}^\infty \gamma^{t+1}\,\mathbb{E}_{\beta_{t+1},\pi}[\nu].
 \end{aligned}
 $$
+
 Re-indexing (\(t\to t-1\)) gives
 $$
 \begin{aligned}
