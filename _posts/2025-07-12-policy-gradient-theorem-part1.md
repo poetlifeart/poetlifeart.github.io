@@ -798,6 +798,6 @@ $$
 
 **Summary**
 1. Prove equivalence of (6) and (8) under \\(x=(I-B^\pi)\nu\\).  
-2. Obtain a telescoping-sum form for \\(\mathbb{E}_{d_\pi}[x]\\) in terms of \\(\beta\\) and \\(\pi\\).  
+2. Obtain a telescoping-sum form for \\( \mathbb{E}_{d_\pi}[x] \\) in terms of \\(\beta\\) and \\(\pi\\).  
 3. Present the double-integral \\(J_1(x)\\) for unbiased sample optimization.  
 4. Solve \\(J_1(x)\\) to get \\(x^* = d_\pi/d_D\\), then recover \\(\nu^*\\) by the Bellman-residual definition—no infinite sums explicitly computed.
