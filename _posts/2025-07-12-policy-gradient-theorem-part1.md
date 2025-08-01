@@ -643,11 +643,12 @@ This note provides a clean, rigorous derivation showing how the off-policy densi
 
 ### 1. Setting and Definitions
 - **Spaces and measures**: Let \\((S, A)\\) be the state–action space. Define:
-  - \\(d_D(s,a)\\): the known behavior-data distribution (assumed \\(d_\pi \ll d_D\)).
+  - \\(d_D(s,a)\\): the known behavior-data distribution (assumed \\(d_\pi \ll d_D)\\).
   - 
     $$
     d_\pi(s,a) = (1-\gamma)\sum_{t=0}^\infty \gamma^t\bigl[\beta_t(s)\,\pi(a\mid s)\bigr],
     $$
+
     the unnormalized visitation measure under \\(\pi\\), starting from \\(\beta_0=\beta\\).
 
 - **Bellman-transition operator** \\(B^\pi: L^2(d_D)\to L^2(d_D)\\):
