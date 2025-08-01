@@ -708,8 +708,8 @@ $$
 
 Minimizing \\(J_1\\) over \\(x\\) is equivalent to minimizing \\(J\\) over \\(\nu\\).
 
-### 4. Telescoping-Sum Derivation of 
-\\( \mathbb{E}_{d_\pi}[x] \\)
+### 4. Telescoping-Sum Derivation of mmmmmmmmm
+$$( \mathbb{E}_{d_\pi}[x] $$
 Starting point:
 
 $$
