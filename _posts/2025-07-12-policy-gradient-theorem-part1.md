@@ -748,23 +748,9 @@ $$
 \mathbb{E}_{d_\pi}[x] = (1-\gamma)\,\mathbb{E}_{\beta,\pi}[\nu].
 $$
 
-### 5. Double-Integral Form for Practical Estimation
-Putting both terms together:
 
-$$
-\begin{aligned}
-J_1(x)
-&= \tfrac12\int_{S\times A} x(s,a)^2\,d_D(s,a) \\
-&\quad - (1-\gamma)\sum_{t=0}^\infty \gamma^t
-   \int_{S\times A} x(s,a)\,[\beta_t(s)\,\pi(a\mid s)]\,ds\,da.
-\end{aligned}
-$$
 
-Unbiased estimation:
-- **First term:** sample \\((s,a)\sim d_D\\), evaluate \\(x(s,a)^2\\).
-- **Second term:** sample \\(t\sim\mathrm{Geom}(1-\gamma)\\), then \\((s,a)\sim\beta_t\otimes\pi\\), evaluate \\(x(s,a)\\).
-
-### 6. Existence and Closed-Form Solution for \\(x\\)
+### 5. Existence and Closed-Form Solution for \\(x\\)
 On \\(L^2(d_D)\\),
 
 $$
@@ -783,7 +769,7 @@ $$
 \int[x^*(s,a)-w_{\pi/D}(s,a)]\,h(s,a)\,d_D(s,a) = 0\;\forall h\;\Longrightarrow\;x^*(s,a) = w_{\pi/D}(s,a).
 $$
 
-### 7. Recovering \\(\nu^*\\) via Bellman-Residual Definition
+### 6. Recovering \\(\nu^*\\) via Bellman-Residual Definition
 Finally, define \\(\nu^*\\) by
 
 $$
@@ -836,6 +822,49 @@ $$(1-\gamma)\mathbb{E}_{s\sim\beta,a\sim\pi(s)}[\nu(s,a)]$$
 $$
 J(\nu) = \frac{1}{2}\mathbb{E}_{(s,a)\sim d_D}\left[(\nu(s,a)-\gamma \mathbb{E}_{s',a'\sim T\pi}[\nu(s',a')])^2\right] - (1-\gamma)\mathbb{E}_{s\sim\beta,a\sim\pi(s)}[\nu(s,a)]
 $$
+
+1. Parameterization  
+Choose a differentiable function class \\(\nu_\theta(s,a)\\).
+
+2. Empirical loss  
+
+$$
+\hat J(\theta)
+= \frac{1}{2N}\sum_{i=1}^N
+\Bigl[
+\nu_\theta(s_i,a_i)
+- \gamma\,\nu_\theta(s'_i,a'_i)
+\Bigr]^2
+\;-\;
+\frac{1-\gamma}{M}\sum_{j=1}^M \nu_\theta(\hat s_j,\bar a_j).
+$$
+
+3. Stochastic gradient  
+Define
+
+$$
+\delta_i \;=\;\nu_\theta(s_i,a_i)\;-\;\gamma\,\nu_\theta(s'_i,a'_i).
+$$
+
+Then over a minibatch of size \\(B\\):
+
+$$
+g_{\rm batch}
+=\frac{1}{B}\sum_{i=1}^B
+\Bigl[
+\delta_i\,\nabla_\theta\nu_\theta(s_i,a_i)
+\;-\;\gamma\,\delta_i\,\nabla_\theta\nu_\theta(s'_i,a'_i)
+\Bigr]
+\;-\;
+\frac{1-\gamma}{B}\sum_{j=1}^B\nabla_\theta\nu_\theta(\hat s_j,\bar a_j).
+$$
+
+4. Gradient step  
+
+$$
+\theta \;\leftarrow\;\theta\;-\;\alpha\,g_{\rm batch}.
+$$
+
 
 
 
