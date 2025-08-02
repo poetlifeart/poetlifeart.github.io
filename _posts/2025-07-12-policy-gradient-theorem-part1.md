@@ -833,4 +833,10 @@ Finally, noting \(\beta_0=\beta\):
 $$(1-\gamma)\mathbb{E}_{s\sim\beta,a\sim\pi(s)}[\nu(s,a)]$$
 
 
+$$
+J(\nu) = \frac{1}{2}\mathbb{E}_{(s,a)\sim d_D}\left[(\nu(s,a)-\gamma \mathbb{E}_{s',a'\sim T\pi}[\nu(s',a')])^2\right] - (1-\gamma)\mathbb{E}_{s\sim\beta,a\sim\pi(s)}[\nu(s,a)]
+$$
+
+
+
 
