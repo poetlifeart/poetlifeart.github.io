@@ -877,31 +877,6 @@ When \\(f(x) = x^2\\), \\(f^*(x) = x^2\\), this reduces to a standard actor–cr
 
 
 
-
-
-
-.....................
-
-$$
-\begin{aligned}
-& \max_{\pi} \ \min_{Q} \ L(Q, \pi_\beta, \pi) \\
-&= \mathbb{E}_{s_0 \sim d_0, \ a \sim \pi(\cdot|s_0)} 
-\big[ Q(s_0,a) \big] \\
-&\quad + \alpha \,
-\mathbb{E}_{(s,a) \sim d^{\pi_\beta}}
-\left[
-f^*\!\left(
-\frac{
-r(s,a) 
-+ \gamma \ \mathbb{E}_{s' \sim T(s,a),\ a' \sim \pi(\cdot|s')} 
-\big[ Q(s',a') \big] 
-- Q(s,a)
-}{\alpha}
-\right)
-\right]
-\end{aligned}
-$$
-
 We parameterize the critic as \\( Q_\phi(s,a) \\) and the actor as \\( \pi_\theta(a|s) \\).  
 The optimization alternates between minimizing over \\( Q_\phi \\) and maximizing over \\( \pi_\theta \\).
 
