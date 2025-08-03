@@ -710,44 +710,40 @@ $$
 Minimizing \\(J_1\\) over \\(x\\) is equivalent to minimizing \\(J\\) over \\(\nu\\).
 
 ### 4. Telescoping-Sum Derivation 
-Starting point:
+$$(1-\gamma)\sum_{t=0}^{\infty}\gamma^t\,\mathbb{E}_{s_t\sim\beta_t,a_t\sim\pi(s_t)}
+\left[
+\nu(s,a)-\gamma\,\mathbb{E}_{s'\sim T(s,a),a'\sim\pi(s')}[\nu(s',a')]
+\right]$$
 
-$$
-\mathbb{E}_{d_\pi}[x]
-= (1-\gamma)\sum_{t=0}^\infty \gamma^t\,\mathbb{E}_{s\sim\beta_t,\,a\sim\pi}\bigl[x(s,a)\bigr].
-$$
+Next, separate into two sums, clearly keeping placeholders:
 
-Since \\(x(s,a)=\nu(s,a)-\gamma\,\mathbb{E}_{s',a'}[\nu(s',a')]\\),
+$$=(1-\gamma)\sum_{t=0}^{\infty}\gamma^t\,\mathbb{E}_{s_t\sim\beta_t,a_t\sim\pi(s_t)}[\nu(s,a)]
+-(1-\gamma)\sum_{t=0}^{\infty}\gamma^{t+1}\,\mathbb{E}_{s_t\sim\beta_t,a_t\sim\pi(s_t)}\left[
+\mathbb{E}_{s'\sim T(s,a),a'\sim\pi(s')}[\nu(s',a')]
+\right]$$
 
-$$
-\begin{aligned}
-\mathbb{E}_{d_\pi}[x]
-&= (1-\gamma)\sum_{t=0}^\infty \gamma^t\Bigl(
-    \mathbb{E}_{\beta_t,\pi}[\nu]
-    - \gamma\,\mathbb{E}_{\beta_t,\pi}\bigl[\mathbb{E}_{s',a'}[\nu(s',a')]\bigr]
-  \Bigr)\\
-&= (1-\gamma)\sum_{t=0}^\infty \gamma^t\,\mathbb{E}_{\beta_t,\pi}[\nu]
-  - (1-\gamma)\sum_{t=0}^\infty \gamma^{t+1}\,\mathbb{E}_{\beta_{t+1},\pi}[\nu].
-\end{aligned}
-$$
+Bring the expectation explicitly inside and introduce indexing clearly:
 
-Re-indexing \\(t\\)to \\(t-1\\) gives
+$$=(1-\gamma)\sum_{t=0}^{\infty}\gamma^t\,\mathbb{E}_{s_t\sim\beta_t,a_t\sim\pi(s_t)}[\nu(s_t,a_t)]
+-(1-\gamma)\sum_{t=0}^{\infty}\gamma^{t+1}\,\mathbb{E}_{s_t\sim\beta_t,a_t\sim\pi(s_t),s_{t+1}\sim T(s_t,a_t),a_{t+1}\sim\pi(s_{t+1})}[\nu(s_{t+1},a_{t+1})]$$
 
-$$
-\begin{aligned}
-\mathbb{E}_{d_\pi}[x]
-&= (1-\gamma)\,\mathbb{E}_{\beta_0,\pi}[\nu]
-  + (1-\gamma)\sum_{t=1}^\infty (\gamma^t - \gamma^t)\,\mathbb{E}_{\beta_t,\pi}[\nu]\\
-&= (1-\gamma)\,\mathbb{E}_{s_0\sim\beta,\,a_0\sim\pi}[\nu(s_0,a_0)].
-\end{aligned}
-$$
+Shift indices explicitly in the second sum (\(t'=t+1\)):
 
-Thus
+$$=(1-\gamma)\sum_{t=0}^{\infty}\gamma^t\,\mathbb{E}_{s_t\sim\beta_t,a_t\sim\pi(s_t)}[\nu(s_t,a_t)]
+-(1-\gamma)\sum_{t'=1}^{\infty}\gamma^{t'}\,\mathbb{E}_{s_{t'}\sim\beta_{t'},a_{t'}\sim\pi(s_{t'})}[\nu(s_{t'},a_{t'})]$$
 
-$$
-\mathbb{E}_{d_\pi}[x] = (1-\gamma)\,\mathbb{E}_{\beta,\pi}[\nu].
-$$
+Rename index \(t'\) back to \(t\):
 
+$$=(1-\gamma)\sum_{t=0}^{\infty}\gamma^t\,\mathbb{E}_{s_t\sim\beta_t,a_t\sim\pi(s_t)}[\nu(s_t,a_t)]
+-(1-\gamma)\sum_{t=1}^{\infty}\gamma^{t}\,\mathbb{E}_{s_{t}\sim\beta_{t},a_{t}\sim\pi(s_{t})}[\nu(s_{t},a_{t})]$$
+
+Explicit telescoping clearly leaves only the first term:
+
+$$=(1-\gamma)\mathbb{E}_{s_0\sim\beta_0,a_0\sim\pi(s_0)}[\nu(s_0,a_0)]$$
+
+Finally, noting \(\beta_0=\beta\):
+
+$$(1-\gamma)\mathbb{E}_{s\sim\beta,a\sim\pi(s)}[\nu(s,a)]$$
 
 
 ### 5. Existence and Closed-Form Solution for \\(x\\)
@@ -783,40 +779,7 @@ $$
 
 ---
 
-$$(1-\gamma)\sum_{t=0}^{\infty}\gamma^t\,\mathbb{E}_{s_t\sim\beta_t,a_t\sim\pi(s_t)}
-\left[
-\nu(s,a)-\gamma\,\mathbb{E}_{s'\sim T(s,a),a'\sim\pi(s')}[\nu(s',a')]
-\right]$$
 
-Next, separate into two sums, clearly keeping placeholders:
-
-$$=(1-\gamma)\sum_{t=0}^{\infty}\gamma^t\,\mathbb{E}_{s_t\sim\beta_t,a_t\sim\pi(s_t)}[\nu(s,a)]
--(1-\gamma)\sum_{t=0}^{\infty}\gamma^{t+1}\,\mathbb{E}_{s_t\sim\beta_t,a_t\sim\pi(s_t)}\left[
-\mathbb{E}_{s'\sim T(s,a),a'\sim\pi(s')}[\nu(s',a')]
-\right]$$
-
-Bring the expectation explicitly inside and introduce indexing clearly:
-
-$$=(1-\gamma)\sum_{t=0}^{\infty}\gamma^t\,\mathbb{E}_{s_t\sim\beta_t,a_t\sim\pi(s_t)}[\nu(s_t,a_t)]
--(1-\gamma)\sum_{t=0}^{\infty}\gamma^{t+1}\,\mathbb{E}_{s_t\sim\beta_t,a_t\sim\pi(s_t),s_{t+1}\sim T(s_t,a_t),a_{t+1}\sim\pi(s_{t+1})}[\nu(s_{t+1},a_{t+1})]$$
-
-Shift indices explicitly in the second sum (\(t'=t+1\)):
-
-$$=(1-\gamma)\sum_{t=0}^{\infty}\gamma^t\,\mathbb{E}_{s_t\sim\beta_t,a_t\sim\pi(s_t)}[\nu(s_t,a_t)]
--(1-\gamma)\sum_{t'=1}^{\infty}\gamma^{t'}\,\mathbb{E}_{s_{t'}\sim\beta_{t'},a_{t'}\sim\pi(s_{t'})}[\nu(s_{t'},a_{t'})]$$
-
-Rename index \(t'\) back to \(t\):
-
-$$=(1-\gamma)\sum_{t=0}^{\infty}\gamma^t\,\mathbb{E}_{s_t\sim\beta_t,a_t\sim\pi(s_t)}[\nu(s_t,a_t)]
--(1-\gamma)\sum_{t=1}^{\infty}\gamma^{t}\,\mathbb{E}_{s_{t}\sim\beta_{t},a_{t}\sim\pi(s_{t})}[\nu(s_{t},a_{t})]$$
-
-Explicit telescoping clearly leaves only the first term:
-
-$$=(1-\gamma)\mathbb{E}_{s_0\sim\beta_0,a_0\sim\pi(s_0)}[\nu(s_0,a_0)]$$
-
-Finally, noting \(\beta_0=\beta\):
-
-$$(1-\gamma)\mathbb{E}_{s\sim\beta,a\sim\pi(s)}[\nu(s,a)]$$
 
 
 $$
