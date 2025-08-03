@@ -931,4 +931,54 @@ $$
 
 The actor and critic are optimized alternately until convergence.
 
+.....................
+
+$$
+\begin{aligned}
+& \max_{\pi} \ \min_{Q} \ L(Q, \pi_\beta, \pi) \\
+&= \mathbb{E}_{s_0 \sim d_0, \ a \sim \pi(\cdot|s_0)} 
+\big[ Q(s_0,a) \big] \\
+&\quad + \alpha \,
+\mathbb{E}_{(s,a) \sim d^{\pi_\beta}}
+\left[
+f^*\!\left(
+\frac{
+r(s,a) 
++ \gamma \ \mathbb{E}_{s' \sim T(s,a),\ a' \sim \pi(\cdot|s')} 
+\big[ Q(s',a') \big] 
+- Q(s,a)
+}{\alpha}
+\right)
+\right]
+\end{aligned}
+$$
+
+We parameterize the critic as \\( Q_\phi(s,a) \\) and the actor as \\( \pi_\theta(a|s) \\).  
+The optimization alternates between minimizing over \\( Q_\phi \\) and maximizing over \\( \pi_\theta \\).
+
+**Critic update** (for fixed \\( \pi_\theta \\)):
+
+$$
+\phi \leftarrow \phi - \eta_Q \, \nabla_\phi \;
+\mathbb{E}_{s_0 \sim d_0, \ a_0 \sim \pi_\theta} \big[ Q_\phi(s_0, a_0) \big]
++ \alpha \,
+\mathbb{E}_{(s,a) \sim \mathcal{D}}
+\left[
+f^*\!\left(
+\frac{
+r(s,a) 
++ \gamma \, \mathbb{E}_{a' \sim \pi_\theta(\cdot|s')}[ Q_\phi(s',a') ]
+- Q_\phi(s,a)
+}{\alpha}
+\right)
+\right]
+$$
+
+**Actor update** (for fixed \\( Q_\phi \\)):
+
+$$
+\theta \leftarrow \theta + \eta_\pi \;
+\mathbb{E}_{s,a \sim \pi_\theta}
+\left[ Q_\phi(s,a) \, \nabla_\theta \log \pi_\theta(a|s) \right]
+$$
 
