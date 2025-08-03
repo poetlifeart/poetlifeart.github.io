@@ -875,24 +875,10 @@ $$
 
 When \\(f(x) = x^2\\), \\(f^*(x) = x^2\\), this reduces to a standard actor–critic objective plus an additional regularization term on \\(Q\\)-values at the initial state.
 
-In the parametric form:
 
--Actor: 
-\\(\pi_\theta(a|s)\\), with parameters \\(\theta\\) updated via
 
-$$
-\nabla_\theta L(\theta) = 
-\mathbb{E}_{s \sim d^{\pi_\theta}, \ a \sim \pi_\theta}
-\left[ \tilde{Q}^{\pi_\theta}(s,a) \ \nabla_\theta \log \pi_\theta(a|s) \right]
-$$
 
-- Critic: \\(Q_\phi(s,a)\\), with parameters \\(\phi\\) updated by
 
-$$
-\min_{\phi} \ L(Q_\phi, \pi_\beta, \pi_\theta)
-$$
-
-The actor and critic are optimized alternately until convergence.
 
 .....................
 
@@ -921,6 +907,16 @@ The optimization alternates between minimizing over \\( Q_\phi \\) and maximizin
 
 **Critic update** (for fixed \\( \pi_\theta \\)):
 
+
+- Critic: \\(Q_\phi(s,a)\\), with parameters \\(\phi\\) updated by
+
+$$
+\min_{\phi} \ L(Q_\phi, \pi_\beta, \pi_\theta)
+$$
+
+The actor and critic are optimized alternately until convergence.
+
+
 $$
 \phi \leftarrow \phi - \eta_Q \, \nabla_\phi \;
 \mathbb{E}_{s_0 \sim d_0, \ a_0 \sim \pi_\theta} \big[ Q_\phi(s_0, a_0) \big]
@@ -938,6 +934,16 @@ r(s,a)
 $$
 
 **Actor update** (for fixed \\( Q_\phi \\)):
+
+-Actor: 
+\\(\pi_\theta(a|s)\\), with parameters \\(\theta\\) updated via
+
+$$
+\nabla_\theta L(\theta) = 
+\mathbb{E}_{s \sim d^{\pi_\theta}, \ a \sim \pi_\theta}
+\left[ \tilde{Q}^{\pi_\theta}(s,a) \ \nabla_\theta \log \pi_\theta(a|s) \right]
+$$
+
 
 $$
 \theta \leftarrow \theta + \eta_\pi \;
