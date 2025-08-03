@@ -867,5 +867,61 @@ $$
 
 
 
+$$
+\max_{\pi} \ \mathbb{E}_{s \sim d^{\pi}, \ a \sim \pi(\cdot|s)}
+\big[ r(s,a) \big]
+- \alpha \, D_f\!\big( d^{\pi}(s,a), \ d^{\pi_\beta}(s,a) \big)
+$$
+
+Using the variational dual form of the \\(f\\)-divergence:
+
+$$
+D_f(p,q) = \max_{x : S \times A \to \mathbb{R}}
+\ \mathbb{E}_{y \sim p}\big[ x(y) \big]
+- \mathbb{E}_{y \sim q} \big[ f^*( x(y) ) \big]
+$$
+
+and applying the change of variables
+
+$$
+Q(s,a) = \mathbb{E}_{s' \sim T(s,a),\ a' \sim \pi(\cdot|s')}
+\left[ r(s,a) - \alpha \, x(s,a) + \gamma \, Q(s',a') \right]
+$$
+
+we obtain the saddle-point optimization:
+
+$$
+\max_{\pi} \ \min_{Q} \ 
+L(Q, \pi_\beta, \pi) :=
+\mathbb{E}_{s_0 \sim d_0, \ a \sim \pi(\cdot|s_0)} \big[ Q(s_0,a) \big]
++ \alpha \,
+\mathbb{E}_{(s,a) \sim d^{\pi_\beta}}
+\left[
+f^*\!\left(
+\frac{
+r(s,a) + \gamma \ \mathbb{E}_{s' \sim T(s,a),\ a' \sim \pi(\cdot|s')} [ Q(s',a') ] - Q(s,a)
+}{\alpha}
+\right)
+\right]
+$$
+
+When \\(f(x) = x^2\\), \\(f^*(x) = x^2\\), this reduces to a standard actor–critic objective plus an additional regularization term on \\(Q\\)-values at the initial state.
+
+In the parametric form:
+- Actor: \\(\pi_\theta(a|s)\\), with parameters \\(\theta\\) updated via
+
+$$
+\nabla_\theta J(\theta) = 
+\mathbb{E}_{s \sim d^{\pi_\theta}, \ a \sim \pi_\theta}
+\left[ \tilde{Q}^{\pi_\theta}(s,a) \ \nabla_\theta \log \pi_\theta(a|s) \right]
+$$
+
+- Critic: \\(Q_\phi(s,a)\\), with parameters \\(\phi\\) updated by
+
+$$
+\min_{\phi} \ L(Q_\phi, \pi_\beta, \pi_\theta)
+$$
+
+The actor and critic are optimized alternately until convergence.
 
 
