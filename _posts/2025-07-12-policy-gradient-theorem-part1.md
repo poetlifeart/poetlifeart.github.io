@@ -839,8 +839,7 @@ $$
 \frac{1-\gamma}{M}\sum_{j=1}^M \nu_\theta(\hat s_j,\bar a_j).
 $$
 
-3. Stochastic gradient  
-Define
+3. Stochastic gradient, Define
 
 $$
 \delta_i \;=\;\nu_\theta(s_i,a_i)\;-\;\gamma\,\nu_\theta(s'_i,a'_i).
