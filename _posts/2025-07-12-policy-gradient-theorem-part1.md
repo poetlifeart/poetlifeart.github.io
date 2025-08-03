@@ -858,7 +858,7 @@ g_{\rm batch}
 \frac{1-\gamma}{B}\sum_{j=1}^B\nabla_\theta\nu_\theta(\hat s_j,\bar a_j).
 $$
 
-4. Gradient step  
+- Gradient step  
 
 $$
 \theta \;\leftarrow\;\theta\;-\;\alpha\,g_{\rm batch}.
