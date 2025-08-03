@@ -823,10 +823,10 @@ $$
 J(\nu) = \frac{1}{2}\mathbb{E}_{(s,a)\sim d_D}\left[(\nu(s,a)-\gamma \mathbb{E}_{s',a'\sim T\pi}[\nu(s',a')])^2\right] - (1-\gamma)\mathbb{E}_{s\sim\beta,a\sim\pi(s)}[\nu(s,a)]
 $$
 
-1. Parameterization  
+- Parameterization  
 Choose a differentiable function class \\(\nu_\theta(s,a)\\).
 
-2. Empirical loss  
+- Empirical loss  
 
 $$
 \hat J(\theta)
@@ -839,7 +839,7 @@ $$
 \frac{1-\gamma}{M}\sum_{j=1}^M \nu_\theta(\hat s_j,\bar a_j).
 $$
 
-3. Stochastic gradient, Define
+- Stochastic gradient, Define
 
 $$
 \delta_i \;=\;\nu_\theta(s_i,a_i)\;-\;\gamma\,\nu_\theta(s'_i,a'_i).
