@@ -891,19 +891,25 @@ $$
 we obtain the saddle-point optimization:
 
 $$
-\max_{\pi} \ \min_{Q} \ 
-L(Q, \pi_\beta, \pi) :=
-\mathbb{E}_{s_0 \sim d_0, \ a \sim \pi(\cdot|s_0)} \big[ Q(s_0,a) \big]
-+ \alpha \,
+\begin{aligned}
+& \max_{\pi} \ \min_{Q} \ L(Q, \pi_\beta, \pi) \\
+&= \mathbb{E}_{s_0 \sim d_0, \ a \sim \pi(\cdot|s_0)} 
+\big[ Q(s_0,a) \big] \\
+&\quad + \alpha \,
 \mathbb{E}_{(s,a) \sim d^{\pi_\beta}}
 \left[
 f^*\!\left(
 \frac{
-r(s,a) + \gamma \ \mathbb{E}_{s' \sim T(s,a),\ a' \sim \pi(\cdot|s')} [ Q(s',a') ] - Q(s,a)
+r(s,a) 
++ \gamma \ \mathbb{E}_{s' \sim T(s,a),\ a' \sim \pi(\cdot|s')} 
+\big[ Q(s',a') \big] 
+- Q(s,a)
 }{\alpha}
 \right)
 \right]
+\end{aligned}
 $$
+
 
 When \\(f(x) = x^2\\), \\(f^*(x) = x^2\\), this reduces to a standard actor–critic objective plus an additional regularization term on \\(Q\\)-values at the initial state.
 
