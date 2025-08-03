@@ -914,10 +914,12 @@ $$
 When \\(f(x) = x^2\\), \\(f^*(x) = x^2\\), this reduces to a standard actor–critic objective plus an additional regularization term on \\(Q\\)-values at the initial state.
 
 In the parametric form:
-Actor: \\(\pi_\theta(a|s)\\), with parameters \\(\theta\\) updated via
+
+-Actor: 
+\\(\pi_\theta(a|s)\\), with parameters \\(\theta\\) updated via
 
 $$
-\nabla_\theta J(\theta) = 
+\nabla_\theta L(\theta) = 
 \mathbb{E}_{s \sim d^{\pi_\theta}, \ a \sim \pi_\theta}
 \left[ \tilde{Q}^{\pi_\theta}(s,a) \ \nabla_\theta \log \pi_\theta(a|s) \right]
 $$
