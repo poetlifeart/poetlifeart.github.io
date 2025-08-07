@@ -95,12 +95,13 @@ $$
 
 -Autonomous:
 
-    \\(u(x)=\displaystyle\lim_{h\to0}\frac{\psi_h(x)-x}{h}\\).
+    $$u(x)=\displaystyle\lim_{h\to0}\frac{\psi_h(x)-x}{h}$$.
 
 -Time‐Dependent:
 
-    \\(u_t(x)=\displaystyle\lim_{h\to0}\frac{\Phi_{t,t+h}(x)-x}{h}\\),
-    where \\(\Phi_{t,t+h}=\psi_{t+h}\circ\psi_t^{-1}\\).
+    $$u_t(x)=\displaystyle\lim_{h\to0}\frac{\Phi_{t,t+h}(x)-x}{h}$$,
+
+where \\(\Phi_{t,t+h}=\psi_{t+h}\circ\psi_t^{-1}\\).
 
 
 In both cases the compact relation
