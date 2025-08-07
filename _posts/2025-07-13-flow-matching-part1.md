@@ -38,22 +38,28 @@ layout: post
 
 
 For any smooth flow of diffeomorphisms \\(\psi_t:\mathbb{R}^d\to\mathbb{R}^d\\), define the Eulerian velocity field by
+
 $$
 u_t(x)=\dot{\psi}_t\bigl(\psi_t^{-1}(x)\bigr),
 $$
+
 where
+
 $$
 \dot{\psi}_t(y)=\frac{d}{dt}\,\psi_t(y)
 =\lim_{h\to 0}\frac{\psi_{t+h}(y)-\psi_t(y)}{h}.
 $$
 
-\section*{Autonomous Case \\(u_t \equiv u\\)}
+-Autonomous Case \\(u_t \equiv u\\)}
 
 Because the velocity is constant in time, the flow satisfies the semigroup property
+
 $$
 \psi_{t+h}=\psi_h\circ\psi_t.
 $$
+
 Hence
+
 $$
 \begin{aligned}
 u(x)
@@ -63,7 +69,9 @@ u(x)
 &=\lim_{h\to0}\frac{\psi_h(x)-x}{h}.
 \end{aligned}
 $$
+
 Thus in the autonomous case,
+
 $$
 u(x)
 =\left.\frac{d}{dh}\right|_{h=0}\psi_h(x)
@@ -72,10 +80,12 @@ $$
 
 
 When \\(u_t\\) varies with time, the one‐parameter map \\(\psi_h\\) alone is not enough. Define the two‐time propagator
+
 $$
 \Phi_{t,t+h}:=\psi_{t+h}\circ\psi_t^{-1},
 $$
 which carries points from time \\(t\\) to \\(t+h\\). Then
+
 $$
 u_t(x)
 =\lim_{h\to0}\frac{\psi_{t+h}(\psi_t^{-1}(x))-\psi_t(\psi_t^{-1}(x))}{h}
@@ -91,7 +101,9 @@ $$
 $$
 
 In both cases the compact relation
+
 $$
 u_t(x)=\dot{\psi}_t\bigl(\psi_t^{-1}(x)\bigr)
 $$
+
 holds without changing notation.
