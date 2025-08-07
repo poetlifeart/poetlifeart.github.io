@@ -87,8 +87,7 @@ u_t(x)
 =\lim_{h\to0}\frac{\Phi_{t,t+h}(x)-x}{h}.
 $$
 
-\section*{One–Line Comparison}
-
+$$
 \begin{itemize}
   \item \textbf{Autonomous:} \quad
     \\(u(x)=\displaystyle\lim_{h\to0}\frac{\psi_h(x)-x}{h}\\).
@@ -96,6 +95,7 @@ $$
     \\(u_t(x)=\displaystyle\lim_{h\to0}\frac{\Phi_{t,t+h}(x)-x}{h}\\),
     where \\(\Phi_{t,t+h}=\psi_{t+h}\circ\psi_t^{-1}\\).
 \end{itemize}
+$$
 
 In both cases the compact relation
 $$
