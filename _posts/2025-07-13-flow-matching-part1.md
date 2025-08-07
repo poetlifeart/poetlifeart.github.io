@@ -93,15 +93,6 @@ u_t(x)
 $$
 
 
-$$
-u(x) = \lim_{h \to 0} \frac{\psi_h(x) - x}{h}.
-$$
-
-$$
-u_t(x) = \lim_{h \to 0} \frac{\Phi_{t,t+h}(x) - x}{h}, \quad
-\Phi_{t,t+h} = \psi_{t+h}\circ\psi_t^{-1}.
-$$
-
 
 In both cases the compact relation
 
