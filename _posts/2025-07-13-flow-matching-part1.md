@@ -34,19 +34,78 @@ layout: post
 
 ## Introduction {#introduction} 
 
-This tutorial bridges the gap between the rigorous mathematical formulation of $\textit{Discrete Flow Matching}$ for continuous time Markov chains and a minimal, practical PyTorch implementation. We define a factorized mixture path, derive coordinate-wise CTMC velocities via the Kolmogorov forward equation, and show how to assemble those into a learnable model.
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[margin=1in]{geometry}
 
-You will find:
+\begin{document}
 
-* A concise statement of each mathematical object (probability path, Bregman divergence, CTMC velocity, posterior parameterization).
-* Exact code lines showing how to:
 
-  1. Sample the mixture path
-  2. Compute the matching loss
-  3. Run the coordinate-wise Euler sampler
-* Tips on dimensional factorization to maintain tractability.
+For any smooth flow of diffeomorphisms \\(\psi_t:\mathbb{R}^d\to\mathbb{R}^d\\), define the Eulerian velocity field by
+$$
+u_t(x)=\dot{\psi}_t\bigl(\psi_t^{-1}(x)\bigr),
+$$
+where
+$$
+\dot{\psi}_t(y)=\frac{d}{dt}\,\psi_t(y)
+=\lim_{h\to 0}\frac{\psi_{t+h}(y)-\psi_t(y)}{h}.
+$$
 
-The basic idea is straightforward:
+\section*{Autonomous Case \\(u_t \equiv u\\)}
+
+Because the velocity is constant in time, the flow satisfies the semigroup property
+$$
+\psi_{t+h}=\psi_h\circ\psi_t.
+$$
+Hence
+$$
+\begin{aligned}
+u(x)
+&=\dot{\psi}_t\bigl(\psi_t^{-1}(x)\bigr)\\
+&=\lim_{h\to0}\frac{\psi_{t+h}(\psi_t^{-1}(x))-\psi_t(\psi_t^{-1}(x))}{h}\\
+&=\lim_{h\to0}\frac{(\psi_h\circ\psi_t)(\psi_t^{-1}(x))-x}{h}\\
+&=\lim_{h\to0}\frac{\psi_h(x)-x}{h}.
+\end{aligned}
+$$
+Thus in the autonomous case,
+$$
+u(x)
+=\left.\frac{d}{dh}\right|_{h=0}\psi_h(x)
+=\lim_{h\to0}\frac{\psi_h(x)-x}{h}.
+$$
+
+\section*{Time‐Dependent Case (Non–Autonomous)}
+
+When \\(u_t\\) varies with time, the one‐parameter map \\(\psi_h\\) alone is not enough. Define the two‐time propagator
+$$
+\Phi_{t,t+h}:=\psi_{t+h}\circ\psi_t^{-1},
+$$
+which carries points from time \\(t\\) to \\(t+h\\). Then
+$$
+u_t(x)
+=\lim_{h\to0}\frac{\psi_{t+h}(\psi_t^{-1}(x))-\psi_t(\psi_t^{-1}(x))}{h}
+=\lim_{h\to0}\frac{\Phi_{t,t+h}(x)-x}{h}.
+$$
+
+\section*{One–Line Comparison}
+
+\begin{itemize}
+  \item \textbf{Autonomous:} \quad
+    \\(u(x)=\displaystyle\lim_{h\to0}\frac{\psi_h(x)-x}{h}\\).
+  \item \textbf{Time‐Dependent:} \quad
+    \\(u_t(x)=\displaystyle\lim_{h\to0}\frac{\Phi_{t,t+h}(x)-x}{h}\\),
+    where \\(\Phi_{t,t+h}=\psi_{t+h}\circ\psi_t^{-1}\\).
+\end{itemize}
+
+In both cases the compact relation
+$$
+u_t(x)=\dot{\psi}_t\bigl(\psi_t^{-1}(x)\bigr)
+$$
+holds without changing notation.
+
+\end{document}
+
 
 
 
