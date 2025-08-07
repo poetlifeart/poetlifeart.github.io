@@ -93,11 +93,11 @@ u_t(x)
 $$
 
 
--Autonomous:
+>Autonomous:
 
     $$u(x)=\lim_{h\to0}\frac{\psi_h(x)-x}{h}$$.
 
--Time‐Dependent:
+>Time‐Dependent:
 
     $$u_t(x)=\lim_{h\to0}\frac{\Phi_{t,t+h}(x)-x}{h}$$,
 
