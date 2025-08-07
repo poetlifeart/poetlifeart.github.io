@@ -75,7 +75,6 @@ u(x)
 =\lim_{h\to0}\frac{\psi_h(x)-x}{h}.
 $$
 
-\section*{Time‐Dependent Case (Non–Autonomous)}
 
 When \\(u_t\\) varies with time, the one‐parameter map \\(\psi_h\\) alone is not enough. Define the two‐time propagator
 $$
