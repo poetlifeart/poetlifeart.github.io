@@ -212,8 +212,7 @@ $$
 
 where we have for have 
 
-$$ \psi_t^{-1}(x) = y$$ (which is really \\(x\\) in the figure)
-
+$$ \psi_t^{-1}(x) = y$$ 
 $$
 \dot{\psi}_t(y)=\frac{d}{dt}\,\psi_t(y)
 =\lim_{h\to 0}\frac{\psi_{t+h}(y)-\psi_t(y)}{h}.
