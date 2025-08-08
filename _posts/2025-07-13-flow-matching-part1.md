@@ -196,6 +196,6 @@ $$
 
 always from "zero" time on the plane to \\( h \\). Instead we need to bring back the point to the initial plane and then move the point to \\( t+ h \\) plane right "above" \\(x\\) on the plane \\(t\\). We do not know where this point comes from
 \\(x\\) on \\(t\\) plane because in our flow representation \\(\psi_t (x)\\) always requires \\(x\\) to be on the 
-initial plane and thus when we take its derivative, the argument for the derivative has to be starting from initial plane as well. The derivative of \\(\psi\\ ) brings the point to \\(t\\) plane just as \\(\psi \\) does; it needs to know the initial point where \\(x\\) came from. 
+initial plane and thus when we take its derivative, the argument for the derivative has to be starting from initial plane as well. The derivative of \\(\psi\\) brings the point to \\(t\\) plane just as \\(\psi \\) does; it needs to know the initial point where \\(x\\) came from. 
 
 
