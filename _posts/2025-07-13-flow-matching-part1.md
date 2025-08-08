@@ -112,10 +112,10 @@ We are going to repeat these notations now in the cotext of thinking about ODEs 
 Given a (possibly time-dependent) vector field  
 
 $$
-f\colon [0,1]\timesR^d\;\to\;R^d,
+f\colon [0,1]\times R^d\;\to\; R^d,
 $$  
 
-the *initial-value problem* with label \\(x\inR^d\\) is  
+the *initial-value problem* with label \\(x\in R^d\\) is  
 
 $$
 \begin{cases}
@@ -132,7 +132,7 @@ $$
 Bundle *all* these curves into one map  
 
 $$
-\psi\colon [0,1]\timesR^d\;\longrightarrow\;R^d,
+\psi\colon [0,1]\times R^d\;\longrightarrow\; R^d,
 \quad
 \psi_t(x) = y_x(t).
 $$  
