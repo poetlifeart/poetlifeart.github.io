@@ -207,7 +207,7 @@ $$
 
 <img src="/images/planes.png"
      alt="Figure 1: Flow of diffeomorphisms over time"
-     width="25%"
+     width="50%"
      style="height:auto;">
 
 
