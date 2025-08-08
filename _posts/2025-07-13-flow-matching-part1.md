@@ -219,4 +219,4 @@ $$
 =\lim_{h\to 0}\frac{\psi_{t+h}(y)-\psi_t(y)}{h}.
 $$
 
-(Note here we are using \\(y\\) label instead of \\(x\\)) for points on the initial plane)
+Note here we are using \\(y\\) label instead of \\(x\\) for points on the initial plane. Note also how the limit definition shows that the derivative too needs to defined from the initial plane to time \\(t \\) inheriting that property from  \\(\psi\\)
