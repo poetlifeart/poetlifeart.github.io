@@ -194,7 +194,7 @@ holds, but in the non-autonomous setting the inverse is essential to “re-ancho
      alt="Figure 1: Flow of diffeomorphisms over time"
      width="50%"
      style="height:auto;">
-     
+
 In case of the flow, it is better to think of a series of "planes" stacked on top of each other in time. The first plane is the plane of initial conditions. We can think of paths as curves piercing the planes. What is happening in the non-autonomous case is that we cannot simply start from zero time ignoring where we are in time and take the usual 
 
 $$
@@ -218,3 +218,5 @@ $$
 \dot{\psi}_t(y)=\frac{d}{dt}\,\psi_t(y)
 =\lim_{h\to 0}\frac{\psi_{t+h}(y)-\psi_t(y)}{h}.
 $$
+
+(Note here we are using \\(y\\) label instead of \\(x\\)) for points on the initial plane)
