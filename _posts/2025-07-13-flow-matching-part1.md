@@ -103,3 +103,87 @@ u_t(x)=\dot{\psi}_t\bigl(\psi_t^{-1}(x)\bigr)
 $$
 
 holds without changing notation.
+
+
+We are going to repeat these notations now in the cotext of thinking about ODEs into ways:
+
+### 1. Standard IVP (Trajectory-by-Trajectory)
+
+Given a (possibly time-dependent) vector field  
+
+$$
+f\colon [0,1]\times\R^d\;\to\;\R^d,
+$$  
+
+the *initial-value problem* with label \\(x\in\R^d\\) is  
+
+$$
+\begin{cases}
+\dot y(t) = f\bigl(t,y(t)\bigr),\\
+y(0) = x.
+\end{cases}
+$$  
+
+- **Solution curve**: for each fixed \\(x\\), existence–uniqueness (e.g.\ local Lipschitz in \\(y\\)) yields a unique \\(y_x(t)\\).  
+- Notation: we often write \\(y_x(t)\\) or simply \\(y(t)\\) when the initial point is understood.
+
+### 2. Flow-map Formulation
+
+Bundle *all* these curves into one map  
+
+$$
+\psi\colon [0,1]\times\R^d\;\longrightarrow\;\R^d,
+\quad
+\psi_t(x) = y_x(t).
+$$  
+
+Then \\(\psi\\) satisfies the **flow ODE**:  
+
+$$
+\frac{\partial}{\partial t}\,\psi_t(x)
+= f\bigl(t,\psi_t(x)\bigr),
+\qquad
+\psi_0(x)=x,
+$$  
+
+for *every* \\(x\\).  Under smoothness (e.g.\ \\(C^1\\) in \\((t,x)\\)) each \\(\psi_t\\) is a diffeomorphism of \\(\R^d\\).
+
+- **Why use it?**  
+  - Captures the entire dynamical system in one object \\(\psi\\).  
+  - Makes clear that at \\(t=0\\) nothing has moved (\\(\psi_0=\mathrm{Id}\\)).  
+  - Yields the semi-group property in the autonomous case.
+
+#### Autonomous vs. Non-Autonomous
+
+- **Autonomous** (\\(f(t,y)\equiv u(y)\\))  
+
+  $$
+  \psi_{t+h}=\psi_h\circ\psi_t,\quad
+  u(x)
+  =\left.\frac{d}{dh}\right|_{h=0}\psi_h(x)
+  =\lim_{h\to0}\frac{\psi_h(x)-x}{h}.
+  $$  
+
+- **Non-Autonomous**  
+
+  Define the two-time propagator  
+
+  $$
+  \Phi_{t,t+h}=\psi_{t+h}\circ\psi_t^{-1}.
+  $$  
+
+  Then  
+
+  $$
+  u_t(x)
+  =\dot\psi_t\bigl(\psi_t^{-1}(x)\bigr)
+  =\lim_{h\to0}\frac{\Phi_{t,t+h}(x)-x}{h}.
+  $$  
+
+In both cases the compact relation  
+
+$$
+u_t(x)=\dot\psi_t\bigl(\psi_t^{-1}(x)\bigr)
+$$  
+
+holds, but in the non-autonomous setting the inverse is essential to “re-anchor” at the current configuration.
