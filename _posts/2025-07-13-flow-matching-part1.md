@@ -205,5 +205,6 @@ $$
 u_t(x)=\dot{\psi}_t\bigl(\psi_t^{-1}(x)\bigr)
 $$
 
-![Flow of diffeomorphisms over time](planes.png)
+![Figure 1: Flow of diffeomorphisms over time](/images/planes.png)
+
 
