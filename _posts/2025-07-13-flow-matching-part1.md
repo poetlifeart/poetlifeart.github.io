@@ -249,7 +249,11 @@ $$
 
 \end{itemize}
 
-We use the evaluation convention \\((\nabla\!\cdot u_t)(\psi_t(x))\\), etc.
+We use the evaluation convention 
+
+$$(\nabla\!\cdot u_t)(\psi_t(x)),$$
+
+meaning that the differential operator (here divergence) is applied first with respect to the spatial variable, producing a scalar field, and \emph{then} this resulting scalar field is evaluated at the point \\(\psi_t(x)\\) along the flow trajectory.
 
 \begin{lem}[Material derivative]\label{lem:MD}
 If \\(f:[0,1]\times\Omega\to\mathbb{R}\\) is \\(C^1\\) in \\((t,x)\\), then for every \\(x\in\Omega\\),
