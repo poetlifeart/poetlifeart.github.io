@@ -222,29 +222,29 @@ $$
 Note here we are using \\(y\\) label instead of \\(x\\) for points on the initial plane. Note also how the limit definition shows that the derivative too needs to be defined from the initial plane to time \\(t \\) inheriting that property from  \\(\psi\\)
 
 
+We next turn to page 14 and proof of (3.30):
 
 
-
-Flow identity for \\(\log p_t\\) from the continuity equation
+### Flow identity for \\(\log p_t\\) from the continuity equation
 
 Setup and notation:
 Let \\(\Omega\subset\mathbb{R}^d\\). For \\(t\in[0,1]\\):
 
-\begin{itemize}
-\item \\(u_t:\Omega\to\mathbb{R}^d\\) is \\(C^1\\) in \\(x\\) (measurable in \\(t\\)).
-\item \\(p_t:\Omega\to(0,\infty)\\) is \\(C^1\\) in \\(x\\) and solves the continuity equation
+
+- \\(u_t:\Omega\to\mathbb{R}^d\\) is \\(C^1\\) in \\(x\\) (measurable in \\(t\\)).
+- \\(p_t:\Omega\to(0,\infty)\\) is \\(C^1\\) in \\(x\\) and solves the continuity equation
 
 $$
 \partial_t p_t + \nabla\!\cdot(p_t\,u_t)=0.
 $$
 
-\item The flow \\(\psi_t:\Omega\to\Omega\\) solves
+The flow \\(\psi_t:\Omega\to\Omega\\) solves
 
 $$
 \dot\psi_t(x)=u_t(\psi_t(x)),\qquad \psi_0(x)=x.
 $$
 
-\end{itemize}
+
 
 We use the evaluation convention 
 
