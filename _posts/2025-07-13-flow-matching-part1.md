@@ -220,3 +220,102 @@ $$
 $$
 
 Note here we are using \\(y\\) label instead of \\(x\\) for points on the initial plane. Note also how the limit definition shows that the derivative too needs to be defined from the initial plane to time \\(t \\) inheriting that property from  \\(\psi\\)
+
+
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[a4paper,margin=1in]{geometry}
+
+\newtheorem{prop}{Proposition}
+\newtheorem{lem}{Lemma}
+
+\DeclareMathOperator{\divergence}{div}
+
+\begin{document}
+
+\section*{Flow identity for \\(\log p_t\\) from the continuity equation}
+
+\paragraph{Setup and notation.}
+Let \\(\Omega\subset\mathbb{R}^d\\). For \\(t\in[0,1]\\):
+
+\begin{itemize}
+\item \\(u_t:\Omega\to\mathbb{R}^d\\) is \\(C^1\\) in \\(x\\) (measurable in \\(t\\)).
+\item \\(p_t:\Omega\to(0,\infty)\\) is \\(C^1\\) in \\(x\\) and solves the continuity equation
+
+$$
+\partial_t p_t + \nabla\!\cdot(p_t\,u_t)=0.
+$$
+
+\item The flow \\(\psi_t:\Omega\to\Omega\\) solves
+
+$$
+\dot\psi_t(x)=u_t(\psi_t(x)),\qquad \psi_0(x)=x.
+$$
+
+\end{itemize}
+
+We use the evaluation convention \\((\nabla\!\cdot u_t)(\psi_t(x))\\), etc.
+
+\begin{lem}[Material derivative]\label{lem:MD}
+If \\(f:[0,1]\times\Omega\to\mathbb{R}\\) is \\(C^1\\) in \\((t,x)\\), then for every \\(x\in\Omega\\),
+
+$$
+\frac{d}{dt}\,f_t(\psi_t(x))
+=\partial_t f_t(\psi_t(x))
++\nabla f_t(\psi_t(x))\cdot u_t(\psi_t(x)).
+$$
+
+\end{lem}
+
+\begin{proof}
+Define \\(F(t,y):=f(t,y)\\) and \\(g(t):=F(t,\psi_t(x))\\). By the multivariable chain rule,
+
+$$
+g'(t)
+=\partial_t F(t,\psi_t(x))
++ D_yF(t,\psi_t(x))\,[\dot\psi_t(x)].
+$$
+
+Since \\(D_yF(t,y)=\nabla f_t(y)\\) and \\(\dot\psi_t(x)=u_t(\psi_t(x))\\), we obtain the formula.
+\end{proof}
+
+\begin{prop}\label{prop:main}
+Along the flow trajectory \\(t\mapsto\psi_t(x)\\),
+
+$$
+\frac{d}{dt}\log p_t(\psi_t(x))
+= -\,(\nabla\!\cdot u_t)(\psi_t(x)).
+$$
+
+Consequently,
+
+$$
+\log p_1(\psi_1(x))
+= \log p_0(\psi_0(x))
+-\int_0^1 (\nabla\!\cdot u_t)(\psi_t(x))\,dt.
+$$
+
+\end{prop}
+
+\begin{proof}
+From the continuity equation,
+
+$$
+\partial_t p_t
+= -\nabla\!\cdot(p_t u_t)
+= -p_t\,\nabla\!\cdot u_t - u_t\cdot\nabla p_t.
+$$
+
+Divide by \\(p_t>0\\) to get
+
+$$
+\partial_t \log p_t
+= -\,\nabla\!\cdot u_t \;-\; u_t\cdot\nabla \log p_t.
+$$
+
+Apply Lemma~\ref{lem:MD} with \\(f_t=\log p_t\\):
+
+$$
+\frac{d}{dt}\log p_t(\psi_t(x))
+=\partial_t\log p_t(\psi_t(x))
++ \nabla\log p_t(\ps_
