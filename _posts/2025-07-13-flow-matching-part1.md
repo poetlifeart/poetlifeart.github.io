@@ -225,12 +225,9 @@ Note here we are using \\(y\\) label instead of \\(x\\) for points on the initia
 
 
 
-
-
-
 Flow identity for \\(\log p_t\\) from the continuity equation
 
-\paragraph{Setup and notation.}
+Setup and notation:
 Let \\(\Omega\subset\mathbb{R}^d\\). For \\(t\in[0,1]\\):
 
 \begin{itemize}
@@ -253,20 +250,22 @@ We use the evaluation convention
 
 $$(\nabla\!\cdot u_t)(\psi_t(x)),$$
 
-meaning that the differential operator (here divergence) is applied first with respect to the spatial variable, producing a scalar field, and \emph{then} this resulting scalar field is evaluated at the point \\(\psi_t(x)\\) along the flow trajectory.
+meaning that the differential operator (here divergence) is applied first with respect to the spatial variable, producing a scalar field, and \emph{then} this resulting scalar field is evaluated at the point \\(\psi_t(x)\\) along the flow trajectory
 
-\begin{lem}[Material derivative]\label{lem:MD}
+We need the following: 
+
+
 If \\(f:[0,1]\times\Omega\to\mathbb{R}\\) is \\(C^1\\) in \\((t,x)\\), then for every \\(x\in\Omega\\),
 
 $$
 \frac{d}{dt}\,f_t(\psi_t(x))
 =\partial_t f_t(\psi_t(x))
-+\nabla f_t(\psi_t(x))\cdot u_t(\psi_t(x)).
++\nabla f_t(\psi_t(x))\cdot u_t(\psi_t(x)). (*)
 $$
 
-\end{lem}
 
-\begin{proof}
+proof:
+
 Define \\(F(t,y):=f(t,y)\\) and \\(g(t):=F(t,\psi_t(x))\\). By the multivariable chain rule,
 
 $$
@@ -276,10 +275,9 @@ g'(t)
 $$
 
 Since \\(D_yF(t,y)=\nabla f_t(y)\\) and \\(\dot\psi_t(x)=u_t(\psi_t(x))\\), we obtain the formula.
-\end{proof}
 
-\begin{prop}\label{prop:main}
-Along the flow trajectory \\(t\mapsto\psi_t(x)\\),
+
+We will now show: Along the flow trajectory \\(t\mapsto\psi_t(x)\\),
 
 $$
 \frac{d}{dt}\log p_t(\psi_t(x))
@@ -294,9 +292,8 @@ $$
 -\int_0^1 (\nabla\!\cdot u_t)(\psi_t(x))\,dt.
 $$
 
-\end{prop}
 
-\begin{proof}
+
 From the continuity equation,
 
 $$
@@ -312,7 +309,7 @@ $$
 = -\,\nabla\!\cdot u_t \;-\; u_t\cdot\nabla \log p_t.
 $$
 
-Apply Lemma~\ref{lem:MD} with \\(f_t=\log p_t\\):
+Apply \\(*\\) with \\(f_t=\log p_t\\):
 
 $$
 \frac{d}{dt}\log p_t(\psi_t(x))
@@ -323,29 +320,11 @@ $$
 Insert the previous equation and cancel the \\(u_t\cdot\nabla\log p_t\\) terms to obtain the differential form.
 
 Integrate over \\(t\in[0,1]\\) to get the stated identity.
-\end{proof}
-
-\paragraph{Optional change-of-variables check.}
-Mass conservation along the flow gives
 
 $$
-p_t(\psi_t(x))\,\det D\psi_t(x)=p_0(x).
+\log p_{1}(\psi_{1}(x)) - \log p_{0}(\psi_{0}(x))
+= - \int_{0}^{1} \big( \nabla \!\cdot u_{t} \big)\big( \psi_{t}(x) \big) \, dt.
 $$
 
-Taking logs and differentiating,
 
-$$
-\frac{d}{dt}\log p_t(\psi_t(x))
-= -\,\frac{d}{dt}\log\det D\psi_t(x).
-$$
-
-By Jacobi's formula,
-
-$$
-\frac{d}{dt}\det D\psi_t
-= (\nabla\!\cdot u_t)(\psi_t(x))\,\det D\psi_t,
-$$
-
-hence the same identity as above.
-\hfill$\square$
 
