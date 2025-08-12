@@ -222,18 +222,13 @@ $$
 Note here we are using \\(y\\) label instead of \\(x\\) for points on the initial plane. Note also how the limit definition shows that the derivative too needs to be defined from the initial plane to time \\(t \\) inheriting that property from  \\(\psi\\)
 
 
-\documentclass[11pt]{article}
-\usepackage{amsmath,amssymb,amsthm,mathtools}
-\usepackage[a4paper,margin=1in]{geometry}
 
-\newtheorem{prop}{Proposition}
-\newtheorem{lem}{Lemma}
 
-\DeclareMathOperator{\divergence}{div}
 
-\begin{document}
 
-\section*{Flow identity for \\(\log p_t\\) from the continuity equation}
+
+
+Flow identity for \\(\log p_t\\) from the continuity equation
 
 \paragraph{Setup and notation.}
 Let \\(\Omega\subset\mathbb{R}^d\\). For \\(t\in[0,1]\\):
@@ -318,4 +313,35 @@ Apply Lemma~\ref{lem:MD} with \\(f_t=\log p_t\\):
 $$
 \frac{d}{dt}\log p_t(\psi_t(x))
 =\partial_t\log p_t(\psi_t(x))
-+ \nabla\log p_t(\ps_
++ \nabla\log p_t(\psi_t(x))\cdot u_t(\psi_t(x)).
+$$
+
+Insert the previous equation and cancel the \\(u_t\cdot\nabla\log p_t\\) terms to obtain the differential form.
+
+Integrate over \\(t\in[0,1]\\) to get the stated identity.
+\end{proof}
+
+\paragraph{Optional change-of-variables check.}
+Mass conservation along the flow gives
+
+$$
+p_t(\psi_t(x))\,\det D\psi_t(x)=p_0(x).
+$$
+
+Taking logs and differentiating,
+
+$$
+\frac{d}{dt}\log p_t(\psi_t(x))
+= -\,\frac{d}{dt}\log\det D\psi_t(x).
+$$
+
+By Jacobi's formula,
+
+$$
+\frac{d}{dt}\det D\psi_t
+= (\nabla\!\cdot u_t)(\psi_t(x))\,\det D\psi_t,
+$$
+
+hence the same identity as above.
+\hfill$\square$
+
