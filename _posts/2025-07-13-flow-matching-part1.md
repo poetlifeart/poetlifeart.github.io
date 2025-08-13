@@ -337,62 +337,18 @@ $$
 is
 
 $$
-u_t(x) \;=\; \mathbb{E}\!\big[u_t(X_t; X_1)\,\big|\,X_t=x\big],
+u_t(x) \;=\; \mathbb{E}\!\big[u_t(X_t, X_1)\,\big|\,X_t=x\big],
 $$
 
-which emphasizes that the second argument is a parameter, not a conditioning operation on the field. Let \\(p_Z(z)\\) be the \\(t\\)-independent density of the latent \\(Z\\). For each fixed \\(z\\), the conditional density \\(p_{t\mid Z}(x\mid z)\\) in \\(x\\) is transported by the velocity \\(u_t(x;z)\\) via the conditional continuity equation
-
-$$
-\partial_t p_{t\mid Z}(x\mid z) + \operatorname{div}_x\!\big(u_t(x;z)\,p_{t\mid Z}(x\mid z)\big)=0,
-$$
-
-and the marginal in \\(x\\) is
-
-$$
-p_t(x)=\int p_{t\mid Z}(x\mid z)\,p_Z(z)\,dz.
-$$
-
-Because \\(u_t(\cdot;z)\\) generates \\(p_{t\mid Z}(\cdot\mid z)\\), we have
-
-$$
-\frac{d}{dt}\,p_t(x)
-= \int \partial_t p_{t\mid Z}(x\mid z)\,p_Z(z)\,dz
-\tag{4.14}
-$$
-
-$$
-= - \int \operatorname{div}_x\!\Big(u_t(x; z)\,p_{t\mid Z}(x\mid z)\Big)\,p_Z(z)\,dz
-\tag{4.15}
-$$
-
-$$
-= -\,\operatorname{div}_x\!\int u_t(x; z)\,p_{t\mid Z}(x\mid z)\,p_Z(z)\,dz
-\tag{4.16}
-$$
-
-$$
-= -\,\operatorname{div}_x\!\big(\bar u_t(x)\,p_t(x)\big),
-\tag{4.17}
-$$
-
-where
-
-$$
-\bar u_t(x) := \frac{\int u_t(x; z)\,p_{t\mid Z}(x\mid z)\,p_Z(z)\,dz}{p_t(x)},
-\qquad p_t(x) > 0.
-$$
-
-Equality (4.14) follows by differentiating under the \\(z\\)-integral (Leibniz rule), using the \\(C^1\\) regularity of \\(p_{t\mid Z}\\) and the fact that \\(p_Z\\) has bounded support. Equality (4.15) follows from the conditional continuity equation for each \\(z\\). Equality (4.16) follows from the linearity of \\(\operatorname{div}_x\\) and the fact it acts only on \\(x\\), allowing it to pass through the \\(z\\)-integral. Equality (4.17) follows from multiplying and dividing inside the integral by \\(p_t(x)\\) and using the definition of \\(\bar u_t\\).
-
-
-
-
+We are not taking condtional expectation twice. The first bar in the paper is really a way of saying fixed \\(X_1\\) but
+when the paper uses \\(Z\\) more generally for \\(X_1\\), it treats it as a random variable. Perhaps 
+\\(u_t(X_t, X_1=x_1)\\) would have been better notation when \\(X_1\\) is fixed.
 
 
 We begin from the definition
 
 $$
-u_t(x) = \mathbb{E}\!\left[\,u_t(X_t; Z) \,\middle|\, X_t = x\right].
+u_t(x) = \mathbb{E}\!\left[\,u_t(X_t, Z) \,\middle|\, X_t = x\right].
 $$
 
 The loss gradient is
@@ -419,11 +375,11 @@ $$
 
 Substituting 
 
-$$u_t(X_t) = \mathbb{E}[u_t(X_t; Z) \mid X_t]$$
+$$u_t(X_t) = \mathbb{E}[u_t(X_t, Z) \mid X_t]$$
 
 $$
 = \mathbb{E}_{t, X_t \sim p_t}
-\big[ \nabla_v D\big(\mathbb{E}_{Z \sim p_{Z\mid t}(\cdot \mid X_t)}[u_t(X_t; Z) \mid X_t],\, u^\theta_t(X_t)\big)
+\big[ \nabla_v D\big(\mathbb{E}_{Z \sim p_{Z\mid t}(\cdot \mid X_t)}[u_t(X_t, Z) \mid X_t],\, u^\theta_t(X_t)\big)
 \,\nabla_\theta u^\theta_t(X_t) \big].
 $$
 
@@ -432,7 +388,7 @@ Since the outer factor depends only on \\(X_t\\) (and \\(t\\), we can move the c
 $$
 = \mathbb{E}_{t, X_t \sim p_t}
 \mathbb{E}_{Z \sim p_{Z\mid t}(\cdot \mid X_t)}
-\big[ \nabla_v D(u_t(X_t; Z),\, u^\theta_t(X_t))
+\big[ \nabla_v D(u_t(X_t, Z),\, u^\theta_t(X_t))
 \,\nabla_\theta u^\theta_t(X_t) \mid X_t ].
 $$
 
@@ -440,7 +396,7 @@ Applying the law of total expectation yields the joint form
 
 $$
 = \mathbb{E}_{t, Z \sim q,\; X_t \sim p_t}
-\big[ \nabla_v D(u_t(X_t; Z),\, u^\theta_t(X_t))
+\big[ \nabla_v D(u_t(X_t, Z),\, u^\theta_t(X_t))
 \,\nabla_\theta u^\theta_t(X_t) \big].
 $$
 
@@ -451,7 +407,7 @@ do not show the \\(|Z_t\\) on the right as we did for \\(X_t\\) )
 
 $$
 = \mathbb{E}_{t, X_t \sim q,\; p_{t\mid Z}(\cdot \mid Z)}
-\big[ \nabla_v D(u_t(X_t; Z),\, u^\theta_t(X_t))
+\big[ \nabla_v D(u_t(X_t, Z),\, u^\theta_t(X_t))
 \,\nabla_\theta u^\theta_t(X_t) \big].
 $$
 
@@ -460,14 +416,14 @@ Applying equation (4.21) conditionally on \\(X_t\\) gives
 $$
 =
 \mathbb{E}_{t, Z \sim q,\; X_t \sim p_{t\mid Z}(\cdot \mid Z)}
-\big[ \nabla_\theta D(u_t(X_t; Z),\, u^\theta_t(X_t)) \big],
+\big[ \nabla_\theta D(u_t(X_t, Z),\, u^\theta_t(X_t)) \big],
 $$
 
 and therefore
 
 $$
 = \nabla_\theta\,\mathbb{E}_{t, Z \sim q,\; X_t \sim p_{t\mid Z}(\cdot \mid Z)}
-\big[ D(u_t(X_t; Z),\, u^\theta_t(X_t)) \big]
+\big[ D(u_t(X_t, Z),\, u^\theta_t(X_t)) \big]
 = \nabla_\theta L_{\mathrm{CFM}}(\theta).
 $$
 
