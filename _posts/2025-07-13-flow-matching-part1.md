@@ -463,11 +463,7 @@ Here, step (i) uses the chain rule, the substitution makes the conditional expec
 
 
 
-\documentclass[11pt]{article}
-\usepackage[a4paper,margin=1in]{geometry}
-\usepackage{amsmath,amssymb,mathtools}
 
-\begin{document}
 
 We start from the definition \\(u_t(x) = \mathbb{E}[\,u_t(X_t;Z)\mid X_t=x]\\. Consider
 
@@ -522,4 +518,4 @@ $$
 
 Equations (1) and (4) use the chain rule; (2) uses \\(\mathbb{E}[\,u_t(X_t;Z)\mid X_t]\,\\) and keeps the bar-notation conditioning \\(|X_t\\) attached “all the way to the right” since the rest is a function of \\(X_t\\); (3) applies the law of total expectation to pass from \\(\mathbb{E}_{t,X_t}\mathbb{E}[\,\cdot\mid X_t]\\) to the joint \\(\mathbb{E}_{t,Z,X_t}\\); (5) breaks the joint into the standard outer expectation over \\(Z\\) with inner conditional over \\(X_t\mid Z\\), yielding the CFM objective.
 
-\end{document}
+
