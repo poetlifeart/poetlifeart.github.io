@@ -389,133 +389,66 @@ Equality (4.14) follows by differentiating under the \\(z\\)-integral (Leibniz r
 
 
 
-We begin from the definition
-
-$$
-u_t(x) = \mathbb{E}\!\left[\,u_t(X_t; Z) \,\middle|\, X_t = x\right].
-$$
-
-The loss gradient is
+Start with the definition \\(u_t(x)=\mathbb{E}\!\left[u_t(X_t;Z)\mid X_t=x\right]\\).  
+Consider the objective
 
 $$
 \nabla_\theta L_{\mathrm{FM}}(\theta)
-= \nabla_\theta\,\mathbb{E}_{t, X_t \sim p_t}
-\big[ D\big(u_t(X_t),\, u^\theta_t(X_t)\big) \big]
+= \nabla_\theta\,\mathbb{E}_{t, X_t \sim p_t}\!\Big[ D\big(u_t(X_t),\,u_t^\theta(X_t)\big) \Big].
 $$
 
-$$
-= \mathbb{E}_{t, X_t \sim p_t}
-\big[ \nabla_\theta D\big(u_t(X_t),\, u^\theta_t(X_t)\big) \big].
-$$
-
-Using the chain rule gives
+Move \\(\nabla_\theta\\) inside and use the chain rule with respect to the second argument of \\(D\\):
 
 $$
-\overset{(i)}{=}
-\mathbb{E}_{t, X_t \sim p_t}
-\big[ \nabla_v D\big(u_t(X_t),\, u^\theta_t(X_t)\big)
-\,\nabla_\theta u^\theta_t(X_t) \big].
+= \mathbb{E}_{t, X_t \sim p_t}\!\Big[ \nabla_\theta D\big(u_t(X_t),\,u_t^\theta(X_t)\big) \Big]
+= \mathbb{E}_{t, X_t \sim p_t}\!\Big[ \nabla_v D\big(u_t(X_t),\,u_t^\theta(X_t)\big)\,\nabla_\theta u_t^\theta(X_t) \Big].
+\tag{4.12}
 $$
 
-Substituting \(u_t(X_t) = \mathbb{E}[u_t(X_t; Z) \mid X_t]\) we have
+Insert \\(u_t(X_t)=\mathbb{E}\!\left[u_t(X_t;Z)\mid X_t\right]\\) inside \\(D\\):
 
 $$
-= \mathbb{E}_{t, X_t \sim p_t}
-\big[ \nabla_v D\big(\mathbb{E}[u_t(X_t; Z) \mid X_t],\, u^\theta_t(X_t)\big)
-\,\nabla_\theta u^\theta_t(X_t) \big].
+= \mathbb{E}_{t, X_t \sim p_t}\!\Big[
+\nabla_v D\big(\,\mathbb{E}[u_t(X_t; Z)\mid X_t],\, u_t^\theta(X_t)\big)\,
+\nabla_\theta u_t^\theta(X_t)
+\Big].
 $$
 
-Since the outer factor depends only on \(X_t\) (and \(t\)), we can move the conditioning on \(X_t\) all the way to the right:
+Since everything other than the explicit \\(Z\\)-dependence is a function of \\(X_t\\), move the conditioning \\(\mid X_t\\) all the way to the right:
 
 $$
-= \mathbb{E}_{t, X_t \sim p_t}
-\mathbb{E}_{Z \sim p_{Z\mid t}(\cdot \mid X_t)}
-\big[ \nabla_v D(u_t(X_t; Z),\, u^\theta_t(X_t))
-\,\nabla_\theta u^\theta_t(X_t) \mid X_t ].
+=
+\mathbb{E}_{t, X_t \sim p_t}\!\Big[
+\mathbb{E}\Big[
+\nabla_v D\big(u_t(X_t; Z),\, u_t^\theta(X_t)\big)\,\nabla_\theta u_t^\theta(X_t)
+\ \Big|\ X_t\Big]
+\Big].
 $$
 
-Applying the law of total expectation yields the joint form
+Drop the bar by the law of total expectation to obtain the joint over \\((t,Z,X_t)\\) with \\((t,Z)\sim q\\) and \\(X_t\sim p_{t\mid Z}(\cdot\mid Z)\\):
 
 $$
-= \mathbb{E}_{t, Z \sim q,\; X_t \sim p_{t\mid Z}(\cdot \mid Z)}
-\big[ \nabla_v D(u_t(X_t; Z),\, u^\theta_t(X_t))
-\,\nabla_\theta u^\theta_t(X_t) \big].
+=
+\mathbb{E}_{\,t, Z \sim q,\;\; X_t \sim p_{t\mid Z}(\cdot\mid Z)}\!\Big[
+\nabla_v D\big(u_t(X_t; Z),\, u_t^\theta(X_t)\big)\,\nabla_\theta u_t^\theta(X_t)
+\Big].
 $$
 
-Applying equation (4.21) conditionally on \(X_t\) gives
+Applying equation (4.21) conditionally on \\(X_t\\) (equivalently, the chain rule inside the joint) converts \\(\nabla_v D(\cdot)\,\nabla_\theta u_t^\theta(X_t)\\) to \\(\nabla_\theta D(\cdot)\\):
 
 $$
-\overset{(ii)}{=}
-\mathbb{E}_{t, Z \sim q,\; X_t \sim p_{t\mid Z}(\cdot \mid Z)}
-\big[ \nabla_\theta D(u_t(X_t; Z),\, u^\theta_t(X_t)) \big],
+=
+\mathbb{E}_{\,t, Z \sim q,\;\; X_t \sim p_{t\mid Z}(\cdot\mid Z)}\!\Big[
+\nabla_\theta D\big(u_t(X_t; Z),\, u_t^\theta(X_t)\big)
+\Big].
 $$
 
-and therefore
+Recognize this as the \\(\theta\\)-gradient of the conditional flow-matching objective:
 
 $$
-= \nabla_\theta\,\mathbb{E}_{t, Z \sim q,\; X_t \sim p_{t\mid Z}(\cdot \mid Z)}
-\big[ D(u_t(X_t; Z),\, u^\theta_t(X_t)) \big]
+=
+\nabla_\theta\,\mathbb{E}_{\,t, Z \sim q,\;\; X_t \sim p_{t\mid Z}(\cdot\mid Z)}\!\Big[
+D\big(u_t(X_t; Z),\, u_t^\theta(X_t)\big)
+\Big]
 = \nabla_\theta L_{\mathrm{CFM}}(\theta).
 $$
-
-Here, step (i) uses the chain rule, the substitution makes the conditional expectation explicit, moving the condition on \(X_t\) to the right uses the fact that the inner term depends only on \(X_t\), the law of total expectation produces the joint distribution, and step (ii) applies equation (4.21) conditionally on \(X_t\).
-
-
-
-
-
-
-We start from the definition \\(u_t(x) = \mathbb{E}[\,u_t(X_t;Z)\mid X_t=x]\\. Consider
-
-$$
-\nabla_\theta L_{\mathrm{FM}}(\theta)
-= \nabla_\theta\,\mathbb{E}_{t,X_t\sim p_t}\!\big[\,D\big(u_t(X_t),\,u_t^\theta(X_t)\big)\,\big].
-$$
-
-Move \\(\nabla_\theta\\) inside and apply the chain rule:
-
-$$
-= \mathbb{E}_{t,X_t\sim p_t}\!\big[\,\nabla_\theta D\big(u_t(X_t),\,u_t^\theta(X_t)\big)\,\big]
-= \mathbb{E}_{t,X_t\sim p_t}\!\big[\,\nabla_v D\big(u_t(X_t),\,u_t^\theta(X_t)\big)\,\nabla_\theta u_t^\theta(X_t)\,\big]. \tag{1}
-$$
-
-Insert the definition \\(u_t(X_t)=\mathbb{E}[\,u_t(X_t;Z)\mid X_t]\\. Because everything except the explicit \\(Z\\)-term is a function of \\(X_t\\), we keep the conditioning on \\(X_t\\) and move it all the way to the right—up to (and including) the factor \\(u_t^\theta(X_t)\\):
-
-$$
-= \mathbb{E}_{t,X_t\sim p_t}\!\Big[
-\mathbb{E}\big[\,
-\nabla_v D\big(u_t(X_t;Z),\,u_t^\theta(X_t)\big)\,\nabla_\theta u_t^\theta(X_t)
-\ \big|\ X_t
-\big]
-\Big]. \tag{2}
-$$
-
-Now drop the inner conditioning by the law of total expectation to obtain the joint over \\((t,Z,X_t)\\) with \\(X_t\sim p_{t\mid Z}(\cdot\mid Z)\\) and \\((t,Z)\sim q\\):
-
-$$
-= \mathbb{E}_{t,Z\sim q,\;X_t\sim p_{t\mid Z}(\cdot\mid Z)}\!\Big[
-\nabla_v D\big(u_t(X_t;Z),\,u_t^\theta(X_t)\big)\,\nabla_\theta u_t^\theta(X_t)
-\Big]. \tag{3}
-$$
-
-Apply the chain rule inside the joint expectation (equivalently, apply equation (4.21) conditionally on \\(X_t\\)):
-
-$$
-= \mathbb{E}_{t,Z\sim q,\;X_t\sim p_{t\mid Z}(\cdot\mid Z)}\!\Big[
-\nabla_\theta D\big(u_t(X_t;Z),\,u_t^\theta(X_t)\big)
-\Big]. \tag{4}
-$$
-
-Finally, recognize this as the \\(\theta\\)-gradient of the conditional flow-matching objective and, if desired, re-express via conditioning on \\(Z\\) (now appropriate since \\(Z\\) is the remaining random parameter):
-
-$$
-= \nabla_\theta\,\mathbb{E}_{t,Z\sim q}\,
-\mathbb{E}_{X_t\sim p_{t\mid Z}(\cdot\mid Z)}\!\Big[
-D\big(u_t(X_t;Z),\,u_t^\theta(X_t)\big)
-\Big]
-= \nabla_\theta L_{\mathrm{CFM}}(\theta). \tag{5}
-$$
-
-Equations (1) and (4) use the chain rule; (2) uses \\(\mathbb{E}[\,u_t(X_t;Z)\mid X_t]\,\\) and keeps the bar-notation conditioning \\(|X_t\\) attached “all the way to the right” since the rest is a function of \\(X_t\\); (3) applies the law of total expectation to pass from \\(\mathbb{E}_{t,X_t}\mathbb{E}[\,\cdot\mid X_t]\\) to the joint \\(\mathbb{E}_{t,Z,X_t}\\); (5) breaks the joint into the standard outer expectation over \\(Z\\) with inner conditional over \\(X_t\mid Z\\), yielding the CFM objective.
-
-
