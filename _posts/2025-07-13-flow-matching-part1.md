@@ -388,5 +388,74 @@ Equality (4.14) follows by differentiating under the \\(z\\)-integral (Leibniz r
 
 
 
+The proof follows a direct computation. We start from the definition
+
+$$
+\nabla_\theta L_{\mathrm{FM}}(\theta)
+= \nabla_\theta\,\mathbb{E}_{t, X_t \sim p_t}
+\big[ D\big(u_t(X_t),\, u^\theta_t(X_t)\big) \big]
+$$
+
+and move the derivative inside the expectation to obtain
+
+$$
+= \mathbb{E}_{t, X_t \sim p_t}
+\big[ \nabla_\theta D\big(u_t(X_t),\, u^\theta_t(X_t)\big) \big].
+$$
+
+Using the chain rule we get
+
+$$
+\overset{(i)}{=}
+\mathbb{E}_{t, X_t \sim p_t}
+\big[ \nabla_v D\big(u_t(X_t),\, u^\theta_t(X_t)\big)
+\,\nabla_\theta u^\theta_t(X_t) \big],
+\tag{4.12}
+$$
+
+where \\(\nabla_v D\\) denotes the gradient of \\(D\\) with respect to its second argument. Next, we write \\(u_t(X_t)\\) as the conditional expectation over \\(Z\\) given \\(X_t\\):
+
+$$
+= \mathbb{E}_{t, X_t \sim p_t}
+\big[ \nabla_v D\big(\mathbb{E}_{Z \sim p_{Z\mid t}(\cdot \mid X_t)}[u_t(X_t;Z)],\, u^\theta_t(X_t)\big)
+\,\nabla_\theta u^\theta_t(X_t) \big].
+$$
+
+Applying equation (4.21) conditionally on \\(X_t\\) yields
+
+$$
+\overset{(ii)}{=}
+\mathbb{E}_{t, X_t \sim p_t}
+\mathbb{E}_{Z \sim p_{Z\mid t}(\cdot \mid X_t)}
+\big[ \nabla_v D\big(u_t(X_t;Z),\, u^\theta_t(X_t)\big)
+\,\nabla_\theta u^\theta_t(X_t) \big].
+$$
+
+Using the chain rule again inside the conditional expectation we obtain
+
+$$
+\overset{(iii)}{=}
+\mathbb{E}_{t, X_t \sim p_t}
+\mathbb{E}_{Z \sim p_{Z\mid t}(\cdot \mid X_t)}
+\big[ \nabla_\theta D\big(u_t(X_t;Z),\, u^\theta_t(X_t)\big) \big].
+$$
+
+Finally, by Bayes’ rule we can rewrite the joint distribution as
+\\((t,Z) \sim q\\), \\(X_t \sim p_{t\mid Z}(\cdot \mid Z)\\), giving
+
+$$
+\overset{(iv)}{=}
+\nabla_\theta\,\mathbb{E}_{t,Z \sim q,\; X_t \sim p_{t\mid Z}(\cdot \mid Z)}
+\big[ D\big(u_t(X_t;Z),\, u^\theta_t(X_t)\big) \big]
+= \nabla_\theta L_{\mathrm{CFM}}(\theta).
+$$
+
+Step (i) and (iii) use the chain rule, (ii) follows from equation (4.21) applied conditionally on \\(X_t\\), and (iv) uses Bayes’ rule to swap the order of expectations and rewrite the joint sampling.
+
+
+
+
+
+
 
 
