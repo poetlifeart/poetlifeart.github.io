@@ -225,7 +225,7 @@ Note here we are using \\(y\\) label instead of \\(x\\) for points on the initia
 We next turn to page 14 and proof of (3.30):
 
 
-### Flow identity for \\(\log p_t\\) from the continuity equation
+### Flow identity for \\(\log p_t\\) (3.30) from the continuity equation
 
 Setup and notation:
 Let \\(\Omega\subset\mathbb{R}^d\\). For \\(t\in[0,1]\\):
