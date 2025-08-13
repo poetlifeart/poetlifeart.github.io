@@ -496,7 +496,7 @@ $$
 =
 \mathbb{E}_{t, X_t \sim p_t}\!\Big[
 \mathbb{E}\Big[
-\nabla_v D\big(u_t(X_t; Z),\, u_t^\theta(X_t)\big)\,\nabla_\theta u_t^\theta(X_t)\ \mid X_t\Big]\Big].
+\nabla_v D\big(u_t(X_t; Z),\, u_t^\theta(X_t)\big)\,\nabla_\theta u_t^\theta(X_t)\ \middle X_t\Big]\Big].
 $$
 
 Drop the bar by the law of total expectation to obtain the joint over \\((t,Z,X_t)\\) with \\((t,Z)\sim q\\) and \\(X_t\sim p_{t\mid Z}(\cdot\mid Z)\\):
