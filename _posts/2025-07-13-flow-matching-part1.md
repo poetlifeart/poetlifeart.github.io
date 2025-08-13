@@ -442,9 +442,8 @@ $$
 \,\nabla_\theta u^\theta_t(X_t) \big].
 $$
 
-we can condition on \\(Z\\) (and break up the joined distribution the other way )
-
-
+we can condition on \\(Z\\) and break up the joined distribution the other way (for simplicity we
+do not show the \\(|Z_t\\)) on the right as we did for \\(X_t\\) )
 
 
 
