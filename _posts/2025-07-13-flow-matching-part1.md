@@ -421,7 +421,7 @@ Substituting \(u_t(X_t) = \mathbb{E}[u_t(X_t; Z) \mid X_t]\) we have
 
 $$
 = \mathbb{E}_{t, X_t \sim p_t}
-\big[ \nabla_v D\big(\mathbb{E}[u_t(X_t; Z) \mid X_t],\, u^\theta_t(X_t)\big)
+\big[ \nabla_v D\big(\mathbb{E}_{Z \sim p_{Z\mid t}(\cdot \mid X_t)}[u_t(X_t; Z) \mid X_t],\, u^\theta_t(X_t)\big)
 \,\nabla_\theta u^\theta_t(X_t) \big].
 $$
 
