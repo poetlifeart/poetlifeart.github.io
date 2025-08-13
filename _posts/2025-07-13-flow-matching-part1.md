@@ -410,7 +410,7 @@ do not show the \\(|Z_t\\) on the right as we did for \\(X_t\\) )
 
 
 $$
-= \mathbb{E}_{t, X_t \sim q,\; p_{t\mid Z}(\cdot \mid Z)}
+= \mathbb{E}_{t, Z \sim q,\; X_t \sim p_{t\mid Z}(\cdot \mid Z)}
 \big[ \nabla_v D(u_t(X_t, Z),\, u^\theta_t(X_t))
 \,\nabla_\theta u^\theta_t(X_t) \big].
 $$
