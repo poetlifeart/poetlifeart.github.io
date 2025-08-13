@@ -497,7 +497,7 @@ $$
 \mathbb{E}_{t, X_t \sim p_t}\!\Big[
 \mathbb{E}_{Z_t \sim p_{Z_t\mid t}(\cdot\mid X_t)}\Big[
 \nabla_v D\big(u_t(X_t; Z_t),\, u_t^{\theta}(X_t)\big)\,\nabla_{\theta} u_t^{\theta}(X_t)
-\ \middle|\ X_t\Big]\Big]
+\ \middle||\ X_t\Big]\Big]
 $$
 
 
