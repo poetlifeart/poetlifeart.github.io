@@ -434,10 +434,22 @@ $$
 \,\nabla_\theta u^\theta_t(X_t) \mid X_t ].
 $$
 
-Applying the law of total expectation yields the joint form
+Applying the law of total expectation yields the joint form 
 
 $$
-= \mathbb{E}_{t, Z \sim q,\; X_t \sim p_{t\mid Z}(\cdot \mid Z)}
+= \mathbb{E}_{t, Z \sim q,\; X_t \sim p_t}}
+\big[ \nabla_v D(u_t(X_t; Z),\, u^\theta_t(X_t))
+\,\nabla_\theta u^\theta_t(X_t) \big].
+$$
+
+we can condition on \\(Z\\) (and break up the joined distribution the other way )
+
+
+
+
+
+$$
+= \mathbb{E}_{t, X_t \sim q,\; p_{t\mid Z}(\cdot \mid Z)}
 \big[ \nabla_v D(u_t(X_t; Z),\, u^\theta_t(X_t))
 \,\nabla_\theta u^\theta_t(X_t) \big].
 $$
