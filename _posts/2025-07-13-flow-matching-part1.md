@@ -388,11 +388,6 @@ Equality (4.14) follows by differentiating under the \\(z\\)-integral (Leibniz r
 
 
 
-\documentclass[11pt]{article}
-\usepackage[a4paper,margin=1in]{geometry}
-\usepackage{amsmath,amssymb,mathtools}
-
-\begin{document}
 
 We begin with
 
@@ -432,4 +427,54 @@ $$
 \mathbb{E}_{t, X_t \sim p_t}
 \left[
 \nabla_v D\!\left(
-\int u_t(X_t; z)\, p_{Z\mid t}(z \mid X_t)\,
+\int u_t(X_t; z)\, p_{Z\mid t}(z \mid X_t)\, dz,\;
+u^\theta_t(X_t)
+\right)
+\,\nabla_\theta u^\theta_t(X_t)
+\right].
+$$
+
+Since the entire integrand is a function of \(X_t\) (and \(t\)), we can move the conditional expectation over \(Z\) to the far right:
+
+$$
+= \mathbb{E}_{t, X_t \sim p_t}
+\left[
+\mathbb{E}_{Z \sim p_{Z\mid t}(\cdot \mid X_t)}
+\big[
+\nabla_v D(u_t(X_t; Z),\, u^\theta_t(X_t))
+\,\nabla_\theta u^\theta_t(X_t)
+\big]
+\right].
+$$
+
+By the total law of expectation, this is equivalent to the joint expectation over \(t\), \(Z\), and \(X_t\) with \(X_t \sim p_{t\mid Z}(\cdot \mid Z)\):
+
+$$
+= \mathbb{E}_{t, Z \sim q,\; X_t \sim p_{t\mid Z}(\cdot \mid Z)}
+\big[
+\nabla_v D(u_t(X_t; Z),\, u^\theta_t(X_t))
+\,\nabla_\theta u^\theta_t(X_t)
+\big].
+$$
+
+Applying equation (4.21) conditionally on \(X_t\) now gives
+
+$$
+\overset{(ii)}{=}
+\mathbb{E}_{t, Z \sim q,\; X_t \sim p_{t\mid Z}(\cdot \mid Z)}
+\big[
+\nabla_\theta D(u_t(X_t; Z),\, u^\theta_t(X_t))
+\big].
+$$
+
+Finally, this is just
+
+$$
+= \nabla_\theta\,\mathbb{E}_{t, Z \sim q,\; X_t \sim p_{t\mid Z}(\cdot \mid Z)}
+\big[ D(u_t(X_t; Z),\, u^\theta_t(X_t)) \big]
+= \nabla_\theta L_{\mathrm{CFM}}(\theta).
+$$
+
+Here, step (i) uses the chain rule, the passage from the explicit integral to the conditional expectation moves the condition to the right since the inside depends only on \(X_t\), the total law of expectation is then used to write the joint over \((t, Z, X_t)\), and step (ii) applies equation (4.21) conditionally on \(X_t\).
+
+
