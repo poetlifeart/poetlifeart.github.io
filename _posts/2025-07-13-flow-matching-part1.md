@@ -342,7 +342,11 @@ $$
 
 We are not taking condtional expectation twice. The first bar in the paper is really a way of saying fixed \\(X_1\\) but
 when the paper uses \\(Z\\) more generally for \\(X_1\\), it treats it as a random variable. Perhaps 
-\\(u_t(X_t, X_1=x_1)\\) would have been better notation when \\(X_1\\) is fixed.
+
+
+$$u_t(X_t, X_1=x_1)$$
+
+would have been better notation when \\(X_1\\) is fixed.
 
 
 We begin from the definition
@@ -367,7 +371,7 @@ $$
 Using the chain rule gives
 
 $$
-\=
+=
 \mathbb{E}_{t, X_t \sim p_t}
 \big[ \nabla_v D\big(u_t(X_t),\, u^\theta_t(X_t)\big)
 \,\nabla_\theta u^\theta_t(X_t) \big].
@@ -414,8 +418,7 @@ $$
 Applying equation (4.21) conditionally on \\(X_t\\) gives
 
 $$
-=
-\mathbb{E}_{t, Z \sim q,\; X_t \sim p_{t\mid Z}(\cdot \mid Z)}
+= \mathbb{E}_{t, Z \sim q,\; X_t \sim p_{t\mid Z}(\cdot \mid Z)}
 \big[ \nabla_\theta D(u_t(X_t, Z),\, u^\theta_t(X_t)) \big],
 $$
 
