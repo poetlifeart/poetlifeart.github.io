@@ -328,3 +328,65 @@ $$
 
 
 
+The expressions \\(u_t(X_t\mid X_1)\\) and \\(u_t(X_t\mid Z)\\) can be misleading, as they suggest probabilistic conditioning of the vector field itself. Here we write the vector field with a semicolon to indicate a parameter: \\(u_t(x;z)\\). For example, a clearer form of
+
+$$
+u_t(x) \;=\; \mathbb{E}\!\big[u_t(X_t\mid X_1)\,\big|\,X_t=x\big]
+$$
+
+is
+
+$$
+u_t(x) \;=\; \mathbb{E}\!\big[u_t(X_t; X_1)\,\big|\,X_t=x\big],
+$$
+
+which emphasizes that the second argument is a parameter, not a conditioning operation on the field. Let \\(p_Z(z)\\) be the \\(t\\)-independent density of the latent \\(Z\\). For each fixed \\(z\\), the conditional density \\(p_{t\mid Z}(x\mid z)\\) in \\(x\\) is transported by the velocity \\(u_t(x;z)\\) via the conditional continuity equation
+
+$$
+\partial_t p_{t\mid Z}(x\mid z) + \operatorname{div}_x\!\big(u_t(x;z)\,p_{t\mid Z}(x\mid z)\big)=0,
+$$
+
+and the marginal in \\(x\\) is
+
+$$
+p_t(x)=\int p_{t\mid Z}(x\mid z)\,p_Z(z)\,dz.
+$$
+
+Because \\(u_t(\cdot;z)\\) generates \\(p_{t\mid Z}(\cdot\mid z)\\), we have
+
+$$
+\frac{d}{dt}\,p_t(x)
+= \int \partial_t p_{t\mid Z}(x\mid z)\,p_Z(z)\,dz
+\tag{4.14}
+$$
+
+$$
+= - \int \operatorname{div}_x\!\Big(u_t(x; z)\,p_{t\mid Z}(x\mid z)\Big)\,p_Z(z)\,dz
+\tag{4.15}
+$$
+
+$$
+= -\,\operatorname{div}_x\!\int u_t(x; z)\,p_{t\mid Z}(x\mid z)\,p_Z(z)\,dz
+\tag{4.16}
+$$
+
+$$
+= -\,\operatorname{div}_x\!\big(\bar u_t(x)\,p_t(x)\big),
+\tag{4.17}
+$$
+
+where
+
+$$
+\bar u_t(x) := \frac{\int u_t(x; z)\,p_{t\mid Z}(x\mid z)\,p_Z(z)\,dz}{p_t(x)},
+\qquad p_t(x) > 0.
+$$
+
+Equality (4.14) follows by differentiating under the \\(z\\)-integral (Leibniz rule), using the \\(C^1\\) regularity of \\(p_{t\mid Z}\\) and the fact that \\(p_Z\\) has bounded support. Equality (4.15) follows from the conditional continuity equation for each \\(z\\). Equality (4.16) follows from the linearity of \\(\operatorname{div}_x\\) and the fact it acts only on \\(x\\), allowing it to pass through the \\(z\\)-integral. Equality (4.17) follows from multiplying and dividing inside the integral by \\(p_t(x)\\) and using the definition of \\(\bar u_t\\).
+
+
+
+
+
+
+
