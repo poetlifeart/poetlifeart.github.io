@@ -497,7 +497,7 @@ $$
 \mathbb{E}_{t, X_t \sim p_t}\!\Big[
 \mathbb{E}\Big[
 \nabla_v D\big(u_t(X_t; Z),\, u_t^\theta(X_t)\big)\,\nabla_\theta u_t^\theta(X_t)
-\ \Big|\ X_t\Big]
+\ \big X_t\ X_t\Big]
 \Big].
 $$
 
