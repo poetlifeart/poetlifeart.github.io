@@ -326,7 +326,7 @@ $$
 = - \int_{0}^{1} \big( \nabla \!\cdot u_{t} \big)\big( \psi_{t}(x) \big) \, dt.
 $$
 
-
+### Proof of Theorem 4, page 20 repeated to clarify better notation 
 
 The expressions \\(u_t(X_t\mid X_1)\\) and \\(u_t(X_t\mid Z)\\) can be misleading, as they suggest probabilistic conditioning of the vector field itself. Here we write the vector field with a semicolon to indicate a parameter: \\(u_t(x;z)\\). For example, a clearer form of
 
@@ -429,6 +429,8 @@ $$
 \big[ D(u_t(X_t, Z),\, u^\theta_t(X_t)) \big]
 = \nabla_\theta L_{\mathrm{CFM}}(\theta).
 $$
+
+It's fine to read the paper with the conditional notation of the vector field as long as you keep the above explanation in mind. 
 
 
 
