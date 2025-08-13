@@ -389,15 +389,19 @@ Equality (4.14) follows by differentiating under the \\(z\\)-integral (Leibniz r
 
 
 
-We begin with
+We begin from the definition
+
+$$
+u_t(x) = \mathbb{E}\!\left[\,u_t(X_t; Z) \,\middle|\, X_t = x\right].
+$$
+
+The loss gradient is
 
 $$
 \nabla_\theta L_{\mathrm{FM}}(\theta)
 = \nabla_\theta\,\mathbb{E}_{t, X_t \sim p_t}
-\big[ D\big(u_t(X_t),\, u^\theta_t(X_t)\big) \big].
+\big[ D\big(u_t(X_t),\, u^\theta_t(X_t)\big) \big]
 $$
-
-By differentiating inside the expectation we obtain
 
 $$
 = \mathbb{E}_{t, X_t \sim p_t}
@@ -411,63 +415,42 @@ $$
 \mathbb{E}_{t, X_t \sim p_t}
 \big[ \nabla_v D\big(u_t(X_t),\, u^\theta_t(X_t)\big)
 \,\nabla_\theta u^\theta_t(X_t) \big].
-\tag{4.12}
 $$
 
-Now expand \(u_t(X_t)\) as a conditional expectation with respect to \(Z\) given \(X_t\) in the explicit integral form
-
-$$
-u_t(X_t)
-= \int u_t(X_t; z)\, p_{Z\mid t}(z \mid X_t)\, dz.
-$$
-
-Substituting this into (4.12) yields
-
-$$
-\mathbb{E}_{t, X_t \sim p_t}
-\left[
-\nabla_v D\!\left(
-\int u_t(X_t; z)\, p_{Z\mid t}(z \mid X_t)\, dz,\;
-u^\theta_t(X_t)
-\right)
-\,\nabla_\theta u^\theta_t(X_t)
-\right].
-$$
-
-Since the entire integrand is a function of \(X_t\) (and \(t\)), we can move the conditional expectation over \(Z\) to the far right:
+Substituting \(u_t(X_t) = \mathbb{E}[u_t(X_t; Z) \mid X_t]\) we have
 
 $$
 = \mathbb{E}_{t, X_t \sim p_t}
-\left[
-\mathbb{E}_{Z \sim p_{Z\mid t}(\cdot \mid X_t)}
-\big[
-\nabla_v D(u_t(X_t; Z),\, u^\theta_t(X_t))
-\,\nabla_\theta u^\theta_t(X_t)
-\big]
-\right].
+\big[ \nabla_v D\big(\mathbb{E}[u_t(X_t; Z) \mid X_t],\, u^\theta_t(X_t)\big)
+\,\nabla_\theta u^\theta_t(X_t) \big].
 $$
 
-By the total law of expectation, this is equivalent to the joint expectation over \(t\), \(Z\), and \(X_t\) with \(X_t \sim p_{t\mid Z}(\cdot \mid Z)\):
+Since the outer factor depends only on \(X_t\) (and \(t\)), we can move the conditioning on \(X_t\) all the way to the right:
+
+$$
+= \mathbb{E}_{t, X_t \sim p_t}
+\mathbb{E}_{Z \sim p_{Z\mid t}(\cdot \mid X_t)}
+\big[ \nabla_v D(u_t(X_t; Z),\, u^\theta_t(X_t))
+\,\nabla_\theta u^\theta_t(X_t) \big].
+$$
+
+Applying the law of total expectation yields the joint form
 
 $$
 = \mathbb{E}_{t, Z \sim q,\; X_t \sim p_{t\mid Z}(\cdot \mid Z)}
-\big[
-\nabla_v D(u_t(X_t; Z),\, u^\theta_t(X_t))
-\,\nabla_\theta u^\theta_t(X_t)
-\big].
+\big[ \nabla_v D(u_t(X_t; Z),\, u^\theta_t(X_t))
+\,\nabla_\theta u^\theta_t(X_t) \big].
 $$
 
-Applying equation (4.21) conditionally on \(X_t\) now gives
+Applying equation (4.21) conditionally on \(X_t\) gives
 
 $$
 \overset{(ii)}{=}
 \mathbb{E}_{t, Z \sim q,\; X_t \sim p_{t\mid Z}(\cdot \mid Z)}
-\big[
-\nabla_\theta D(u_t(X_t; Z),\, u^\theta_t(X_t))
-\big].
+\big[ \nabla_\theta D(u_t(X_t; Z),\, u^\theta_t(X_t)) \big],
 $$
 
-Finally, this is just
+and therefore
 
 $$
 = \nabla_\theta\,\mathbb{E}_{t, Z \sim q,\; X_t \sim p_{t\mid Z}(\cdot \mid Z)}
@@ -475,6 +458,6 @@ $$
 = \nabla_\theta L_{\mathrm{CFM}}(\theta).
 $$
 
-Here, step (i) uses the chain rule, the passage from the explicit integral to the conditional expectation moves the condition to the right since the inside depends only on \(X_t\), the total law of expectation is then used to write the joint over \((t, Z, X_t)\), and step (ii) applies equation (4.21) conditionally on \(X_t\).
+Here, step (i) uses the chain rule, the substitution makes the conditional expectation explicit, moving the condition on \(X_t\) to the right uses the fact that the inner term depends only on \(X_t\), the law of total expectation produces the joint distribution, and step (ii) applies equation (4.21) conditionally on \(X_t\).
 
 
