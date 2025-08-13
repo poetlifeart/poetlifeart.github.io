@@ -371,8 +371,7 @@ $$
 Using the chain rule gives
 
 $$
-=
-\mathbb{E}_{t, X_t \sim p_t}
+= \mathbb{E}_{t, X_t \sim p_t}
 \big[ \nabla_v D\big(u_t(X_t),\, u^\theta_t(X_t)\big)
 \,\nabla_\theta u^\theta_t(X_t) \big].
 $$
