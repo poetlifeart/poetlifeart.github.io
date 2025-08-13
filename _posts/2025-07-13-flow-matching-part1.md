@@ -431,7 +431,7 @@ $$
 = \mathbb{E}_{t, X_t \sim p_t}
 \mathbb{E}_{Z \sim p_{Z\mid t}(\cdot \mid X_t)}
 \big[ \nabla_v D(u_t(X_t; Z),\, u^\theta_t(X_t))
-\,\nabla_\theta u^\theta_t(X_t) \big].
+\,\nabla_\theta u^\theta_t(X_t) \mid X_t ].
 $$
 
 Applying the law of total expectation yields the joint form
