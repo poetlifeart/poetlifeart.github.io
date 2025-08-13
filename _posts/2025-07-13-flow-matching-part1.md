@@ -425,7 +425,7 @@ $$
 \,\nabla_\theta u^\theta_t(X_t) \big].
 $$
 
-Since the outer factor depends only on \(X_t\) (and \(t\)), we can move the conditioning on \(X_t\) all the way to the right:
+Since the outer factor depends only on \\(X_t\\) (and \\(t\\), we can move the conditioning on \\(X_t\\) all the way to the right:
 
 $$
 = \mathbb{E}_{t, X_t \sim p_t}
@@ -437,7 +437,7 @@ $$
 Applying the law of total expectation yields the joint form 
 
 $$
-= \mathbb{E}_{t, Z \sim q,\; X_t \sim p_t}}
+= \mathbb{E}_{t, Z \sim q,\; X_t \sim p_t}
 \big[ \nabla_v D(u_t(X_t; Z),\, u^\theta_t(X_t))
 \,\nabla_\theta u^\theta_t(X_t) \big].
 $$
