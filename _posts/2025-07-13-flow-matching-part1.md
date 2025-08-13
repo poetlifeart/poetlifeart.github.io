@@ -328,7 +328,7 @@ $$
 
 ### Proof of Theorem 4, page 20 repeated to clarify better notation 
 
-The expressions \\(u_t(X_t\mid X_1)\\) and \\(u_t(X_t\mid Z)\\) can be misleading, as they suggest probabilistic conditioning of the vector field itself. Here we write the vector field with a semicolon to indicate a parameter: \\(u_t(x;z)\\). For example, a clearer form of
+The expressions \\(u_t(X_t\mid X_1)\\) and \\(u_t(X_t\mid Z)\\) can be misleading, as they suggest probabilistic conditioning of the vector field itself. Here we write the vector field with a comma. For example, a clearer form of
 
 $$
 u_t(x) \;=\; \mathbb{E}\!\big[u_t(X_t\mid X_1)\,\big|\,X_t=x\big]
