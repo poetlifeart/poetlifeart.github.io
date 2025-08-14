@@ -436,7 +436,7 @@ It's fine to read the paper with the conditional notation of the vector field as
 
 
 In dynamic OT (Benamou--Brenier) the primary optimization outputs are  \\(p_t^*\\) and  \\(u_t^*\\)
-the transport map \(\phi\) are derived. Given \\(u_t^*\), define \\(\psi_t\\) by
+the transport map \\(\phi\\) are derived. Given \\(u_t^*\\), define \\(\psi_t\\) by
 
 $$
 \dot\psi_t(x)=u_t^*(\psi_t(x)),\qquad \psi_0(x)=x,
