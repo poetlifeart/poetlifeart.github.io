@@ -439,9 +439,9 @@ It's fine to read the paper with the conditional notation of the vector field as
 On page 25, \\(\phi\\) is introduced right after 4.43. Here is where it comes from: 
 
 In dyanamic Optimal Transport, the primary optimization outputs are  
-$$p_t^* ,$$ $$u_t^*$$
+$$p_t^* ,$$ $$u_t^*.$$
 
-the transport map \\(\phi\\) are derived. Given \\(u_t^*\\), define \\(\psi_t\\) by
+The transport map \\(\phi\\) is derived. Given \\(u_t^*\\), define \\(\psi_t\\) by
 
 $$
 \dot\psi_t(x)=u_t^*(\psi_t(x)),\qquad \psi_0(x)=x,
