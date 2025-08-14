@@ -434,52 +434,32 @@ It's fine to read the paper with the conditional notation of the vector field as
 
 
 
-% Dynamic OT, displacement interpolant, and conditional flows (numbered, no lists, $$ display; \\( \\) inline)
+% Clarifying what phi is (numbered, no lists, $$ display; \\( \\) inline)
 
-1. Dynamic OT (Benamou--Brenier). Solve for Eulerian variables \\((p_t, u_t)\\):
+1. OT map. \\(\phi:\\mathbb{R}^d\\to\\mathbb{R}^d\\) is the (quadratic-cost) optimal transport map that pushes \\(p\\) to \\(q\\):
 $$
-\min_{p_t,u_t}\ \int_0^1 \int \|u_t(x)\|^2\,p_t(x)\,dx\,dt
+\phi_{\#}p=q,\qquad X_1=\phi(X_0)\ \ \text{when}\ \ X_0\sim p.
 $$
-$$
-\text{s.t. }\ \partial_t p_t+\nabla\!\cdot(p_t u_t)=0,\qquad p_0=p,\ \ p_1=q.
-$$
+Under standard regularity, \\(\phi=\nabla \Phi\\) for a convex potential \\(\Phi\\).
 
-2. Recover Lagrangian flow and OT map. Define \\(\psi_t\\) by the ODE
+2. Relation to the displacement interpolant. The time-\\(t\\) position of a particle that started at \\(x\\) is
 $$
-\dot\psi_t(x)=u_t^\*(\psi_t(x)),\qquad \psi_0(x)=x.
-$$
-Then
-$$
-p_t^\*=(\psi_t)_{\#}p,
-$$
-and the endpoint (OT) map is
-$$
-\phi(x):=\psi_1(x),\qquad \phi_{\#}p=q.
-$$
-Under standard assumptions, the optimal velocity is potential and the Hamilton--Jacobi equation holds:
-$$
-u_t^\*=\nabla \Phi_t,\qquad \partial_t \Phi_t+\tfrac12\|\nabla \Phi_t\|^2=0.
+\psi_t(x)=(1-t)\,x+t\,\phi(x),\qquad p_t=(\psi_t)_{\#}p.
 $$
 
-3. Displacement interpolant (quadratic cost). Optimal trajectories are straight in Lagrangian coordinates:
+3. Relation to the Eulerian velocity field. Along the trajectory started at \\(x\\),
 $$
-\psi_t(x)=(1-t)\,x+t\,\phi(x),\qquad \tfrac{d}{dt}\psi_t(x)=\phi(x)-x.
+\frac{d}{dt}\psi_t(x)=\phi(x)-x,
 $$
-Eulerian form:
+so in Eulerian coordinates
 $$
+u_t\!\big(\psi_t(x)\big)=\phi(x)-x,
+\qquad
 u_t(y)=\phi\!\big(\psi_t^{-1}(y)\big)-\psi_t^{-1}(y).
 $$
 
-4. Conditional flows for Flow Matching. For a prescribed endpoint \\(x_1\\):
+4. Conditional flow (useful in flow matching). For a prescribed endpoint \\(x_1\\),
 $$
-\psi_t(x\,|\,x_1)=(1-t)\,x+t\,x_1,\qquad \dot\psi_t(x\,|\,x_1)=x_1-x.
+\psi_t(x\,|\,x_1)=(1-t)\,x+t\,x_1,
 $$
-Choosing \\(x_1=\phi(x)\\) recovers the displacement interpolant and attains the minimal kinetic energy. Aggregating conditionals gives the marginal (Eulerian) field
-$$
-v_t(x)=\mathbb{E}\!\left[X_1-X_0\,\middle|\,X_t=x\right],
-$$
-and training targets \\(u_t^\*(\cdot)\approx v_t(\cdot)\\). In the OT-coupled case, \\(v_t=u_t^\*\\).
-
-
-
-
+and choosing \\(x_1=\phi(x)\\) recovers the displacement interpolant above.
