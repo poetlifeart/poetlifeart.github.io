@@ -435,7 +435,12 @@ It's fine to read the paper with the conditional notation of the vector field as
 
 
 
-In dynamic OT (Benamou--Brenier) the primary optimization outputs are  \\(p_t^*\\) and  \\(u_t^*\\)
+
+
+In dyanamic Optimal Transport, the primary optimization outputs are 
+
+$$p_t^*$$ $$u_t^*$$
+
 the transport map \\(\phi\\) are derived. Given \\(u_t^*\\), define \\(\psi_t\\) by
 
 $$
@@ -454,5 +459,5 @@ $$
 \psi_t(x)=(1-t)x+t\,\phi(x),
 $$
 
-so \(\phi(x)=\psi_1(x)\) is the endpoint at time \(1\).
+so \\(\phi(x)=\psi_1(x)\\) is the endpoint at time \\(1\\).
 
