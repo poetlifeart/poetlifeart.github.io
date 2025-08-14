@@ -434,8 +434,5 @@ It's fine to read the paper with the conditional notation of the vector field as
 
 
 
-\noindent In the dynamic OT (Benamou--Brenier) formulation the primary optimization outputs are \\(p_t^\*\\) and \\(u_t^\*\\); the flow map \\(\psi_t\\) and the transport map \\(\phi\\) are derived. Given \\(u_t^\*\\), define \\(\psi_t\\) by the ODE \\(\dot\psi_t(x)=u_t^\*(\psi_t(x))\\) with \\(\psi_0(x)=x\\), hence \\(p_t^\*=(\psi_t)_{\#}p\\) and \\(\phi(x)=\psi_1(x)\\). (Equivalently, solving the static OT first gives \\(\phi\\), and under quadratic cost \\(\psi_t(x)=(1-t)x+t\,\phi(x)\\).) Yes—by \\(\phi\\) the paper means the endpoint of the transformation: starting at \\(x\\), the flow carries it to \\(\phi(x)\\) at time \\(1\\).
-
-
-
+\noindent In the dynamic OT (Benamou--Brenier) formulation the primary optimization outputs are \\(p_t^\*\\) and \\(u_t^\*\\); the flow map \\(\psi_t\\) and the transport map \\(\phi\\) are derived. Given \\(u_t^*\\), define \\(\psi_t\\) by the ODE \\(\dot\psi_t(x)=u_t^*(\psi_t(x))\\) with \\(\psi_0(x)=x\\), hence \\(p_t^*=(\psi_t)_{\#}p\\) and \\(\phi(x)=\psi_1(x)\\). 
 
