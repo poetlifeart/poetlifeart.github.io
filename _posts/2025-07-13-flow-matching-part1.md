@@ -453,7 +453,7 @@ $$
 p_t^*=(\psi_t)_{\#}p,\qquad \phi(x)=\psi_1(x).
 $$
 
-Under quadratic cost,
+Under quadratic cost as shown at the bottom of that page,
 
 $$
 \psi_t(x)=(1-t)x+t\,\phi(x),
