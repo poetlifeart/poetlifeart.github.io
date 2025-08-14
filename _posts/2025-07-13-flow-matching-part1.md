@@ -434,10 +434,12 @@ It's fine to read the paper with the conditional notation of the vector field as
  
 
 
+### Optimal Transport and linear conditional flow
 
+On page 25, \\(\phi\\) is introduced right after 4.43. Here is where it comes from: 
 
-
-In dyanamic Optimal Transport, the primary optimization outputs are  $$p_t^*$$ $$u_t^*$$
+In dyanamic Optimal Transport, the primary optimization outputs are  
+$$p_t^* ,$$ $$u_t^*$$
 
 the transport map \\(\phi\\) are derived. Given \\(u_t^*\\), define \\(\psi_t\\) by
 
