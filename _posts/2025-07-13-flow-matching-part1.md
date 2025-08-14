@@ -434,32 +434,8 @@ It's fine to read the paper with the conditional notation of the vector field as
 
 
 
-% Clarifying what phi is (numbered, no lists, $$ display; \\( \\) inline)
+\noindent In the dynamic OT (Benamou--Brenier) formulation the primary optimization outputs are \\(p_t^\*\\) and \\(u_t^\*\\); the flow map \\(\psi_t\\) and the transport map \\(\phi\\) are derived. Given \\(u_t^\*\\), define \\(\psi_t\\) by the ODE \\(\dot\psi_t(x)=u_t^\*(\psi_t(x))\\) with \\(\psi_0(x)=x\\), hence \\(p_t^\*=(\psi_t)_{\#}p\\) and \\(\phi(x)=\psi_1(x)\\). (Equivalently, solving the static OT first gives \\(\phi\\), and under quadratic cost \\(\psi_t(x)=(1-t)x+t\,\phi(x)\\).) Yes—by \\(\phi\\) the paper means the endpoint of the transformation: starting at \\(x\\), the flow carries it to \\(\phi(x)\\) at time \\(1\\).
 
-1. OT map. \\(\phi:\\mathbb{R}^d\\to\\mathbb{R}^d\\) is the (quadratic-cost) optimal transport map that pushes \\(p\\) to \\(q\\):
-$$
-\phi_{\#}p=q,\qquad X_1=\phi(X_0)\ \ \text{when}\ \ X_0\sim p.
-$$
-Under standard regularity, \\(\phi=\nabla \Phi\\) for a convex potential \\(\Phi\\).
 
-2. Relation to the displacement interpolant. The time-\\(t\\) position of a particle that started at \\(x\\) is
-$$
-\psi_t(x)=(1-t)\,x+t\,\phi(x),\qquad p_t=(\psi_t)_{\#}p.
-$$
 
-3. Relation to the Eulerian velocity field. Along the trajectory started at \\(x\\),
-$$
-\frac{d}{dt}\psi_t(x)=\phi(x)-x,
-$$
-so in Eulerian coordinates
-$$
-u_t\!\big(\psi_t(x)\big)=\phi(x)-x,
-\qquad
-u_t(y)=\phi\!\big(\psi_t^{-1}(y)\big)-\psi_t^{-1}(y).
-$$
 
-4. Conditional flow (useful in flow matching). For a prescribed endpoint \\(x_1\\),
-$$
-\psi_t(x\,|\,x_1)=(1-t)\,x+t\,x_1,
-$$
-and choosing \\(x_1=\phi(x)\\) recovers the displacement interpolant above.
