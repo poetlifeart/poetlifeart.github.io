@@ -437,9 +437,7 @@ It's fine to read the paper with the conditional notation of the vector field as
 
 
 
-In dyanamic Optimal Transport, the primary optimization outputs are 
-
-$$p_t^*$$ $$u_t^*$$
+In dyanamic Optimal Transport, the primary optimization outputs are  $$p_t^*$$ $$u_t^*$$
 
 the transport map \\(\phi\\) are derived. Given \\(u_t^*\\), define \\(\psi_t\\) by
 
