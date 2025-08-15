@@ -431,6 +431,18 @@ $$
 
 It's fine to read the paper with the conditional notation of the vector field as long as you keep the above explanation in mind. 
 
+
+Caution. In Theorem 4 (Eq. 4.24) we are not learning the conditional vector field \(u_t(\cdot \mid Z)\). The network \(u_t^\theta(x)\) only receives \(X_t\) as input, whereas the conditional target \(u_t(X_t\mid Z)\) depends on both \(X_t\) and the endpoint variable \(Z\) (e.g., \(Z=X_1\)). Consequently, the regression with this input–target mismatch returns the conditional mean:
+$$
+u_t^\theta(x)\ \xrightarrow{\ \mathrm{MSE}\ }\ \mathbb{E}\!\left[u_t(X_t\mid Z)\ \middle|\ X_t=x\right].
+$$
+In particular, with \(Z=X_1\), Eq. (4.24) states exactly that
+$$
+u_t(x)=\mathbb{E}\!\left[u_t(X_t\mid X_1)\ \middle|\ X_t=x\right],
+$$
+i.e., we learn the Eulerian (marginal) field obtained by averaging the conditional field over the unknown \(Z\) at fixed \(X_t=x\), not the conditional field itself.
+
+
  
 
 
