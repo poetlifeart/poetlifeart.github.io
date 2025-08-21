@@ -485,7 +485,7 @@ $$
 \sum_{x} u_t(y, x) \, p_t(x) 
 &=  \sum_{x: x \ne y} u_t(y, x) \, p_t(x) +  u_t(x, x) \, p_t(x)\\[6pt]
 &=  \sum_{x: x \ne y} u_t(y, x) \, p_t(x) +  u_t(y, y) \, p_t(y)\\[6pt]
-&=  \underbrace{\sum_{x: x \ne y} u_t(y, x) \, p_t(x)}_{\text{incoming flux}}\quad -\underbrace{\sum_{x: x \ne y} u_t(x, y) \, p_t(y)}_{\text{outgoing flux}} \\[6pt]
+&=  \underbrace{\sum_{x: x \ne y} u_t(y, x) \, p_t(x)}_{\text{incoming flux}} -\underbrace{\sum_{x: x \ne y} u_t(x, y) \, p_t(y)}_{\text{outgoing flux}} \\[6pt]
 &= - \sum_{x: x \ne y} \big[ j_t(x, y) - j_t(y, x) \big] \,.
 \end{aligned}
 $$
