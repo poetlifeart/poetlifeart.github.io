@@ -550,4 +550,4 @@ p_{i^{1}\mid t}(x_i^{1}\mid x).
 \end{aligned}
 $$
 
-Each sample of the above sum is a "x-token i to y-token i"  transition once \\(X_1^i \sim p_{i^{1}\mid t}(x_i^{1}\mid x)\\) is made. The whole \\(x)\\ controls the sampling but once the sample is made, the transition is "x-token i to y-token i". 
+Each sample of the above sum is a "x-token \\(i)\\ to y-token \\(i)\\"  transition once \\(X_1^i \sim p_{i^{1}\mid t}(x_i^{1}\mid x)\\) is made. The whole \\( x )\\ controls the sampling but once the sample is made, the transition is "x-token \\(i)\\ to y-token \\(i)\\". 
