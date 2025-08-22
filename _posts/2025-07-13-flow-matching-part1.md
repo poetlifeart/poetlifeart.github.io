@@ -506,7 +506,7 @@ In the discrete FM setting, “factorization” is not just a representation cho
 
 <img src="/images/grid.png"
      alt="Figure 2: Flow on the grid"
-     width="50%"
+     width="30%"
      style="height:auto;">
 
 Finally, it turns out that 
