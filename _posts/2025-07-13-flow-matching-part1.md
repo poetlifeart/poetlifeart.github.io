@@ -540,7 +540,7 @@ This eventually leads for example for the mixture model to update rule 7.34:
 $$
 \begin{aligned}
 \mathbb{P}\!\left(X_i^{\,t+h} = y_i \,\middle|\, X_t = x\right)
-&= \delta(y_i, x_i) + h\,u_i(y_i, x) + o(h) \tag{7.33} \\
+&= \delta(y_i, x_i) + h\,u_i(y_i, x) + o(h)  \\
 &= \sum_{x_i^{1}}
 \Bigl[
 \delta(y_i, x_i)
