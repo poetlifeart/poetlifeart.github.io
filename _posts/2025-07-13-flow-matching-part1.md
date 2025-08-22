@@ -551,3 +551,5 @@ p_{i^{1}\mid t}(x_i^{1}\mid x).
 $$
 
 Each sample of the above sum is a "x-token \\(i)\\ to y-token \\(i)\\"  transition once \\(X_1^i \sim p_{i^{1}\mid t}(x_i^{1}\mid x)\\) is made. The whole \\( x )\\ controls the sampling but once the sample is made, the transition is "x-token \\(i)\\ to y-token \\(i)\\". 
+
+Lastly, because we lack a differential strcuture, we cannot evaluate the velocity fields by plugging the state into some derevative; we have to extract the velocity fields from the contuity equation as it is shown in 7.24. 
