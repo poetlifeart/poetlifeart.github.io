@@ -526,3 +526,27 @@ u^{(i)}_t(y_i,x), & \text{if } D(x,y)=\{i\}, \\[6pt]
 \end{cases}
 $$
 
+what is interesting is that once the assumption of "factroized velocities" 7.12 is made, the velocities can be expressed "token to token"; i.e, not only the sink is factorized the source is factorized as well once we condition on the State as shown in 7.17:
+
+$$
+u_t^{\,i}(y_i, x)
+= \sum_{z} u_t^{\,i}\big(y_i, X_i^{\,t} \mid z\big)\, p_{Z\mid t}(z \mid x)
+= \mathbb{E}\!\left[\, u_t^{\,i}\big(y_i, X_i^{\,t} \mid Z\big) \,\middle|\, X_t = x \right].
+\tag{7.17}
+$$
+
+This eventually leads for example for the mixture model to update rule:
+
+$$
+\sum_{x_i^{1}}
+\Bigl[
+\delta(y_i, x_i)
++ h\,\frac{\dot{\kappa}_t}{1-\kappa_t}\bigl(\delta(y_i, x_i^{1}) - \delta(y_i, x_i)\bigr)
++ o(h)
+\Bigr]\,
+p_{i^{1}\mid t}(x_i^{1}\mid x).
+$$
+
+
+
+
