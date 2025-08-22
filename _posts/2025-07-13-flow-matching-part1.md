@@ -532,7 +532,6 @@ $$
 u_t^{\,i}(y_i, x)
 = \sum_{z} u_t^{\,i}\big(y_i, X_i^{\,t} \mid z\big)\, p_{Z\mid t}(z \mid x)
 = \mathbb{E}\!\left[\, u_t^{\,i}\big(y_i, X_i^{\,t} \mid Z\big) \,\middle|\, X_t = x \right].
-\tag{7.17}
 $$
 
 This eventually leads for example for the mixture model to update rule 7.34:
@@ -551,6 +550,4 @@ p_{i^{1}\mid t}(x_i^{1}\mid x).
 \end{aligned}
 $$
 
-
-
-
+Each sample of the above sum is a "x-token i to y-token i"  transition once \\(X_1^i \sim p_{i^{1}\mid t}(x_i^{1}\mid x)\\) is made. The whole \\(x)\\ controls the sampling but once the sample is made, the transition is "x-token i to y-token i". 
