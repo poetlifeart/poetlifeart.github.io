@@ -502,11 +502,27 @@ The second observation is that unlike the continuous differentiable case, where 
 
 Later in the paper, the authors introduce factorized velocities, which they compare with the coordinate representation of ODEs. This analogy must be treated with some care. It is possible to define ODEs on manifolds abstractly without reference to coordinates. What is really happening here is that the flow is being restricted to one coordinate at a time. Such a restriction has no analogue when the domain admits a differential structure, where the flow may follow complicated smooth twists and turns.
 
-In the discrete FM setting, “factorization” is not just a representation choice — it restricts the model class. You’re constraining the process so that it evolves only one coordinate at a time, which is a modeling assumption, not a coordinate artifact. This restriction does not prevent our ability to transport mass from any point to another point point on the grid. It is similar to  how we get from one point to the other while driving on grid like streets. Except that here, we make jumps past intersections as long as we move East, West, South, and North one direction at a time. 
+In the discrete FM setting, “factorization” is not just a representation choice — it restricts the model class. You’re constraining the process so that it evolves only one coordinate at a time, which is a modeling assumption, not a coordinate artifact. This restriction does not prevent our ability to transport mass from any point to another point point on the grid. It is similar to  how we get from one point to the other while driving on grid like streets. Except that here, we can make jumps past intersections as long as we move East, West, South, and North one direction at a time. 
 
 <img src="/images/grid.png"
      alt="Figure 2: Flow on the grid"
      width="30%"
      style="height:auto;">
 
-Finally, it turns out that 
+Finally, let's discuss how these factorized velocities work. The paper's notation might at first complicated but it is very simple:
+
+$$
+u_t(y,x) \;=\; \sum_{i} \delta(y_{\bar i},x_{\bar i}) \; u^{(i)}_t(y_i,x).
+$$
+
+
+Equivalently Define \(D(x,y) = \{ j : y_j \neq x_j \}\). Then
+
+$$
+u_t(y,x) \;=\;
+\begin{cases}
+u^{(i)}_t(y_i,x), & \text{if } D(x,y)=\{i\}, \\[6pt]
+0, & \text{if } |D(x,y)| \neq 1 .
+\end{cases}
+$$
+
