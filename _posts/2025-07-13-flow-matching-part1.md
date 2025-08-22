@@ -491,3 +491,20 @@ $$
 $$
 
 
+### Factorized paths and velocities
+
+
+
+
+Here, the important observations are twofold. First, in the discrete case there is no underlying differential structure. We cannot define vector fields pointwise as limits of movements along integral curves, since we cannot start from a source and end at a sink and then take the limit of their difference as the endpoint approaches the start point. Our “vectors” are instead specified by sink–source pairs on a "grid". Each grid point is an enumeration of tokens from a vocabulary in different positions. For example, assuming 100 tokens in the vocabulary, the integer \\(x=(3, 100, 4)\\) depicts a sentence with the third, last, and fourth elements, while another vector might be \\(y=(6, 100, 5)\\) A sink–source “vector” is then given by \\( (x,y) \\).
+
+The second observation is that unlike the continuous differentiable case, where one can begin with an ODE and study the Fokker–Planck–type evolution of the induced density, in the discrete case we must begin with the evolution of probabilities directly and define our “vectors” in probabilistic terms as well.
+
+Later in the paper, the authors introduce factorized velocities, which they compare with the coordinate representation of ODEs. This analogy must be treated with some care. It is possible to define ODEs on manifolds abstractly without reference to coordinates. What is really happening here is that the flow is being restricted to one coordinate at a time. Such a restriction has no analogue when the domain admits a differential structure, where the flow may follow complicated smooth twists and turns.
+
+In the discrete FM setting, “factorization” is not just a representation choice — it restricts the model class. You’re constraining the process so that it evolves only one coordinate at a time, which is a modeling assumption, not a coordinate artifact. This restriction does not prevent our ability to transport mass from any point to another point point on the grid. It is similar to  how we get from one point to the other while driving on grid like streets. Except that here, we make jumps past intersections as long as we move East, West, South, and North one direction at a time. 
+
+<img src="/images/planes.png"
+     alt="Figure 2: Flow on the grid"
+     width="50%"
+     style="height:auto;">
