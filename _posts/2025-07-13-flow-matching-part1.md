@@ -516,7 +516,7 @@ u_t(y,x) \;=\; \sum_{i} \delta(y_{\bar i},x_{\bar i}) \; u^{(i)}_t(y_i,x).
 $$
 
 
-Equivalently Define \(D(x,y) = \{ j : y_j \neq x_j \}\). Then
+Equivalently Define \\(D(x,y) = \{ j : y_j \neq x_j \}\\). Then
 
 $$
 u_t(y,x) \;=\;
