@@ -504,7 +504,9 @@ Later in the paper, the authors introduce factorized velocities, which they comp
 
 In the discrete FM setting, “factorization” is not just a representation choice — it restricts the model class. You’re constraining the process so that it evolves only one coordinate at a time, which is a modeling assumption, not a coordinate artifact. This restriction does not prevent our ability to transport mass from any point to another point point on the grid. It is similar to  how we get from one point to the other while driving on grid like streets. Except that here, we make jumps past intersections as long as we move East, West, South, and North one direction at a time. 
 
-<img src="/images/planes.png"
+<img src="/images/grid.png"
      alt="Figure 2: Flow on the grid"
      width="50%"
      style="height:auto;">
+
+Finally, it turns out that 
