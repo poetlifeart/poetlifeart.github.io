@@ -536,7 +536,7 @@ $$
 
 
 
-what is interesting is that once the assumption of "factroized velocities" 7.12 is made, the velocities for the mixture model can be expressed "token to token"; i.e, not only the sink is factorized the source is factorized as well once we condition on the State as shown below:
+what is interesting is that once the assumption of "factroized velocities" 7.12 is made, the velocities for the mixture model can be expressed effectively  "token to token"; i.e, not only the sink is factorized the source is factorized as well once we condition on the State as shown below:
 
 We condition on \\(Z = (X_0, X_1)\\) to accommodate arbitrary data couplings
 
