@@ -536,7 +536,75 @@ $$
 
 
 
-what is interesting is that once the assumption of "factroized velocities" 7.12 is made, the velocities for the mixture model can be expressed \\(\textit{effectively}\\) "token to token"; i.e, not only the sink is factorized the source is factorized as well once we condition on the State as shown below:
+what is interesting is that once the assumption of "factroized velocities" 7.12 is made, the velocities are \\(\textit{effectively}\\) "token to token"; i.e, not only the sink is factorized the source is computationally factorized as well once we condition on the State. The reason we say effectively is that under factorized assumtion we have:
+
+Assume the product form
+
+$$
+q_t(x) \;=\; \prod_i q^i_t(x_i),
+$$
+
+and that the joint distribution evolves according to
+
+$$
+\frac{d}{dt}q_t(y)
+= \sum_{x}\left[\sum_i \delta(y_{\bar i},x_{\bar i})\,u^i_t(y_i,x_i)\right] q_t(x).
+$$
+
+Fix an index \\(i\\) and sum the previous display over \\(y_{\bar i}\\):
+
+$$
+\begin{align*}
+\frac{d}{dt}q^i_t(y_i)
+&= \sum_{y_{\bar i}}\frac{d}{dt}q_t(y) \\
+&= \sum_{y_{\bar i}} \sum_x \left[\sum_{j}\delta(y_{\bar j},x_{\bar j})\,u^j_t(y_j,x_j)\right] q_t(x) \\
+&= \sum_{j}\sum_x q_t(x)\,\left[\sum_{y_{\bar i}}\delta(y_{\bar j},x_{\bar j})\,u^j_t(y_j,x_j)\right].
+\end{align*}
+$$
+
+Consider the inner sum. If \\(j=i\\), then
+
+$$
+\sum_{y_{\bar i}}\delta(y_{\bar i},x_{\bar i})\,u^i_t(y_i,x_i)
+= u^i_t(y_i,x_i).
+$$
+
+If \\(j\neq i\\), then the Kronecker delta fixes all coordinates except \\(y_j\\), so
+
+$$
+\sum_{y_{\bar i}}\delta(y_{\bar j},x_{\bar j})\,u^j_t(y_j,x_j)
+= \sum_{y_j} u^j_t(y_j,x_j) \;=\; 0,
+$$
+
+by the rate condition \\(\sum_{y_j}u^j_t(y_j,x_j)=0\\).
+
+Thus only the \\(j=i\\) term survives, giving
+
+$$
+\frac{d}{dt}q^i_t(y_i)
+= \sum_x u^i_t(y_i,x_i)\,q_t(x).
+$$
+
+Now decompose \\(x=(x_i,x_{\bar i})\\) and use the product form:
+
+$$
+\begin{align*}
+\frac{d}{dt}q^i_t(y_i)
+&= \sum_{x_i}\sum_{x_{\bar i}} u^i_t(y_i,x_i)\,q^{\bar i}_t(x_{\bar i})\,q^i_t(x_i) \\
+&= \sum_{x_i} u^i_t(y_i,x_i)\,q^i_t(x_i)\,\underbrace{\sum_{x_{\bar i}} q^{\bar i}_t(x_{\bar i})}_{=\,1}.
+\end{align*}
+$$
+
+Therefore,
+
+$$
+\frac{d}{dt}q^i_t(y_i)
+= \sum_{x_i} u^i_t(y_i,x_i)\,q^i_t(x_i),
+$$
+
+which is exactly the Kolmogorov equation for the marginal \\(q^i_t\\) with generator \\(u^i_t\\).
+\end{proof}
+
 
 We condition on \\(Z = (X_0, X_1)\\) to accommodate arbitrary data couplings
 
