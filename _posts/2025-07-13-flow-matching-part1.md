@@ -526,7 +526,87 @@ u^{(i)}_t(y_i,x), & \text{if } D(x,y)=\{i\}, \\[6pt]
 \end{cases}
 $$
 
-what is interesting is that once the assumption of "factroized velocities" 7.12 is made, the velocities can be expressed "token to token"; i.e, not only the sink is factorized the source is factorized as well once we condition on the State as shown in 7.17:
+
+This leade to 7.1, "source to single sink token" coordinate-wise independent transitions  decomosition:
+
+$$
+\mathbb{P}\!\left(X_i(t+h)=y_i \mid X_t=x\right)
+= \delta(y_i,x_i) + h\,u_i(y_i,x) + o(h).
+$$
+
+
+
+what is interesting is that once the assumption of "factroized velocities" 7.12 is made, the velocities for the mixture model can be expressed "token to token"; i.e, not only the sink is factorized the source is factorized as well once we condition on the State as shown below:
+
+We condition on \\(Z = (X_0, X_1)\\) to accommodate arbitrary data couplings
+
+$$
+(X_0, X_1) \sim \pi_{0,1}(X_0, X_1).
+$$
+
+Then, we build the factorized conditional paths
+
+$$
+p_{t \mid 0,1}(x \mid x_0, x_1) = \prod_i p^i_{t \mid 0,1}(x^i \mid x_0, x_1) \tag{7.21}
+$$
+
+as mixtures
+
+$$
+p^i_{t \mid 0,1}(x^i \mid x_0, x_1) = \kappa_t \, \delta(x^i, x^i_1) 
++ (1-\kappa_t) \, \delta(x^i, x^i_0), \tag{7.22}
+$$
+
+
+where \\(\kappa : [0,1] \to [0,1]\) is a \(C^1([0,1])\\) scheduler.  
+Note that a random variable \\(X^i_t \sim p^i_{t \mid 0,1}(\cdot \mid x_0, x_1)\\) follows
+
+$$
+X^i_t =
+\begin{cases}
+x^i_1 & \text{with prob. } \kappa_t, \\
+x^i_0 & \text{with prob. } 1-\kappa_t,
+\end{cases} \tag{7.23}
+$$
+
+i.e. it assumes either the source or the target states with a probability depending on the time \\(t\\).  
+If \\(\kappa_0 = 0\\) and \\(\kappa_1 = 1\\), then the marginal \\(p_t(x)\\) in (7.1) satisfies the boundary constraints.  
+
+We also need generating velocities \\(u^i_t(y^i, x^i \mid x_0, x_1)\\) for \\(p^i_{t \mid 0,1}(x^i \mid x_0, x_1)\\), which are solutions to (7.18). We derive these as follows:
+
+$$
+\frac{d}{dt} p^i_{t \mid Z}(y^i \mid z)
+\overset{(7.22)}{=} \dot{\kappa}_t \big( \delta(y^i, x^i_1) - \delta(y^i, x^i_0) \big)
+$$
+
+$$
+= \dot{\kappa}_t \left[ \delta(y^i, x^i_1) - 
+\frac{p^i_{t \mid Z}(y^i \mid z) - \kappa_t \delta(y^i, x^i_1)}{1-\kappa_t} \right]
+$$
+
+$$
+= \frac{\dot{\kappa}_t}{1-\kappa_t} \Big( \delta(y^i, x^i_1) - p^i_{t \mid Z}(y^i \mid z) \Big)
+$$
+
+$$
+= \sum_{x^i} \frac{\dot{\kappa}_t}{1-\kappa_t} 
+\Big( \delta(y^i, x^i_1) - \delta(y^i, x^i) \Big) p^i_{t \mid Z}(x^i \mid z),
+$$
+
+where we have used \\(z = (x_0, x_1)\\) and \\(Z = (X_0, X_1)\\) interchangeably to keep notation concise.  
+
+In conclusion, we have found a conditional velocity generating the path in (7.22), namely
+
+$$
+u^i_t(y^i, x^i \mid x_0, x_1) =
+\frac{\dot{\kappa}_t}{1-\kappa_t} \Big( \delta(y^i, x^i_1) - \delta(y^i, x^i) \Big). \tag{7.24}
+$$
+
+
+
+
+
+
 
 $$
 u_t^{\,i}(y_i, x)
