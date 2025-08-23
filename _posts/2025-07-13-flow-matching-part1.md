@@ -604,10 +604,6 @@ $$
 
 
 
-
-
-
-
 $$
 u_t^{\,i}(y_i, x)
 = \sum_{z} u_t^{\,i}\big(y_i, X_i^{\,t} \mid z\big)\, p_{Z\mid t}(z \mid x)
