@@ -664,7 +664,19 @@ p_{i^{1}\mid t}(x_i^{1}\mid x).
 \end{aligned}
 $$
 
-Each sample of the above sum is an \\(x_i)\\ token to a \\(y_i\\) token transition but only after \\(X_1^i \sim p_{i^{1}\mid t}x_i^{1\mid x \\) is chosen. The whole of the sentence \\( x \\) controls the sampling but once the sample is created, the transition is decomposed into \\(x_i)\\ token to \\(y_i\\) tokens. 
+Each term in the sum
+
+$$
+u^{\,i}_t(y_i, x)
+= \sum_{z} u^{\,i}_t(y_i, x_i \mid z)\, p_{Z\mid t}(z \mid x)
+$$
+
+corresponds to an \\(x_i \to y_i\\) token transition in coordinate \\(i\\), 
+weighted by the posterior distribution of the latent variable \\(Z\\) given the full state \\(x\\).
+The full sentence \\(x\\) determines the posterior \\(p(Z \mid X_t = x)\\), 
+and hence the rate of each coordinate transition. But, given \\( x\\), the generator decomposes into coordinate-wise
+token transitions \\(x_i \to y_i\\), with context dependence through \\(x\\).
+
 
 Because we lack a differential strcuture, we cannot evaluate the velocity fields by plugging the state into some derevative; we have to extract the velocity fields from the continuity equation as it is shown in 7.24. 
 
@@ -701,9 +713,8 @@ $$
 \Big( \delta(y^i, x^i_1) - \delta(y^i, x^i) \Big) p^i_{t \mid Z}(x^i \mid z),
 $$
 
-where we have used \\(z = (x_0, x_1)\\) and \\(Z = (X_0, X_1)\\) interchangeably to keep notation concise.  
 
-In conclusion, we have found a conditional velocity generating the path in (7.22), namely
+we have found a conditional velocity generating the path in (7.22), namely
 
 $$
 u^i_t(y^i, x^i \mid x_0, x_1) =
