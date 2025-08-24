@@ -536,13 +536,45 @@ $$
 
 
 
-what is interesting is that once the assumption of "factroized velocities" 7.12 is made, the velocities are \\(\textit{effectively}\\) "token to token"; i.e, not only the sink is factorized the source is computationally factorized as well once we condition on the State. The reason we say effectively is that under factorized assumtion we have:
+Once the assumption of "factroized velocities" 7.12 is made, the velocities become \\(\textit{effectively}\\) "token to token"; i.e, not only the sink is factorized the source is computationally factorized as well. The reason we say effectively is that under factorized assumtion, the evolution of the probability paths conditioned on the state becomes a weighted 
+sum of sink-source single token-to-token first oderder Markov transitions. Below we provide more details as how this comes about. 
 
 Assume the product form
 
 $$
 q_t(x) \;=\; \prod_i q^i_t(x_i),
 $$
+
+When using factorized velocities, we can sample CTMC models coordinate-wise (Campbell et al., 2024):
+
+$$
+P(X_{t+h} = y \mid X_t = x)
+= \delta(y, x) 
++ h \sum_i \delta(y_{\bar i}, x_{\bar i})\,u^i_t(y_i, x) 
++ o(h)
+$$
+
+$$
+= \prod_i \Big( \delta(y_i, x_i) + h\,u^i_t(y_i, x) + o(h) \Big),
+$$
+
+where the second equality follows from 
+
+$$
+\delta(y, x) = \prod_i \delta(y_i, x_i)
+$$
+
+and the identity
+
+$$
+\prod_i \left(a_i + h b_i\right)
+= \prod_i a_i 
++ h \sum_i \Bigg(\prod_{j\neq i} a_j\Bigg)b_i 
++ o(h).
+$$
+
+
+
 
 and that the joint distribution evolves according to
 
