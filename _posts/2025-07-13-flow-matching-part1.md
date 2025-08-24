@@ -648,15 +648,6 @@ u^{\,i}_t(y_i, x)
 $$
 
 
-
-
-We condition on \\(Z = (X_0, X_1)\\) to accommodate arbitrary data couplings
-
-$$
-(X_0, X_1) \sim \pi_{0,1}(X_0, X_1).
-$$
-
-
 This eventually leads for example for the mixture model to update sampling rule 7.34:
 
 $$
@@ -673,7 +664,7 @@ p_{i^{1}\mid t}(x_i^{1}\mid x).
 \end{aligned}
 $$
 
-Each sample of the above sum is a x-token \\(i)\\ to y-token \\(i)\\ transition once \\(X_1^i \sim p_{i^{1}\mid t}(x_i^{1\mid x)\\) is made. The whole \\( x )\\ controls the sampling but once the sample is made, the transition is x-token \\(i to y-token \\(i)\\. 
+Each sample of the above sum is a \\(x)-\\)) token \\(i)\\ to \\(y)-\\)token \\(i\\) transition only after \\(X_1^i \sim p_{i^{1}\mid t}(x_i^{1\mid x)\\) is chosen. The whole of the sentence \\( x \\) controls the sampling but once the sample is created, the transition is \\(x)-\\)token \\(i\\) to \\(y-\\)token \\(i\\). 
 
 Lastly, because we lack a differential strcuture, we cannot evaluate the velocity fields by plugging the state into some derevative; we have to extract the velocity fields from the contuity equation as it is shown in 7.24. 
 
