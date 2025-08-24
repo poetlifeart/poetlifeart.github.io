@@ -539,11 +539,7 @@ $$
 Once the assumption of "factroized velocities" 7.12 is made, the velocities become \\(\textit{effectively}\\) "token to token"; i.e, not only the sink is factorized the source is computationally factorized as well. The reason we say effectively is that under factorized assumtion, the evolution of the probability paths conditioned on the state becomes a weighted 
 sum of sink-source single token-to-token first oderder Markov transitions. Below we provide more details as how this comes about. 
 
-Assume the product form
 
-$$
-q_t(x) \;=\; \prod_i q^i_t(x_i),
-$$
 
 When using factorized velocities, we can sample CTMC models coordinate-wise (Campbell et al., 2024):
 
@@ -574,9 +570,13 @@ $$
 $$
 
 
+Assume the product form
 
+$$
+q_t(x) \;=\; \prod_i q^i_t(x_i),
+$$
 
-and that the joint distribution evolves according to
+Paper shows that the  joint distribution obeys sum-velocities: 
 
 $$
 \frac{d}{dt}q_t(y)
@@ -636,6 +636,18 @@ $$
 
 which is exactly the Kolmogorov equation for the marginal \\(q^i_t\\) with generator \\(u^i_t\\).
 \end{proof}
+This shows the decomposition is complete in both source and sink Markov transition process. In the paper the above
+proof is missing. This proof works just as well in the conditional case as well. So why did we say effectively? 
+It is because our Markov process evolves the conditional expection and that process depends on the entire state not
+individual tokens of the state:
+
+$$
+u^{\,i}_t(y_i, x)
+= \sum_{z} u^{\,i}_t(y_i, x_i \mid z)\, p_{Z\mid t}(z \mid x)
+= \mathbb{E}\!\left[\,u^{\,i}_t\!\big(y_i, X^{i}_t \mid Z\big)\,\middle|\, X_t = x \right].
+$$
+
+
 
 
 We condition on \\(Z = (X_0, X_1)\\) to accommodate arbitrary data couplings
