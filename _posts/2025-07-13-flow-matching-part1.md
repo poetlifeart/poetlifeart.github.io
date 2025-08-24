@@ -678,21 +678,8 @@ and hence the rate of each coordinate transition. But, given \\( x\\), the gener
 token transitions \\(x_i \to y_i\\), with context dependence through \\(x\\).
 
 
-Because we lack a differential strcuture, we cannot evaluate the velocity fields by plugging the state into some derevative; we have to extract the velocity fields from the continuity equation as it is shown in 7.24. 
+Because we lack a differential strcuture, we cannot evaluate the velocity fields by plugging the state into some derevative; we have to extract the velocity fields from the continuity equation as it is shown in 7.24. For the mixure model, for example, we have: 
 
-
-$$
-X^i_t =
-\begin{cases}
-x^i_1 & \text{with prob. } \kappa_t, \\
-x^i_0 & \text{with prob. } 1-\kappa_t,
-\end{cases} \tag{7.23}
-$$
-
-i.e. it assumes either the source or the target states with a probability depending on the time \\(t\\).  
-If \\(\kappa_0 = 0\\) and \\(\kappa_1 = 1\\), then the marginal \\(p_t(x)\\) in (7.1) satisfies the boundary constraints.  
-
-We also need generating velocities \\(u^i_t(y^i, x^i \mid x_0, x_1)\\) for \\(p^i_{t \mid 0,1}(x^i \mid x_0, x_1)\\), which are solutions to (7.18). We derive these as follows:
 
 $$
 \frac{d}{dt} p^i_{t \mid Z}(y^i \mid z)
