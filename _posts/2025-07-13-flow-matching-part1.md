@@ -656,6 +656,31 @@ $$
 (X_0, X_1) \sim \pi_{0,1}(X_0, X_1).
 $$
 
+
+This eventually leads for example for the mixture model to update sampling rule 7.34:
+
+$$
+\begin{aligned}
+\mathbb{P}\!\left(X_i^{\,t+h} = y_i \,\middle|\, X_t = x\right)
+&= \delta(y_i, x_i) + h\,u_i(y_i, x) + o(h)  \\
+&= \sum_{x_i^{1}}
+\Bigl[
+\delta(y_i, x_i)
++ h\,\frac{\dot{\kappa}_t}{1-\kappa_t}\bigl(\delta(y_i, x_i^{1}) - \delta(y_i, x_i)\bigr)
++ o(h)
+\Bigr]\,
+p_{i^{1}\mid t}(x_i^{1}\mid x).
+\end{aligned}
+$$
+
+Each sample of the above sum is a x-token \\(i)\\ to y-token \\(i)\\ transition once \\(X_1^i \sim p_{i^{1}\mid t}(x_i^{1\mid x)\\) is made. The whole \\( x )\\ controls the sampling but once the sample is made, the transition is x-token \\(i to y-token \\(i)\\. 
+
+Lastly, because we lack a differential strcuture, we cannot evaluate the velocity fields by plugging the state into some derevative; we have to extract the velocity fields from the contuity equation as it is shown in 7.24. 
+
+
+
+
+
 Then, we build the factorized conditional paths
 
 $$
@@ -722,22 +747,3 @@ u_t^{\,i}(y_i, x)
 = \mathbb{E}\!\left[\, u_t^{\,i}\big(y_i, X_i^{\,t} \mid Z\big) \,\middle|\, X_t = x \right].
 $$
 
-This eventually leads for example for the mixture model to update rule 7.34:
-
-$$
-\begin{aligned}
-\mathbb{P}\!\left(X_i^{\,t+h} = y_i \,\middle|\, X_t = x\right)
-&= \delta(y_i, x_i) + h\,u_i(y_i, x) + o(h)  \\
-&= \sum_{x_i^{1}}
-\Bigl[
-\delta(y_i, x_i)
-+ h\,\frac{\dot{\kappa}_t}{1-\kappa_t}\bigl(\delta(y_i, x_i^{1}) - \delta(y_i, x_i)\bigr)
-+ o(h)
-\Bigr]\,
-p_{i^{1}\mid t}(x_i^{1}\mid x).
-\end{aligned}
-$$
-
-Each sample of the above sum is a x-token \\(i)\\ to y-token \\(i)\\ transition once \\(X_1^i \sim p_{i^{1}\mid t}(x_i^{1\mid x)\\) is made. The whole \\( x )\\ controls the sampling but once the sample is made, the transition is x-token \\(i to y-token \\(i)\\. 
-
-Lastly, because we lack a differential strcuture, we cannot evaluate the velocity fields by plugging the state into some derevative; we have to extract the velocity fields from the contuity equation as it is shown in 7.24. 
