@@ -664,30 +664,10 @@ p_{i^{1}\mid t}(x_i^{1}\mid x).
 \end{aligned}
 $$
 
-Each sample of the above sum is a \\(x\\) token \\(i\\) to \\(y\\)token \\(i\\) transition only after \\(X_1^i \sim p_{i^{1}\mid t}(x_i^{1\mid x)\\) is chosen. The whole of the sentence \\( x \\) controls the sampling but once the sample is created, the transition is \\(x\\)token \\(i\\) to \\(y\\)token \\(i\\). 
+Each sample of the above sum is an \\(x_i)\\ token to a \\(y_i\\) token transition but only after \\(X_1^i \sim p_{i^{1}\mid t}x_i^{1\mid x \\) is chosen. The whole of the sentence \\( x \\) controls the sampling but once the sample is created, the transition is decomposed into \\(x_i)\\ token to \\(y_i\\) tokens. 
 
-Lastly, because we lack a differential strcuture, we cannot evaluate the velocity fields by plugging the state into some derevative; we have to extract the velocity fields from the contuity equation as it is shown in 7.24. 
+Because we lack a differential strcuture, we cannot evaluate the velocity fields by plugging the state into some derevative; we have to extract the velocity fields from the continuity equation as it is shown in 7.24. 
 
-
-
-
-
-Then, we build the factorized conditional paths
-
-$$
-p_{t \mid 0,1}(x \mid x_0, x_1) = \prod_i p^i_{t \mid 0,1}(x^i \mid x_0, x_1) \tag{7.21}
-$$
-
-as mixtures
-
-$$
-p^i_{t \mid 0,1}(x^i \mid x_0, x_1) = \kappa_t \, \delta(x^i, x^i_1) 
-+ (1-\kappa_t) \, \delta(x^i, x^i_0), \tag{7.22}
-$$
-
-
-where \\(\kappa : [0,1] \to [0,1]\) is a \(C^1([0,1])\\) scheduler.  
-Note that a random variable \\(X^i_t \sim p^i_{t \mid 0,1}(\cdot \mid x_0, x_1)\\) follows
 
 $$
 X^i_t =
