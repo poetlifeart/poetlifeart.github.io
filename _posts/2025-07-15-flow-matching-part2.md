@@ -27,26 +27,19 @@ layout: post
 - [Introduction](#introduction)
 - [Training Procedure](#training-procedure)
 - [Inference Procedure](#inference-procedure)
-- [Factorized Source→Sink Velocities](#factorized-source-sink-velocities)
+
 
 
 
 
 ## Introduction {#introduction} 
 
-This tutorial bridges the gap between the rigorous mathematical formulation of $\textit{Discrete Flow Matching}$ for continuous time Markov chains and a minimal, practical PyTorch implementation. We define a factorized mixture path, derive coordinate-wise CTMC velocities via the Kolmogorov forward equation, and show how to assemble those into a learnable model.
 
-You will find:
-
-* A concise statement of each mathematical object (probability path, Bregman divergence, CTMC velocity, posterior parameterization).
-* Exact code lines showing how to:
+The basic idea is straightforward:
 
   1. Sample the mixture path
   2. Compute the matching loss
   3. Run the coordinate-wise Euler sampler
-* Tips on dimensional factorization to maintain tractability.
-
-The basic idea is straightforward:
 
 
 
@@ -105,26 +98,4 @@ During inference, reverse the process:
 
 $X_i^1$ in formulas is always the data’s coordinate $i$.
 $X_t$ during training is sampled via the chosen mixture path $p_{t|0,1}$, ensuring the model learns the velocity field of this path.
-
-## Factorized Source→Sink Velocities {#factorized-source-sink-velocities}
-
-Because probability path and velocity factorize over coordinates, we handle each dimension independently:
-
-$$
-q_t(x)=\prod_{i=1}^d q^i_t(x_i), \quad u_t(y,x)=\sum_{i=1}^d \delta(y_{\bar i},x_{\bar i})u^i_t(y_i,x).
-$$
-
-## Mixture-path Construction
-
-Define the conditional marginal path:
-
-$$
-p^i_{t|0,1}(x_i|x_0,x_1)=t\,\delta(x_i,x_{1,i})+(1-t)\,\delta(x_i,x_{0,i}).
-$$
-
-Thus, each coordinate:
-
-$$
-\Pr[X_t^i=X_1^i]=t, \quad \Pr[X_t^i=X_0^i]=1-t.
-$$
 
