@@ -99,6 +99,10 @@ During inference, reverse the process:
 
 2\. Iteratively step forward in \\( t \\) using the learned posterior \\( p^{\theta,i}_{1|t} \\) to sample each coordinate’s jump until you reach \\( X_1 \\), your generated sample.
 
+
+2. Iteratively step forward in \\(t\\) using the learned posterior \\(p^{\\theta,i}_{1\\mid t}\\) to sample each coordinate’s jump until you reach \\(X_1\\), your generated sample.
+
+
 \\( X_i^1 \\) in formulas is always the data’s coordinate \\( i \\).
 \\( X_t \\) during training is sampled via the chosen mixture path \\( p_{t|0,1} \\), ensuring the model learns the velocity field of this path.
 
