@@ -129,3 +129,10 @@ p_{\theta,i,1\mid t}(x_{1,i}\mid x)
 +o(h).
 $$
 
+$$
+\begin{enumerate}
+	\item Draw \(x_{1,i}\sim p_{\theta,i,1\mid t}(\,\cdot\mid x)\).
+	\item With probability \(\tfrac{h}{1-t}\), set \(X_{t+h,i}=x_{1,i}\); otherwise keep \(X_{t+h,i}=x_i\).
+\end{enumerate}
+$$
+
