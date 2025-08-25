@@ -107,6 +107,18 @@ P\bigl(X_{t+h,i}=y_i \mid X_t=x\bigr)
 =\delta(y_i,x_i)+h\,u^i_t(y_i,x)+o(h).
 $$
 
+Consider the most basic mixture model with  the conditional marginal path:
+
+$$
+p^i_{t|0,1}(x_i|x_0,x_1)=t\,\delta(x_i,x_{1,i})+(1-t)\,\delta(x_i,x_{0,i}).
+$$
+
+Thus, each coordinate:
+
+$$
+\Pr[X_t^i=X_1^i]=t, \quad \Pr[X_t^i=X_0^i]=1-t.
+$$
+
 Substituting our posterior‐assembled velocity
 
 $$
@@ -130,6 +142,7 @@ p_{\theta,i,1\mid t}(x_{1,i}\mid x)
 $$
   
 1\. Draw \\(x_{1,i}\sim p_{\theta,i,1\mid t}(\,\cdot\mid x)\\).
+
 2\. With probability \\(\tfrac{h}{1-t}\\), set \\(X_{t+h,i}=x_{1,i}\\); otherwise keep \\(X_{t+h,i}=x_i\\).
 
 
