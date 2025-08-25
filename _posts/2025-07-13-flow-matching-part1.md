@@ -713,11 +713,6 @@ the conditioning step intrupting it. \\(u_t^{\,i}(y_i, x)\\) is obtained by taki
 \\(X_t\\) context from \\( u^{\,i}_t(y_i, x_i \mid z) \\) velocities and then in the next time step \\( x_i\\) is
 extracted from this new \\( x \\) value. 
 
-$$
-u_t^{\,i}(y_i, x)
-= \sum_{z} u_t^{\,i}\big(y_i, X_i^{\,t} \mid z\big)\, p_{Z\mid t}(z \mid x)
-= \mathbb{E}\!\left[\, u_t^{\,i}\big(y_i, X_i^{\,t} \mid Z\big) \,\middle|\, X_t = x \right].
-$$
 
 $$
 u^{\,i}_t(y_i, x)
@@ -728,7 +723,9 @@ $$
 Lastly, note that in 
 
 $$
-u_t(y, x) \;=\; \sum_i \delta(y_{\bar i}, x_{\bar i})\,u^{\,i}_t(y_i, x).
+u_t(y, x) \;=\; \sum_i \delta(y_{\bar i}, x_{\bar i})\,u^{\,i}_t(y_i, x),
 $$
 
+the condition \\(\delta(y_{\bar i}, x_{\bar i})\\) is never explicitily enforced as we always work, thoughout, on one
+component \\(y_i\\) at a time anyway. 
 
