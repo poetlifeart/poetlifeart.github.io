@@ -635,7 +635,7 @@ $$
 $$
 
 which is exactly the Kolmogorov equation for the marginal \\(q^i_t\\) with generator \\(u^i_t\\).
-\end{proof}
+
 This shows the decomposition is complete in both source and sink Markov transition process. In the paper the above
 proof is missing. This proof works just as well in the conditional case as well. So why did we say effectively? 
 It is because our Markov process evolves the conditional expection and that process depends on the entire state not
