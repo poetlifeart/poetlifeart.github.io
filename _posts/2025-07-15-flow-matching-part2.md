@@ -128,8 +128,8 @@ P\bigl(X_{t+h,i}=y_i \mid X_t=x\bigr)
 p_{\theta,i,1\mid t}(x_{1,i}\mid x)
 +o(h).
 $$
-
-	1. Draw \\(x_{1,i}\sim p_{\theta,i,1\mid t}(\,\cdot\mid x)\\).
-	2. With probability \\(\tfrac{h}{1-t}\\), set \\(X_{t+h,i}=x_{1,i}\\); otherwise keep \\(X_{t+h,i}=x_i\\).
+  
+1\. Draw \\(x_{1,i}\sim p_{\theta,i,1\mid t}(\,\cdot\mid x)\\).
+2\. With probability \\(\tfrac{h}{1-t}\\), set \\(X_{t+h,i}=x_{1,i}\\); otherwise keep \\(X_{t+h,i}=x_i\\).
 
 
