@@ -93,9 +93,39 @@ $$
 
 During inference, reverse the process:
 
-1\. Start from $X_0$ drawn from the prior.
-2\. Iteratively step forward in $t$ using the learned posterior $p^{\theta,i}_{1|t}$ to sample each coordinate’s jump until you reach $X_1$, your generated sample.
+1\. Start from \\(X_0\\) drawn from the prior.
+2\. Iteratively step forward in $t$ using the learned posterior \\(p^{\theta,i}_{1|t}\\) to sample each coordinate’s jump until you reach $X_1$, your generated sample.
 
-$X_i^1$ in formulas is always the data’s coordinate $i$.
-$X_t$ during training is sampled via the chosen mixture path $p_{t|0,1}$, ensuring the model learns the velocity field of this path.
+\\(X_i^1\\) in formulas is always the data’s coordinate $i$.
+\\(X_t\\) during training is sampled via the chosen mixture path \\(p_{t|0,1}\\), ensuring the model learns the velocity field of this path.
+
+
+For a small time step \(h\), the CTMC transition kernel factorizes over coordinates:
+
+$$
+P\bigl(X_{t+h,i}=y_i \mid X_t=x\bigr)
+=\delta(y_i,x_i)+h\,u^i_t(y_i,x)+o(h).
+$$
+
+Substituting our posterior‐assembled velocity
+
+$$
+u^i_t(y_i,x)
+=\frac{1}{1-t}
+\sum_{x_{1,i}}
+\bigl[\delta(y_i,x_{1,i})-\delta(y_i,x_i)\bigr]\,
+p_{\theta,i,1\mid t}(x_{1,i}\mid x),
+$$
+we obtain
+
+$$
+P\bigl(X_{t+h,i}=y_i \mid X_t=x\bigr)
+=\sum_{x_{1,i}}
+\Bigl[
+\delta(y_i,x_i)
++\frac{h}{1-t}\bigl(\delta(y_i,x_{1,i})-\delta(y_i,x_i)\bigr)
+\Bigr]\,
+p_{\theta,i,1\mid t}(x_{1,i}\mid x)
++o(h).
+$$
 
