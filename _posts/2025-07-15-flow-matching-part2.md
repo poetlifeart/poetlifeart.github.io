@@ -95,10 +95,7 @@ $$
 
 During inference, reverse the process:
 
-1\. Start from \\( X_0 \\) drawn from the prior.
-
-2\. Iteratively step forward in \\( t \\) using the learned posterior \\( p^{\theta,i}_{1|t} \\) to sample each coordinate’s jump until you reach \\( X_1 \\), your generated sample.
-
+1. Start from \\( X_0 \\) drawn from the prior.
 
 2. Iteratively step forward in \\(t\\) using the learned posterior \\(p^{\\theta,i}_{1\\mid t}\\) to sample each coordinate’s jump until you reach \\(X_1\\), your generated sample.
 
