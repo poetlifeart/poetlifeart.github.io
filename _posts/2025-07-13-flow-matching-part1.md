@@ -23,12 +23,6 @@ layout: post
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 
-## Table of Contents
-- [Introduction](#introduction)
-- [Training Procedure](#training-procedure)
-- [Inference Procedure](#inference-procedure)
-- [Factorized Source→Sink Velocities](#factorized-source-sink-velocities)
-
 
 
 
