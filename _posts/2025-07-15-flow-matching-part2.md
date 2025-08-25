@@ -73,17 +73,17 @@ $$
 X_t \sim p_{t|0,1}(x|X_0,X_1) = \prod_{i=1}^D \left[ \kappa(t)\,\delta(x_i,X_i^1)+(1-\kappa(t))\,\delta(x_i,X_i^0) \right].
 $$
 
-In other words, each coordinate $i$ of $X_t$ is $X_i^1$ with probability $\kappa(t)$, otherwise $X_i^0$.
+In other words, each coordinate \\(i\\) of \\(X_t\\) is \\(X_i^1\\) with probability \\(\kappa(t)\\), otherwise \\(X_i^0\\).
 
-5\. Compute the loss using the true generator (depends on $X_i^1$) and your model’s posterior:
+5\. Compute the loss using the true generator (depends on \\(X_i^1\\) and your model’s posterior:
 
 $$
 p^{\theta,i}_{1|t}(\cdot|X_t).
 $$
 
-Because $X_i^1$ is always the data, it drives the true velocity in every coordinate, and $X_t$ is where you evaluate velocities.
+Because \\(X_i^1\\) is always the data, it drives the true velocity in every coordinate, and \\(X_t\\) is where you evaluate velocities.
 
-The posterior $p^{\theta,i}_{1|t}(\cdot|X_t)$ is learned via a cross-entropy objective:
+The posterior \\(p^{\theta,i}_{1|t}(\cdot|X_t)\\) is learned via a cross-entropy objective:
 
 $$
 L(\theta) = -\mathbb{E}_{t,X_0,X_1,X_t}\sum_{i=1}^d \log p^{\theta,i}_{1|t}(X_1^i|X_t)+\text{const}.
