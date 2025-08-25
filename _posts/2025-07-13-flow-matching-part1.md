@@ -708,11 +708,27 @@ u^i_t(y^i, x^i \mid x_0, x_1) =
 \frac{\dot{\kappa}_t}{1-\kappa_t} \Big( \delta(y^i, x^i_1) - \delta(y^i, x^i) \Big). \tag{7.24}
 $$
 
-
+Once again not that token-to-token evolution of velocities,\\( u^{\,i}_t(y_i, x_i \mid z) \\),  is not taking place without 
+the conditioning step intrupting it. \\(u_t^{\,i}(y_i, x)\\) is obtained by taking conditional expectation with the entire
+\\(X_t\\) context from \\( u^{\,i}_t(y_i, x_i \mid z) \\) velocities and then in the next time step \\( x_i\\) is
+extracted from this new \\( x \\) value. 
 
 $$
 u_t^{\,i}(y_i, x)
 = \sum_{z} u_t^{\,i}\big(y_i, X_i^{\,t} \mid z\big)\, p_{Z\mid t}(z \mid x)
 = \mathbb{E}\!\left[\, u_t^{\,i}\big(y_i, X_i^{\,t} \mid Z\big) \,\middle|\, X_t = x \right].
 $$
+
+$$
+u^{\,i}_t(y_i, x)
+= \sum_{z} u^{\,i}_t(y_i, x_i \mid z)\, p_{Z \mid t}(z \mid x)
+= \mathbb{E}\!\left[\,u^{\,i}_t(y_i, X^i_t \mid Z)\,\middle|\,X_t = x \right].
+$$
+
+Lastly, note that in 
+
+$$
+u_t(y, x) \;=\; \sum_i \delta(y_{\bar i}, x_{\bar i})\,u^{\,i}_t(y_i, x).
+$$
+
 
