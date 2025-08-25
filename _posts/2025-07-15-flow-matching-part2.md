@@ -51,7 +51,7 @@ $$
 X_1 \sim q_{\mathrm{data}}.
 $$
 
-This is your “target” $(X_i^1)$ in every coordinate.
+This is your “target” \\(X_i^1\\) in every coordinate.
 
 2\. Sample a “source”:
 
@@ -83,7 +83,7 @@ $$
 
 Because \\(X_i^1\\) is always the data, it drives the true velocity in every coordinate, and \\(X_t\\) is where you evaluate velocities.
 
-The posterior \\(p^{\theta,i}_{1|t}(\cdot|X_t)\\) is learned via a cross-entropy objective:
+The posterior \\( p^{\theta,i}_{1|t}(\cdot|X_t) \\) is learned via a cross-entropy objective:
 
 $$
 L(\theta) = -\mathbb{E}_{t,X_0,X_1,X_t}\sum_{i=1}^d \log p^{\theta,i}_{1|t}(X_1^i|X_t)+\text{const}.
@@ -94,13 +94,14 @@ $$
 During inference, reverse the process:
 
 1\. Start from \\(X_0\\) drawn from the prior.
-2\. Iteratively step forward in $t$ using the learned posterior \\(p^{\theta,i}_{1|t}\\) to sample each coordinate’s jump until you reach $X_1$, your generated sample.
 
-\\(X_i^1\\) in formulas is always the data’s coordinate $i$.
+2\. Iteratively step forward in \\(t\\) using the learned posterior \\(p^{\theta,i}_{1|t}\\) to sample each coordinate’s jump until you reach \\(X_1\\), your generated sample.
+
+\\(X_i^1\\) in formulas is always the data’s coordinate \\(i\\).
 \\(X_t\\) during training is sampled via the chosen mixture path \\(p_{t|0,1}\\), ensuring the model learns the velocity field of this path.
 
 
-For a small time step \(h\), the CTMC transition kernel factorizes over coordinates:
+For a small time step \\( h \\), the CTMC transition kernel factorizes over coordinates:
 
 $$
 P\bigl(X_{t+h,i}=y_i \mid X_t=x\bigr)
