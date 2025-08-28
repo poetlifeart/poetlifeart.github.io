@@ -207,8 +207,7 @@ with no time index on \\(d^{\pi}\\).
 
 While a simple time-dependent baseline \\(b_t = \frac{1}{N} \sum_{i=1}^N R_{i,t}\\) is often used to reduce variance in Monte Carlo policy gradient estimators, it does not represent a true value function \\(V(s_t) = \mathbb{E}[R_t \mid s_t]\\). This is because \\(b_t\\) marginalizes over all states \\(s_t\\) encountered at time \\(t\\) rather than conditioning on a specific state. Thus, it captures only the average return under the state visitation distribution \\(d_t(s)\\), not the expected return from a particular state \\(s_t = s\\). Although useful for variance reduction, this approach lacks the precision and generalization capabilities of a learned, state-dependent baseline.
 
-% Insert this snippet into your document body (no \documentclass or \begin{document}/\end{document})
-% Inline math uses \\( ... \\) and displayed equations use $$ ... $$ with a blank line before and after each $$ ... $$.
+
 
 This note derives the pointwise soft-Bellman identity
 
@@ -219,7 +218,7 @@ $$
 
 points out the common typo (confusing \\( \lambda \\) and the discount \\( \gamma \\)), and shows how multiplying the identity by the discounted occupancy \\( \mu_r \\) recovers the global return identity.
 
-Setup and notation. Let an MDP be given by state space \\( \mathcal S \\), action space \\( \mathcal A \\), transition kernel \\( P(s'|s,a) \\), discount \\( \gamma\in[0,1) \\), and per-step reward \\( r:\mathcal S\times\mathcal A\to\mathbb R \\). Fix entropy coefficient \\( \lambda>0 \\).
+
 
 Define the entropy-regularized return
 
@@ -295,7 +294,15 @@ $$
 v_r(s)=\lambda\log\sum_a\exp\!\bigl(q(s,a)/\lambda\bigr).
 $$
 
-From \\( \lambda\log\pi_r(a\mid s)=q(s,a)-v_r(s) \\) and \\( q(s,a)=r(s,a)+\gamma\mathbb{E}_{s'|s,a}[v_r(s')] \\) we obtain the soft-Bellman identity:
+From 
+
+$$( \lambda\log\pi_r(a\mid s)=q(s,a)-v_r(s) $$
+
+and 
+
+$$ q(s,a)=r(s,a)+\gamma\mathbb{E}_{s'|s,a}[v_r(s')] $$ 
+ 
+we obtain the soft-Bellman identity:
 
 $$
 r(s,a)-\lambda\log\pi_r(a\mid s)=v_r(s)-\gamma\mathbb{E}_{s'|s,a}[v_r(s')]\qquad\forall s,a.
