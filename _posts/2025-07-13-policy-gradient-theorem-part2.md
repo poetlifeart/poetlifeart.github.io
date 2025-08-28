@@ -207,6 +207,155 @@ with no time index on \\(d^{\pi}\\).
 
 While a simple time-dependent baseline \\(b_t = \frac{1}{N} \sum_{i=1}^N R_{i,t}\\) is often used to reduce variance in Monte Carlo policy gradient estimators, it does not represent a true value function \\(V(s_t) = \mathbb{E}[R_t \mid s_t]\\). This is because \\(b_t\\) marginalizes over all states \\(s_t\\) encountered at time \\(t\\) rather than conditioning on a specific state. Thus, it captures only the average return under the state visitation distribution \\(d_t(s)\\), not the expected return from a particular state \\(s_t = s\\). Although useful for variance reduction, this approach lacks the precision and generalization capabilities of a learned, state-dependent baseline.
 
+% Insert this snippet into your document body (no \documentclass or \begin{document}/\end{document})
+% Inline math uses \\( ... \\) and displayed equations use $$ ... $$ with a blank line before and after each $$ ... $$.
+
+This note derives the pointwise soft-Bellman identity
+
+$$
+r(s,a)-\lambda\log\pi_r(a\mid s)=v_r(s)-\gamma\mathbb{E}_{s'\mid s,a}[v_r(s')]
+\qquad\forall s,a,
+$$
+
+points out the common typo (confusing \\( \lambda \\) and the discount \\( \gamma \\)), and shows how multiplying the identity by the discounted occupancy \\( \mu_r \\) recovers the global return identity.
+
+Setup and notation. Let an MDP be given by state space \\( \mathcal S \\), action space \\( \mathcal A \\), transition kernel \\( P(s'|s,a) \\), discount \\( \gamma\in[0,1) \\), and per-step reward \\( r:\mathcal S\times\mathcal A\to\mathbb R \\). Fix entropy coefficient \\( \lambda>0 \\).
+
+Define the entropy-regularized return
+
+$$
+J(\pi)=\mathbb{E}\!\Big[\sum_{t=0}^{\infty}\gamma^t\big(r(s_t,a_t)-\lambda\log\pi(a_t\mid s_t)\big)\Big],
+$$
+
+and the soft value and soft-Q functions
+
+$$
+V_\pi(s)=\mathbb{E}_\pi\Big[\sum_{t=0}^\infty \gamma^t\big(r(s_t,a_t)-\lambda\log\pi(a_t\mid s_t)\big)\Bigm| s_0=s\Big],
+$$
+
+$$
+Q_\pi(s,a)=r(s,a)-\lambda\log\pi(a\mid s)+\gamma\,\mathbb{E}_{s'\sim P(\cdot\mid s,a)}[V_\pi(s')].
+$$
+
+Use the discounted occupancy normalized to sum to one:
+
+$$
+\mu_\pi(s,a)=(1-\gamma)\sum_{t=0}^\infty \gamma^t \Pr(s_t=s,a_t=a\mid\pi),
+$$
+
+so that expectations with respect to \\( \mu_\pi \\) are discounted time averages:
+
+$$
+\mathbb{E}_{(s,a)\sim\mu_\pi}[\cdot]=(1-\gamma)\sum_{t=0}^\infty \gamma^t \mathbb{E}[\cdot\ \text{at time }t].
+$$
+
+1) Pointwise soft-Bellman optimality (proof).
+
+Fix a reward \\( r \\). Let \\( \pi_r \\) be an optimal policy for the entropy-regularized objective and write \\( v_r=V_{\pi_r} \\), \\( Q_r=Q_{\pi_r} \\).
+
+For any state \\( s \\) define
+
+$$
+q(s,a):=r(s,a)+\gamma\mathbb{E}_{s'\mid s,a}[v_r(s')].
+$$
+
+The per-state contribution is
+
+$$
+\mathcal G_s(\pi(\cdot\mid s))=\sum_{a}\pi(a\mid s)\big(q(s,a)-\lambda\log\pi(a\mid s)\big),
+$$
+
+and the optimal policy at \\( s \\) maximizes \\( \mathcal G_s \\) subject to \\( \sum_a\pi(a\mid s)=1 \\). Form the Lagrangian with multiplier \\( \eta(s) \\):
+
+$$
+\mathcal L=\sum_a\pi(a)\big(q(s,a)-\lambda\log\pi(a)\big)-\eta\Big(\sum_a\pi(a)-1\Big).
+$$
+
+Stationarity with respect to \\( \pi(a) \\) gives
+
+$$
+q(s,a)-\lambda(1+\log\pi_r(a\mid s))-\eta(s)=0,
+$$
+
+hence
+
+$$
+\log\pi_r(a\mid s)=\frac{q(s,a)-\eta(s)-\lambda}{\lambda}.
+$$
+
+Normalizing yields the Gibbs policy
+
+$$
+\pi_r(a\mid s)=\frac{\exp(q(s,a)/\lambda)}{\sum_{a'}\exp(q(s,a')/\lambda)},
+$$
+
+and substituting back gives the state value
+
+$$
+v_r(s)=\lambda\log\sum_a\exp\!\bigl(q(s,a)/\lambda\bigr).
+$$
+
+From \\( \lambda\log\pi_r(a\mid s)=q(s,a)-v_r(s) \\) and \\( q(s,a)=r(s,a)+\gamma\mathbb{E}_{s'|s,a}[v_r(s')] \\) we obtain the soft-Bellman identity:
+
+$$
+r(s,a)-\lambda\log\pi_r(a\mid s)=v_r(s)-\gamma\mathbb{E}_{s'|s,a}[v_r(s')]\qquad\forall s,a.
+$$
+
+Remark: the multiplier on \\( v_r(s') \\) is the discount \\( \gamma \\). If you see \\( \lambda v_r(s') \\) instead, that is a typo.
+
+2) Where \\( \mu_r \\) appears: integrating the pointwise identity.
+
+The pointwise identity is local and does not mention \\( \mu_r \\). Multiply both sides by \\( \mu_r(s,a) \\) and sum/integrate over \\( (s,a) \\):
+
+$$
+\sum_{s,a}\mu_r(s,a)\bigl(r(s,a)-\lambda\log\pi_r(a\mid s)\bigr)
+= \sum_{s,a}\mu_r(s,a)\Bigl(v_r(s)-\gamma\mathbb{E}_{s'|s,a}[v_r(s')]\Bigr).
+$$
+
+Compute the right-hand side terms:
+
+$$
+\sum_{s,a}\mu_r(s,a)\,v_r(s)=(1-\gamma)\sum_{t\ge0}\gamma^t \mathbb{E}[v_r(s_t)],
+$$
+
+and
+
+$$
+\sum_{s,a}\mu_r(s,a)\mathbb{E}_{s'|s,a}[v_r(s')]
+=(1-\gamma)\sum_{t\ge0}\gamma^t\mathbb{E}[v_r(s_{t+1})]
+=(1-\gamma)\sum_{t\ge1}\gamma^{t-1}\mathbb{E}[v_r(s_t)].
+$$
+
+Hence the difference telescopes to
+
+$$
+\sum_{s,a}\mu_r(s,a)\Bigl(v_r(s)-\gamma\mathbb{E}_{s'|s,a}[v_r(s')]\Bigr)=(1-\gamma)\mathbb{E}[v_r(s_0)].
+$$
+
+Therefore
+
+$$
+\sum_{s,a}\mu_r(s,a)\bigl(r(s,a)-\lambda\log\pi_r(a\mid s)\bigr)=(1-\gamma)\,\mathbb{E}_{s_0\sim d_0}[v_r(s_0)],
+$$
+
+where \\( d_0 \\) is the initial-state distribution used in the trajectory expectation.
+
+Since
+
+$$
+\mathbb{E}_{(s,a)\sim\mu_r}[r-\lambda\log\pi_r]=(1-\gamma)J(\pi_r),
+$$
+
+we recover \\( J(\pi_r)=\mathbb{E}_{s_0}[v_r(s_0)] \\) as usual.
+
+Summary (plain English).
+
+\\( \bullet \\) The pointwise identity is the soft (entropy-regularized) Bellman optimality condition; it is local and does not require mentioning \\( \mu_r \\).
+
+\\( \bullet \\) The discounted occupancy \\( \mu_r \\) naturally appears when integrating the pointwise identity to yield expectation-level equalities and the connection to \\( J(\pi) \\).
+
+\\( \bullet \\) Watch for typographical errors: the multiplier on the next-state value must be \\( \gamma \\), not \\( \lambda \\).
+
 
 
 
