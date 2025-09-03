@@ -47,10 +47,11 @@ that these states are reached through the forward dynamics induced by the policy
 
 
 
-where \\(D_f = \mathbb{E}_{\mu_E}\big[f\!\left(\tfrac{\mu_\pi(s,a)}{\mu_E(s,a)}\right)\big]\\) is an \\(f\\)-divergence. Different \\(f\\)-divergences have been used in the
-literature \\cite{ho2016generative,ghasemipour2019divergence}. When taking the example of the reverse
-KL divergence, with \\(f(t) = f_{\mathrm{RKL}}(t) = -\log(t)\\), we can decompose the objective into a state
-distribution and an MLE term:
+where 
+
+$$D_f = \mathbb{E}_{\mu_E}\big[f\!\left(\tfrac{\mu_\pi(s,a)}{\mu_E(s,a)}\right)\big]$$ 
+
+When taking the example of the reverse KL divergence, with \\(f(t) = f_{\mathrm{RKL}}(t) = -\log(t)\\), we can decompose the objective into a state distribution and an MLE term:
 
 $$
 \min_{\pi}\; D_{f_{\mathrm{RKL}}}(\mu_\pi\|\mu_E)
@@ -61,7 +62,9 @@ $$
 where
 
 - the **unnormalized discounted state distribution** is  
-  \\(\rho_\pi(s) := \sum_{t=0}^\infty \gamma^t\,\Pr_\pi(s_t=s) = \sum_a \mu_\pi(s,a)\\),  
+
+  $$\rho_\pi(s) := \sum_{t=0}^\infty \gamma^t\,\Pr_\pi(s_t=s) = \sum_a \mu_\pi(s,a)$$,  
+
   and similarly \\(\rho_E(s) := \sum_a \mu_E(s,a)\\);
 
 - the **normalized discounted state distribution** is obtained by scaling:  
@@ -70,8 +73,9 @@ where
 
 Thus, depending on convention, the first KL term can be written either with unnormalized occupancies  
 \\(\mathrm{KL}(\rho_E\|\rho_\pi)\\) (scales differ by a factor \\((1-\gamma)^{-1}\\)) or with normalized ones  
-\\(\mathrm{KL}(\hat\rho_E\|\hat\rho_\pi)\\). The second term  
-\\(\mathbb{E}_{s\sim\rho_E}[\mathrm{KL}(\pi_E\|\pi)]\\) is equivalently  
+\\(\mathrm{KL}(\hat\rho_E\|\hat\rho_\pi)\\). 
+
+The second term  \\(\mathbb{E}_{s\sim\rho_E}[\mathrm{KL}(\pi_E\|\pi)]\\) is equivalently  
 \\(\mathbb{E}_{s\sim\hat\rho_E}[\mathrm{KL}(\pi_E\|\pi)]\\), since the normalization factor cancels in the expectation.
 
 
