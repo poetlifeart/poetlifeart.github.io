@@ -59,7 +59,10 @@ D_{f_{\mathrm{RKL}}}(\mu_\pi\|\mu_E)
 = \mathrm{KL}(\mu_E\|\mu_\pi).
 $$
 
-2. Factorize occupancy as \\(\mu_\pi(s,a)=\rho_\pi(s)\pi(a|s)\\), 
+2. Factorize occupancy as 
+
+$$\mu_\pi(s,a)=\rho_\pi(s)\pi(a|s),$$
+
 \\(\mu_E(s,a)=\rho_E(s)\pi_E(a|s)\\).
 
 3. Plugging in gives
