@@ -28,6 +28,22 @@ layout: post
 In this post, we walk through the step-by-step derivations of some of the math in the 
 paper [ Offline Reinforcement Learning: Tutorial, Review, and Perspectives on Open Problems](https://arxiv.org/abs/2005.01643), at times provide a deeper discussion and correct minor mistakes and typoes in that paper. 
 
+$$
+H(\pi) \;=\; - \sum_{s} d_\pi(s) \sum_{a} \pi(a \mid s)\,\log \pi(a \mid s),
+$$
+
+where \\(d_\pi(s)\\) is the (discounted) state visitation distribution under policy \\(\pi\\).
+This weighting means the entropy contribution of each state is proportional
+to how often that state is encountered when following the policy.
+Thus, the regularizer encourages stochasticity in states that actually occur
+along trajectories, rather than uniformly across all states.
+
+
+
+
+
+
+
 ## 1.
 
  Finite MDP, discount \\(\gamma \in [0,1)\\), initial state law \\(d_0\\), kernel \\(P(s' \mid s,a)\\).  
@@ -79,50 +95,3 @@ $$
 
 No \\(\pi\\) remains. \\(\square\\)
 
-**Proof B (factorizing \\(\pi\\) explicitly).**
-
-$$
-\sum_{s,a}\tilde\mu_\pi(s,a)\Psi_w(s,a)
-= \sum_s \tilde\rho_\pi(s)\sum_a \pi(a\mid s)\Big(w(s) - \gamma\sum_{s'} P(s'|s,a)w(s')\Big).
-$$
-
-$$
-= \sum_s \tilde\rho_\pi(s) w(s)
-- \gamma \sum_{s'}\Big(\sum_s \tilde\rho_\pi(s)\sum_a \pi(a\mid s)P(s'|s,a)\Big)w(s').
-$$
-
-Define
-
-$$
-P_\pi(s,s') := \sum_a \pi(a\mid s) P(s'|s,a).
-$$
-
-So the expression is
-
-$$
-(\tilde\rho_\pi^\top - \gamma \tilde\rho_\pi^\top P_\pi)w.
-$$
-
-The unnormalized discounted state flow satisfies
-
-$$
-\tilde\rho_\pi^\top = d_0^\top + \gamma \tilde\rho_\pi^\top P_\pi,
-\quad\Rightarrow\quad
-\tilde\rho_\pi^\top - \gamma \tilde\rho_\pi^\top P_\pi = d_0^\top.
-$$
-
-Therefore
-
-$$
-(\tilde\rho_\pi^\top - \gamma \tilde\rho_\pi^\top P_\pi)w
-= d_0^\top w
-= \mathbb{E}_{s_0\sim d_0}[w(s_0)].
-$$
-
-Again no \\(\pi\\) left. \\(\square\\)
-
-With normalized occupancy \\(\mu_\pi = (1-\gamma)\tilde\mu_\pi\\), the identity becomes
-
-$$
-\mathbb{E}_{\mu_\pi}[\Psi_w] = (1-\gamma)\,\mathbb{E}_{d_0}[w(s_0)].
-$$
