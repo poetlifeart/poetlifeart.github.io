@@ -47,7 +47,7 @@ that these states are reached through the forward dynamics induced by the policy
 
 
 
-where 
+We drive 4 next: 
 
 $$D_f = \mathbb{E}_{\mu_E}\big[f\!\left(\tfrac{\mu_\pi(s,a)}{\mu_E(s,a)}\right)\big]$$ 
 
