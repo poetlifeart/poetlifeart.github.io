@@ -51,7 +51,7 @@ where
 
 $$D_f = \mathbb{E}_{\mu_E}\big[f\!\left(\tfrac{\mu_\pi(s,a)}{\mu_E(s,a)}\right)\big]$$ 
 
-1. Start from the definition. For the reverse KL with \\(f(t)=-\log t\\),
+ Start from the definition. For the reverse KL with \\(f(t)=-\log t\\),
 
 $$
 D_{f_{\mathrm{RKL}}}(\mu_\pi\|\mu_E)
@@ -59,26 +59,26 @@ D_{f_{\mathrm{RKL}}}(\mu_\pi\|\mu_E)
 = \mathrm{KL}(\mu_E\|\mu_\pi).
 $$
 
-2. Factorize occupancy as 
+Factorize occupancy as 
 
 $$\mu_\pi(s,a)=\rho_\pi(s)\pi(a|s),$$
 
 \\(\mu_E(s,a)=\rho_E(s)\pi_E(a|s)\\).
 
-3. Plugging in gives
+Plugging in gives
 
 $$
 \mathrm{KL}(\mu_E\|\mu_\pi)
 = \sum_{s,a}\rho_E(s)\pi_E(a|s)\log\frac{\rho_E(s)\pi_E(a|s)}{\rho_\pi(s)\pi(a|s)}.
 $$
 
-4. Separate terms inside the log:
+Separate terms inside the log:
 
 $$
 \log\frac{\rho_E(s)}{\rho_\pi(s)} + \log\frac{\pi_E(a|s)}{\pi(a|s)}.
 $$
 
-5. Collapse each sum:
+Collapse each sum:
 
 $$
 \sum_s \rho_E(s)\log\frac{\rho_E(s)}{\rho_\pi(s)} = \mathrm{KL}(\rho_E\|\rho_\pi),
@@ -89,7 +89,7 @@ $$
 = \sum_s \rho_E(s)\,\mathrm{KL}(\pi_E(\cdot|s)\|\pi(\cdot|s)).
 $$
 
-6. Put it together. For any fixed policy \\(\pi\\),
+Put it together. For any fixed policy \\(\pi\\),
 
 $$
 D_{f_{\mathrm{RKL}}}(\mu_\pi\|\mu_E)
