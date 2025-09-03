@@ -51,43 +51,58 @@ where
 
 $$D_f = \mathbb{E}_{\mu_E}\big[f\!\left(\tfrac{\mu_\pi(s,a)}{\mu_E(s,a)}\right)\big]$$ 
 
-When taking the example of the reverse KL divergence, with \\(f(t) = f_{\mathrm{RKL}}(t) = -\log(t)\\), we can decompose the objective into a state distribution and an MLE term:
+1. Start from the definition. For the reverse KL with \\(f(t)=-\log t\\),
 
 $$
-\min_{\pi}\; D_{f_{\mathrm{RKL}}}(\mu_\pi\|\mu_E)
-= \mathrm{KL}(\rho_E\|\rho_\pi) \;+\; \mathbb{E}_{s\sim\rho_E}\!\left[\mathrm{KL}(\pi_E(\cdot\mid s)\|\pi(\cdot\mid s))\right],
-\tag{4}
+D_{f_{\mathrm{RKL}}}(\mu_\pi\|\mu_E)
+= \mathbb{E}_{(s,a)\sim \mu_E}\!\left[-\log\frac{\mu_\pi(s,a)}{\mu_E(s,a)}\right]
+= \mathrm{KL}(\mu_E\|\mu_\pi).
 $$
 
-where
+2. Factorize occupancy as \\(\mu_\pi(s,a)=\rho_\pi(s)\pi(a|s)\\), 
+\\(\mu_E(s,a)=\rho_E(s)\pi_E(a|s)\\).
 
-- the **unnormalized discounted state distribution** is  
+3. Plugging in gives
 
-  $$\rho_\pi(s) := \sum_{t=0}^\infty \gamma^t\,\Pr_\pi(s_t=s) = \sum_a \mu_\pi(s,a)$$,  
+$$
+\mathrm{KL}(\mu_E\|\mu_\pi)
+= \sum_{s,a}\rho_E(s)\pi_E(a|s)\log\frac{\rho_E(s)\pi_E(a|s)}{\rho_\pi(s)\pi(a|s)}.
+$$
 
-  and similarly \\(\rho_E(s) := \sum_a \mu_E(s,a)\\);
+4. Separate terms inside the log:
 
-- the **normalized discounted state distribution** is obtained by scaling:  
-  \\(\hat\rho_\pi(s) := (1-\gamma)\,\rho_\pi(s)\\), which is a valid probability distribution on states
-  (and likewise \\(\hat\rho_E\\)).
+$$
+\log\frac{\rho_E(s)}{\rho_\pi(s)} + \log\frac{\pi_E(a|s)}{\pi(a|s)}.
+$$
 
-Thus, depending on convention, the first KL term can be written either with unnormalized occupancies  
+5. Collapse each sum:
 
-$$\mathrm{KL}(\rho_E\|\rho_\pi)$$ 
+$$
+\sum_s \rho_E(s)\log\frac{\rho_E(s)}{\rho_\pi(s)} = \mathrm{KL}(\rho_E\|\rho_\pi),
+$$
 
-(scales differ by a factor \\((1-\gamma)^{-1}\\)) or with normalized ones  
+$$
+\sum_{s,a}\rho_E(s)\pi_E(a|s)\log\frac{\pi_E(a|s)}{\pi(a|s)}
+= \sum_s \rho_E(s)\,\mathrm{KL}(\pi_E(\cdot|s)\|\pi(\cdot|s)).
+$$
 
-$$\mathrm{KL}(\hat\rho_E\|\hat\rho_\pi)$$ 
+6. Put it together. For any fixed policy \\(\pi\\),
 
-The second term  
+$$
+D_{f_{\mathrm{RKL}}}(\mu_\pi\|\mu_E)
+= \mathrm{KL}(\rho_E\|\rho_\pi)
++ \mathbb{E}_{s\sim\rho_E}[\,\mathrm{KL}(\pi_E(\cdot|s)\|\pi(\cdot|s))\,].
+$$
 
-$$\mathbb{E}_{s\sim\rho_E}[\mathrm{KL}(\pi_E\|\pi)]$$ 
+Therefore
 
-is equivalently  
-
-$$\mathbb{E}_{s\sim\hat\rho_E}[\mathrm{KL}(\pi_E\|\pi)]$$, 
-
-since the normalization factor cancels in the expectation.
+$$
+\min_\pi D_{f_{\mathrm{RKL}}}(\mu_\pi\|\mu_E)
+= \min_\pi\Big\{
+\mathrm{KL}(\rho_E\|\rho_\pi)
++ \mathbb{E}_{s\sim\rho_E}[\,\mathrm{KL}(\pi_E(\cdot|s)\|\pi(\cdot|s))\,]
+\Big\}.
+$$
 
 
 
