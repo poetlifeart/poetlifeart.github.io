@@ -72,11 +72,22 @@ where
   (and likewise \\(\hat\rho_E\\)).
 
 Thus, depending on convention, the first KL term can be written either with unnormalized occupancies  
-\\(\mathrm{KL}(\rho_E\|\rho_\pi)\\) (scales differ by a factor \\((1-\gamma)^{-1}\\)) or with normalized ones  
-\\(\mathrm{KL}(\hat\rho_E\|\hat\rho_\pi)\\). 
 
-The second term  \\(\mathbb{E}_{s\sim\rho_E}[\mathrm{KL}(\pi_E\|\pi)]\\) is equivalently  
-\\(\mathbb{E}_{s\sim\hat\rho_E}[\mathrm{KL}(\pi_E\|\pi)]\\), since the normalization factor cancels in the expectation.
+$$\mathrm{KL}(\rho_E\|\rho_\pi)$$ 
+
+(scales differ by a factor \\((1-\gamma)^{-1}\\)) or with normalized ones  
+
+$$\mathrm{KL}(\hat\rho_E\|\hat\rho_\pi)$$ 
+
+The second term  
+
+$$\mathbb{E}_{s\sim\rho_E}[\mathrm{KL}(\pi_E\|\pi)]$$ 
+
+is equivalently  
+
+$$\mathbb{E}_{s\sim\hat\rho_E}[\mathrm{KL}(\pi_E\|\pi)]$$, 
+
+since the normalization factor cancels in the expectation.
 
 
 
