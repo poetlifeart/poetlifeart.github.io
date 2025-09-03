@@ -47,7 +47,7 @@ that these states are reached through the forward dynamics induced by the policy
 
 
 
-We drive 4 next: 
+We drive 4 next as we note there is a "min" missing from right hand side of the equation in the paper: 
 
 $$D_f = \mathbb{E}_{\mu_E}\big[f\!\left(\tfrac{\mu_\pi(s,a)}{\mu_E(s,a)}\right)\big]$$ 
 
@@ -106,6 +106,42 @@ $$
 + \mathbb{E}_{s\sim\rho_E}[\,\mathrm{KL}(\pi_E(\cdot|s)\|\pi(\cdot|s))\,]
 \Big\}.
 $$
+
+
+Next in 5 note that we have pointwise fucntion of state and action:
+
+$$
+D(s,a) = -\mathbb{E}_{\mu_E}\!\big[f^{*}(g(s,a))\big] \;+\; \mathbb{E}_{\mu_\pi}\!\big[g(s,a)\big]k,
+$$
+
+such that The variational representation requires that the discriminator function \\(g:S\times A \to \mathbb{R}\\) satisfies
+
+$$
+g(s,a) \in \operatorname{effdom}(f^{*})
+\quad \text{for all } (s,a)\in S\times A,
+$$
+
+where the effective domain of the convex conjugate is defined as
+
+$$
+\operatorname{effdom}(f^{*}) := \{\, y \in \mathbb{R} \;\mid\; f^{*}(y) < \infty \,\}.
+$$
+
+In particular, \\(g\\) will include functions that are "nearly onto", except at infinite values \\(\operatorname{effdom}(f^{*})\\). 
+
+Then 
+
+$$
+D_f(s,a) = \sup_{g: S\times A \to \operatorname{effdom}(f^{*})} D(s,a;g) 
+$$
+
+
+
+
+
+
+
+
 
 
 
