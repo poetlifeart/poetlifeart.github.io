@@ -28,15 +28,21 @@ layout: post
 In this post, we walk through the step-by-step derivations of some of the math in the 
 paper [ Offline Reinforcement Learning: Tutorial, Review, and Perspectives on Open Problems](https://arxiv.org/abs/2005.01643), at times provide a deeper discussion and correct minor mistakes and typoes in that paper. 
 
+
+Starting on page 3. 
+
 $$
 H(\pi) \;=\; - \sum_{s} d_\pi(s) \sum_{a} \pi(a \mid s)\,\log \pi(a \mid s),
 $$
 
 where \\(d_\pi(s)\\) is the (discounted) state visitation distribution under policy \\(\pi\\).
-This weighting means the entropy contribution of each state is proportional
-to how often that state is encountered when following the policy.
-Thus, the regularizer encourages stochasticity in states that actually occur
-along trajectories, rather than uniformly across all states.
+The weighting by \\(d_\pi(s)\\) ensures that each state's contribution to the entropy
+is proportional to how often it is actually encountered under the policy.
+In this sense, the regularizer promotes stochasticity in states along real trajectories,
+rather than uniformly across all states.
+The term *weighted* refers to the state-distribution weighting, while *causal* highlights
+that these states are reached through the forward dynamics induced by the policy.
+
 
 
 
