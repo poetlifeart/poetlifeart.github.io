@@ -165,8 +165,8 @@ $$
 
 
 
-(Fix a state \\(s\\), discount \\(\gamma\in[0,1)\\), temperature \\(\lambda>0\\), and a value function \\(v:S\to\mathbb{R}\\).
-Define the soft state–action score
+(proof: Fix a state \\(s\\), discount \\(\gamma\in[0,1)\\), temperature \\(\lambda>0\\), and a value function \\(v:S\to\mathbb{R}\\).
+Define the soft state–action score as above 
 
 
 $$
@@ -282,15 +282,17 @@ Note qualtiy 9 is used twice once in 10 and again in 12.
 
 
 
-## 1.
+## A telescoping argument
 
- Finite MDP, discount \\(\gamma \in [0,1)\\), initial state law \\(d_0\\), kernel \\(P(s' \mid s,a)\\).  
+Let's first remind ourselves of our notation: 
+
+Finite MDP, discount \\(\gamma \in [0,1)\\), initial state law \\(d_0\\), kernel \\(P(s' \mid s,a)\\).  
 For a stationary policy \\(\pi\\),
 
 $$
-\tilde\mu_\pi(s,a) := \sum_{t=0}^\infty \gamma^t \Pr_\pi(s_t=s,a_t=a),
+\tilde\mu_\pi(s,a) := \sum_{t=0}^\infty \gamma^t \Pr_{\pi}(s_t=s,a_t=a),
 \qquad
-\tilde\rho_\pi(s) := \sum_a \tilde\mu_\pi(s,a) = \sum_{t=0}^\infty \gamma^t \Pr_\pi(s_t=s).
+\tilde\rho_\pi(s) := \sum_a \tilde\mu_\pi(s,a) = \sum_{t=0}^\infty \gamma^t \Pr{\pi}(s_t=s).
 $$
 
 So \\(\tilde\mu_\pi(s,a) = \tilde\rho_\pi(s)\,\pi(a\mid s)\\).
@@ -336,5 +338,5 @@ $$
 = \mathbb{E}_{s_0\sim d_0}[w(s_0)].
 $$
 
-No \\(\pi\\) remains. \\(\square\\)
+No \\(\pi\\) remains.
 
