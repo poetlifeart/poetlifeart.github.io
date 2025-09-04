@@ -26,7 +26,7 @@ layout: post
 
 
 In this post, we walk through the step-by-step derivations of some of the math in the 
-paper [ Offline Reinforcement Learning: Tutorial, Review, and Perspectives on Open Problems](https://arxiv.org/abs/2005.01643), at times provide a deeper discussion and correct minor mistakes and typoes in that paper. 
+paper [ Imitating Language via Scalable Inverse Reinforcement Learning](https://arxiv.org/pdf/2409.01369), at times provide a deeper discussion and correct minor mistakes and typoes in that paper. 
 
 
 Starting on page 3. 
