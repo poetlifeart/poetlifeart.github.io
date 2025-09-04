@@ -134,6 +134,55 @@ D_f(s,a) = \sup_{g: S\times A \to \operatorname{effdom}(f^{*})} D(s,a;g)
 $$
 
 
+Next note there is a typo in 9 and the second term on the right should be discounted by \\(\gamma\\) not by \\(\lambda\\). We prove it below: 
+
+**Claim (soft Bellman optimality identity).** For entropy temperature \\(\lambda>0\\) and discount \\(\gamma\in(0,1)\\), the soft-optimal pair \\((v_r,\pi_r)\\) for reward \\(r\\) satisfies, for all \\(s\in S, a\in A\\),
+
+$$
+r(s,a)\;-\;\lambda \log \pi_r(a\mid s)
+\;=\;
+v_r(s)\;-\;\gamma\,\mathbb{E}_{s'\sim P(\cdot\mid s,a)}[\,v_r(s')\,].
+$$
+
+**Proof.** Define the soft state value and state–action value as
+
+$$
+Q_r(s,a)\;:=\;r(s,a)\;+\;\gamma\,\mathbb{E}_{s'\sim P(\cdot\mid s,a)}[\,v_r(s')\,],
+\qquad
+v_r(s)\;:=\;\max_{\pi(\cdot\mid s)}\;\mathbb{E}_{a\sim \pi(\cdot\mid s)}\!\big[\,Q_r(s,a)\;-\;\lambda \log \pi(a\mid s)\,\big].
+$$
+
+The inner maximization is strictly concave in \\(\pi(\cdot\mid s)\\), yielding the Gibbs optimum
+
+$$
+\pi_r(a\mid s)\;=\;\frac{\exp(Q_r(s,a)/\lambda)}{\sum_{b}\exp(Q_r(s,b)/\lambda)},
+\qquad
+v_r(s)\;=\;\lambda \log \sum_{b}\exp\!\big(Q_r(s,b)/\lambda\big).
+$$
+
+Taking logs of \\(\pi_r\\) and rearranging,
+
+$$
+-\lambda \log \pi_r(a\mid s)\;=\;v_r(s)\;-\;Q_r(s,a).
+$$
+Substitute \\(Q_r(s,a)=r(s,a)+\gamma\,\mathbb{E}_{s'}[v_r(s')]\\) to get
+
+$$
+r(s,a)\;-\;\lambda \log \pi_r(a\mid s)\;=\;v_r(s)\;-\;\gamma\,\mathbb{E}_{s'}[v_r(s')],
+$$
+
+as claimed. 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
