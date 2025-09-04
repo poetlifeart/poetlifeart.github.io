@@ -63,7 +63,7 @@ Factorize occupancy as
 
 $$\mu_\pi(s,a)=\rho_\pi(s)\pi(a|s),$$
 
-\\(\mu_E(s,a)=\rho_E(s)\pi_E(a|s)\\).
+$$\mu_E(s,a)=\rho_E(s)\pi_E(a|s)$$.
 
 Plugging in gives
 
