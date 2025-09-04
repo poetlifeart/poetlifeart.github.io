@@ -173,6 +173,8 @@ $$
 
 as claimed. 
 
+Note qualtiy 9 is used twice once in 10 and again in 12. 
+
 
 
 
