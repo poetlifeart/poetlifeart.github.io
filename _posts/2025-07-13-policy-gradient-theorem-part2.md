@@ -340,3 +340,9 @@ $$
 
 No \\(\pi\\) remains.
 
+fianlly note in using soft Bellman optimality to drive 13, there is a typo; the correct expression is
+
+$$
+r_{(v_r,\pi_r)}(s,a) = v_r(s)+ \lambda\,\log \pi_r(a\mid s) - \mathbb{E}_{s'\sim P(\cdot\mid s,a)}\!\big[\,\gamma\, v_r(s')\,\big]
+$$
+
