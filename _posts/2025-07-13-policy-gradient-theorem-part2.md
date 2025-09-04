@@ -234,7 +234,7 @@ $$
 
 Since 
 
-$$(\mathbb{E}[w(s_{t+1})\mid s_t,a_t] = \mathbb{E}_\pi[w(s_{t+1})]$$, 
+$$\mathbb{E}[w(s_{t+1})\mid s_t,a_t] = \mathbb{E}_\pi[w(s_{t+1})]$$, 
 
 this is
 
