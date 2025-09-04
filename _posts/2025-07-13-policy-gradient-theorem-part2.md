@@ -232,11 +232,12 @@ $$
 = \sum_{t=0}^\infty \gamma^t\,\mathbb{E}_\pi\!\big[w(s_t) - \gamma\,\mathbb{E}[w(s_{t+1})\mid s_t,a_t]\big].
 $$
 
-Since 
+Apply the tower property (law of total expectation):
 
-$$\mathbb{E}[w(s_{t+1})\mid s_t,a_t] = \mathbb{E}_\pi[w(s_{t+1})]$$, 
-
-this is
+$$
+\mathbb{E}_\pi\!\big[\mathbb{E}[w(s_{t+1})\mid s_t,a_t]\big]
+= \mathbb{E}_\pi[w(s_{t+1})].
+$$
 
 $$
 \sum_{t=0}^\infty \gamma^t\big(\mathbb{E}_\pi[w(s_t)] - \gamma\,\mathbb{E}_\pi[w(s_{t+1})]\big).
