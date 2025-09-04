@@ -136,7 +136,7 @@ $$
 
 Next note there is a typo in 9 and the second term on the right should be discounted by \\(\gamma\\) not by \\(\lambda\\). We prove it below: 
 
-**Claim (soft Bellman optimality identity).** For entropy temperature \\(\lambda>0\\) and discount \\(\gamma\in(0,1)\\), the soft-optimal pair \\((v_r,\pi_r)\\) for reward \\(r\\) satisfies, for all \\(s\in S, a\in A\\),
+**Claim (soft Bellman optimality identity).** For any \\(\lambda>0\\) and discount \\(\gamma\in(0,1)\\), the soft-optimal pair \\((v_r,\pi_r)\\) for reward \\(r\\) satisfies, for all \\(s\in S, a\in A\\),
 
 $$
 r(s,a)\;-\;\lambda \log \pi_r(a\mid s)
@@ -152,13 +152,98 @@ Q_r(s,a)\;:=\;r(s,a)\;+\;\gamma\,\mathbb{E}_{s'\sim P(\cdot\mid s,a)}[\,v_r(s')\
 v_r(s)\;:=\;\max_{\pi(\cdot\mid s)}\;\mathbb{E}_{a\sim \pi(\cdot\mid s)}\!\big[\,Q_r(s,a)\;-\;\lambda \log \pi(a\mid s)\,\big].
 $$
 
-The inner maximization is strictly concave in \\(\pi(\cdot\mid s)\\), yielding the Gibbs optimum
+The maximization is strictly concave in \\(\pi(\cdot\mid s)\\), yielding the Gibbs optimum
 
 $$
 \pi_r(a\mid s)\;=\;\frac{\exp(Q_r(s,a)/\lambda)}{\sum_{b}\exp(Q_r(s,b)/\lambda)},
 \qquad
 v_r(s)\;=\;\lambda \log \sum_{b}\exp\!\big(Q_r(s,b)/\lambda\big).
 $$
+
+
+
+
+
+
+(Fix a state \\(s\\), discount \\(\gamma\in[0,1)\\), temperature \\(\lambda>0\\), and a value function \\(v:S\to\mathbb{R}\\).
+Define the soft state–action score
+
+
+$$
+Q(s,a) := r(s,a) + \gamma\,\mathbb{E}_{s'\sim P(\cdot\mid s,a)}[\,v(s')\,].
+$$
+
+We maximize over the simplex \\(\Delta(\mathcal{A})\\) the per-state objective
+
+$$
+F_s(\pi(\cdot\mid s)) \;=\; \sum_a \pi(a\mid s)\,Q(s,a) \;+\; \lambda\,H\!\big(\pi(\cdot\mid s)\big),
+$$
+
+where \\(H(\pi) = -\sum_a \pi(a)\log \pi(a)\\).
+
+Strict concavity: The entropy \\(H\\) is strictly concave on the probability simplex, and
+\\(\sum_a \pi(a\mid s)Q(s,a)\\) is linear. Hence \\(F_s\\) is strictly concave. Equivalently, on the
+interior \\(\{\pi(a\mid s)>0\}\\), the Hessian is
+
+$$
+\frac{\partial^2 F_s}{\partial \pi(a\mid s)\,\partial \pi(b\mid s)}
+\;=\; -\,\lambda\,\frac{\delta_{ab}}{\pi(a\mid s)},
+$$
+
+which is negative definite on the tangent subspace \\(\{x:\sum_a x_a=0\}\\). Therefore the maximizer is unique and lies in the interior (so \\(\pi(a\mid s)>0\\) for all \\(a\\)).
+
+Gibbs optimum via KKT.
+Introduce the Lagrangian with multiplier \\(\alpha_s\\) for \\(\sum_a \pi(a\mid s)=1\\):
+
+$$
+\mathcal{L}(\pi,\alpha_s)
+= \sum_a \pi(a\mid s)Q(s,a) + \lambda\Big(-\sum_a \pi(a\mid s)\log \pi(a\mid s)\Big)
++ \alpha_s\Big(\sum_a \pi(a\mid s)-1\Big).
+$$
+
+Stationarity gives, for each \\(a\\),
+
+$$
+0 \;=\; \frac{\partial \mathcal{L}}{\partial \pi(a\mid s)}
+= Q(s,a) - \lambda(\log \pi(a\mid s)+1) + \alpha_s.
+$$
+
+Thus
+
+$$
+\log \pi(a\mid s) \;=\; \frac{Q(s,a)}{\lambda} + \frac{\alpha_s-\lambda}{\lambda}
+\;\;\Longrightarrow\;\;
+\pi(a\mid s) \;=\; \frac{\exp\!\big(Q(s,a)/\lambda\big)}{\sum_{b}\exp\!\big(Q(s,b)/\lambda\big)}.
+$$
+
+This is the (unique) Gibbs/softmax optimum.
+
+
+Taking logs and rearranging (soft Bellman identities).
+
+Let
+
+$$
+v(s) \;:=\; \lambda \log \sum_{b}\exp\!\big(Q(s,b)/\lambda\big)
+\quad\Longrightarrow\quad
+\log \pi(a\mid s) \;=\; \frac{Q(s,a) - v(s)}{\lambda}.
+$$
+
+Substitute \\(Q(s,a)=r(s,a)+\gamma\,\mathbb{E}[v(s')\mid s,a]\\) to obtain, for all \\((s,a)\\),
+
+$$
+r(s,a) \;-\; \lambda \log \pi(a\mid s)
+\;=\; v(s) \;-\; \gamma\,\mathbb{E}_{s'\mid s,a}[\,v(s')\,],
+$$
+
+which is the soft Bellman optimality relation. (Equivalently, \\(v(s)=\lambda\log\sum_a \exp(Q(s,a)/\lambda)\\).)
+
+Note: If \\(\lambda=0\\), \\(F_s\\) reduces to a linear program and the maximizer is the deterministic argmax of \\(Q(s,\cdot)\\); strict concavity and the Gibbs form require \\(\lambda>0\\).
+)
+
+
+
+
 
 Taking logs of \\(\pi_r\\) and rearranging,
 
@@ -225,7 +310,7 @@ $$
 
 In particular, the value is independent of \\(\pi\\).
 
-**Proof A (time-unrolling).**
+**Proof (time-unrolling).**
 
 $$
 \sum_{s,a}\tilde\mu_\pi(s,a)\Psi_w(s,a)
