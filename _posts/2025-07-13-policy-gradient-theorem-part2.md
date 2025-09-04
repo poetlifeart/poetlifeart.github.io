@@ -111,7 +111,7 @@ $$
 Next in 5 note that we have pointwise fucntion of state and action:
 
 $$
-D(s,a) = -\mathbb{E}_{\mu_E}\!\big[f^{*}(g(s,a))\big] \;+\; \mathbb{E}_{\mu_\pi}\!\big[g(s,a)\big]k,
+D(s,a) = -\mathbb{E}_{\mu_E}\!\big[f^{*}(g(s,a))\big] \;+\; \mathbb{E}_{\mu_\pi}\!\big[g(s,a)\big],
 $$
 
 such that The variational representation requires that the discriminator function \\(g:S\times A \to \mathbb{R}\\) satisfies
@@ -127,9 +127,7 @@ $$
 \operatorname{effdom}(f^{*}) := \{\, y \in \mathbb{R} \;\mid\; f^{*}(y) < \infty \,\}.
 $$
 
-In particular, \\(g\\) will include functions that are "nearly onto", except at infinite values \\(\operatorname{effdom}(f^{*})\\). 
-
-Then 
+In particular, \\(g\\) will include functions that are "nearly onto", except at infinite values. Then 
 
 $$
 D_f(s,a) = \sup_{g: S\times A \to \operatorname{effdom}(f^{*})} D(s,a;g) 
