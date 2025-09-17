@@ -184,7 +184,7 @@ Before any variational trick, imitation is ``minimize a divergence between occup
 
 
 .................................
-Short answer: almost all modern IRL variants admit an energy-based model (EBM) view—especially MaxEnt / causal MaxEnt, Guided Cost Learning (GCL), AIRL, and adversarial imitation methods. Some classical margin/LP formulations are non-probabilistic but can be recovered as zero-temperature limits of EBMs.
+almost all modern IRL variants admit an energy-based model (EBM) view—especially MaxEnt / causal MaxEnt, Guided Cost Learning (GCL), AIRL, and adversarial imitation methods. Some classical margin/LP formulations are non-probabilistic but can be recovered as zero-temperature limits of EBMs.
 
 Core EBM template. Define an energy \\( E_\theta(x) \\) over \\( x \\) (either a whole trajectory or a state–action item). The unnormalized density is \\( \exp(-E_\theta(x)) \\) with partition \\( Z(\theta) \\). Learning seeks \\( \theta \\) that makes expert data likely; methods differ by the choice of \\( x \\), the parameterization of \\( E_\theta \\), and how \\( Z(\theta) \\) (or its gradient) is handled.
 
