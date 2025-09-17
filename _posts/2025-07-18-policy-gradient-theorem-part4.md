@@ -28,120 +28,151 @@ layout: post
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 
-In this post, we walk through the step-by-step derivations of some of the math in the 
-paper [ Offline Reinforcement Learning: Tutorial, Review, and Perspectives on Open Problems](https://arxiv.org/abs/2005.01643), at times provide a deeper discussion and correct minor mistakes and typoes in that paper. 
 
 
-
-
-## 3. Introducing the Reward-to-Go (Causality)
-
-Only future rewards depend on \\(a_t\\). Dropping past rewards:
-(mathematically if you write out the integral terms that do not depend on the integrator 
-factor out and you are left with the gradient of integral of a probability which is the constant 1 and hence zero)
+Initial optimization problem (before any variational trick)
+We want a policy whose (discounted) occupancy measure matches the expert's. Define
 
 $$
-\nabla_{\theta}J(\theta)
-= \sum_{t=0}^{H}\mathbb{E}_{\tau}\Bigl[\nabla_{\theta}\log\pi_{\theta}(a_t\mid s_t)\,
-\underbrace{\sum_{t'=t}^{H}\gamma^{t'}r(s_{t'},a_{t'})}_{\text{reward‐to‐go}}\Bigr].
+\rho_\pi(s,a) \;=\; (1-\gamma)\sum_{t=0}^{\infty}\gamma^t\,\Pr_{\pi}\!\big(s_t=s,\,a_t=a\big).
 $$
 
-Factor out \\(\gamma^t\\):
+A clean imitation objective is ``occupancy matching'' with entropy regularization:
 
 $$
-
-= \sum_{t=0}^{H}\mathbb{E}_{\tau}\Bigl[\gamma^t\,\nabla_{\theta}\log\pi_{\theta}(a_t\mid s_t)\,
-\sum_{t'=t}^{H}\gamma^{\,t'-t}r(s_{t'},a_{t'})\Bigr].
+\min_{\pi}\; \mathcal{D}\big(\rho_E \,\|\, \rho_\pi\big)\;-\;\lambda\,\mathcal H(\pi),
 $$
 
-Add a Baseline (As to what a baseline is and why we subtract see pp 329 of Sutton, but here we give the proof)}
-
-Subtract a baseline \\(b(s_t)\\):
-$$
-\nabla_{\theta}J(\theta)
-= \sum_{t=0}^{H}\mathbb{E}_{\tau}\Bigl[\gamma^t\,\nabla_{\theta}\log\pi_{\theta}(a_t\mid s_t)\,
-\Bigl(\sum_{t'=t}^{H}\gamma^{\,t'-t}r(s_{t'},a_{t'}) - b(s_t)\Bigr)\Bigr].
-$$
-
-
-proof that you can subtract the base so long as it is a function of state alone:
-
+where \\(mathcal{D}\\) is any statistical divergence between distributions on \\( (s,a) \\). Choosing \\(\mathcal{D}=\mathrm{JS}\\) gives
 
 $$
-\begin{align*}
-\nabla_{\theta} J(\pi_{\theta}) 
-&= \mathbb{E}_{\tau\sim p_{\pi_{\theta}}(\tau)}\left[
-\sum_{t=0}^{H}\gamma^{t}\nabla_{\theta}\log\pi_{\theta}(a_{t}|s_{t})\left(\sum_{t'=t}^{H}\gamma^{t'-t}r(s_{t'},a_{t'}) - b(s_{t})\right)
-\right]
-\end{align*}
+\min_{\pi}\; 2\,\mathrm{JS}\!\big(\rho_E \,\|\, \rho_\pi\big)\;-\;\lambda\,\mathcal H(\pi).
 $$
 
-We explicitly verify that the baseline is unbiased:
+This is the \emph{pre-variational} formulation. Later we rewrite the JS term via a supremum over an auxiliary function (the discriminator), which yields the familiar GAN/GAIL saddle-point training. A useful identity we employ when turning occupancy expectations into RL returns is:
 
 $$
-\begin{align*}
-&\mathbb{E}_{\tau\sim p_{\pi_{\theta}}(\tau)}\left[
-\sum_{t=0}^{H}\gamma^{t}\nabla_{\theta}\log\pi_{\theta}(a_{t}|s_{t}) b(s_{t})
-\right] \\
-&\quad= \sum_{t=0}^{H}\gamma^{t}\mathbb{E}_{\tau\sim p_{\pi_{\theta}}(\tau)}\left[
-b(s_{t})\mathbb{E}_{a_{t}\sim\pi_{\theta}(a_{t}|s_{t})}\left[\nabla_{\theta}\log\pi_{\theta}(a_{t}|s_{t})\middle|s_{t}\right]
-\right] \\
-&\quad= \sum_{t=0}^{H}\gamma^{t}\mathbb{E}_{\tau\sim p_{\pi_{\theta}}(\tau)}\left[
-b(s_{t})\int_{a_t}\pi_{\theta}(a_{t}|s_{t})\nabla_{\theta}\log\pi_{\theta}(a_{t}|s_{t})\,da_{t}
-\right] \\
-&\quad= \sum_{t=0}^{H}\gamma^{t}\mathbb{E}_{\tau\sim p_{\pi_{\theta}}(\tau)}\left[
-b(s_{t})\int_{a_t}\nabla_{\theta}\pi_{\theta}(a_{t}|s_{t})\,da_{t}
-\right] \\
-&\quad= \sum_{t=0}^{H}\gamma^{t}\mathbb{E}_{\tau\sim p_{\pi_{\theta}}(\tau)}\left[
-b(s_{t}) \cdot 0
-\right] \\
-&\quad= 0
-\end{align*}
+\mathbb{E}_{(s,a)\sim \rho_\pi}\![c(s,a)]
+\;=\; (1-\gamma)\,\mathbb{E}_{s_0\sim \rho_0}
+\mathbb{E}_{\pi,P}\!\Big[\sum_{t=0}^{\infty}\gamma^t\,c(s_t,a_t)\,\Big|\,s_0\Big].
 $$
 
+JS divergence in standard and expanded forms
+Let \\(P\\) and \\(Q\\) be distributions with densities \\(p(x)\\) and $q(x)$, and 
 
-
-Erratum note: finite‐ to infinite‐horizon carry–over typo
-
-In the finite‐horizon derivation we write
-$$
-\nabla_{\theta}
-= \sum_{t=0}^{H}
-\mathbb{E}_{s_{t}\sim d_{t}^{\pi},\,a_{t}\sim\pi_{\theta}}
-\bigl[\gamma^{t}\,\nabla_{\theta}\log\pi_{\theta}(a_{t}\mid s_{t})\,\hat{A}(s_{t},a_{t})\bigr].
-$$
-
-Here both the state‐distribution (\\(d_{t}^{\pi}\\) and the discount weight \\(\gamma^{t}\\) are explicitly indexed by \\(t\\).
-
-When passing to the infinite‐horizon form, those two pieces are folded into a single “discounted occupancy” measure
+$$M=\tfrac12(P+Q)$ with $m(x)=\tfrac12\big(p(x)+q(x)\big)$$.
 
 $$
-d^{\pi}(s)\;=\;(1-\gamma)\sum_{t=0}^{\infty}\gamma^{t}\,d_{t}^{\pi}(s),
+\mathrm{JS}(P\|Q)
+= \tfrac12\,\mathrm{KL}\!\big(P\|M\big) + \tfrac12\,\mathrm{KL}\!\big(Q\|M\big).
 $$
 
-We can now absorb the discount factor and the sum into the measure \\(d_{t}^{\pi}(s)\\) (tutorial characterizes this as "dropping" the discount factor but this is not really an accurate description)  so that the gradient can be written as
+Expanding and substituting \\(m(x)\\):
 
 $$
-\nabla_{\theta}J
-= \frac{1}{1-\gamma}\,
-\mathbb{E}_{s\sim d^{\pi},\,a\sim\pi_{\theta}}
-\bigl[\nabla_{\theta}\log\pi_{\theta}(a\mid s)\,\hat{A}(s,a)\bigr].
+\mathrm{JS}(P\|Q)
+= \tfrac12\,\mathbb{E}_{P}\!\left[\log\frac{p}{p+q}\right]
++ \tfrac12\,\mathbb{E}_{Q}\!\left[\log\frac{q}{p+q}\right]
++ \log 2.
 $$
 
-The stray subscript “\\(_t\\)” on the state distribution in the infinite‐horizon equation was simply a leftover from the finite‐horizon version. The correct infinite‐horizon line should read
-
+Equivalently,
 
 $$
-\nabla_{\theta}J
-= \frac{1}{1-\gamma}\,
-\mathbb{E}_{s\sim d^{\pi}(s),\,a\sim\pi_{\theta}(a\mid s)}
-\bigl[\nabla_{\theta}\log\pi_{\theta}(a\mid s)\,\hat{A}(s,a)\bigr],
+\mathbb{E}_{P}\!\left[\log\frac{p}{p+q}\right]
++ \mathbb{E}_{Q}\!\left[\log\frac{q}{p+q}\right]
+= 2\,\mathrm{JS}(P\|Q) - 2\log 2.
 $$
 
-with no time index on \\(d^{\pi}\\).
+Binary classification view and the GAN/GAIL discriminator
+Define a binary classification problem: draw \\(Y\in\{1,0\}\\) with prior $1/2$, then \\(X\mid(Y{=}1)\!\sim P\\), 
+\\(X\mid(Y{=}0)\!\sim Q\\). For any discriminator \\(D:\mathcal X\to(0,1)\\) estimating \\(\Pr(Y{=}1\mid X{=}x)\\), the (negative) expected log-likelihood (BCE) is
 
-While a simple time-dependent baseline \\(b_t = \frac{1}{N} \sum_{i=1}^N R_{i,t}\\) is often used to reduce variance in Monte Carlo policy gradient estimators, it does not represent a true value function \\(V(s_t) = \mathbb{E}[R_t \mid s_t]\\). This is because \\(b_t\\) marginalizes over all states \\(s_t\\) encountered at time \\(t\\) rather than conditioning on a specific state. Thus, it captures only the average return under the state visitation distribution \\(d_t(s)\\), not the expected return from a particular state \\(s_t = s\\). Although useful for variance reduction, this approach lacks the precision and generalization capabilities of a learned, state-dependent baseline.
+$$
+\mathcal{L}_{\mathrm{BCE}}(D)
+= -\mathbb{E}_{x\sim P}[\log D(x)] \;-\; \mathbb{E}_{x\sim Q}[\log(1-D(x))].
+$$
+
+Maximizing 
+
+$$\mathcal{J}(D):=\mathbb{E}_{P}[\log D]+\mathbb{E}_{Q}[\log(1-D)]$$
+
+yields the Bayes-optimal
+
+$$
+D^*(x) \;=\; \frac{p(x)}{p(x)+q(x)}.
+$$
+
+Plugging $D^*$ back,
+
+$$
+\max_{D}\ \mathcal{J}(D)
+= \mathbb{E}_{P}\!\left[\log\frac{p}{p+q}\right]
++ \mathbb{E}_{Q}\!\left[\log\frac{q}{p+q}\right]
+= -\log 4 + 2\,\mathrm{JS}(P\|Q).
+$$
+
+Hence
+
+$$
+\boxed{\ \max_{D}\ \mathbb{E}_{P}[\log D]+\mathbb{E}_{Q}[\log(1-D)]
+= -\log 4 + 2\,\mathrm{JS}(P\|Q)\ }.
+$$
+
+Where the variational step comes in
+The previous display is a variational characterization} of JS:
+
+$$
+2\,\mathrm{JS}(P\|Q) - \log 4
+\;=\;
+\sup_{D:\mathcal X\to(0,1)}
+\Big\{\mathbb{E}_{P}[\log D(X)] + \mathbb{E}_{Q}[\log(1-D(X))]\Big\}.
+$$
+
+That \\(\sup_D\\) is the variational step. In practice, we parametrize $D$ (NN) and maximize the empirical version. More generally, for any $f$-divergence,
+
+$$
+D_f(P\|Q)
+=\sup_{T}\ \mathbb{E}_{P}[T(X)] - \mathbb{E}_{Q}[f^*(T(X))],
+$$
+
+with $f^*$ the convex conjugate; the JS case with a logistic link recovers the GAN/GAIL discriminator.
+
+From divergence to practical BCE and sums
+Expectations become batch means. With samples \\(\{x_i^P\}_{i=1}^m\!\sim P$ and $\{x_j^Q\}_{j=1}^n\!\sim Q\\),
+
+$$
+\widehat{\mathcal{L}}_{\mathrm{BCE}}(D)
+= -\frac{1}{m}\sum_{i=1}^m \log D(x_i^P)
+\;-\;\frac{1}{n}\sum_{j=1}^n \log\big(1-D(x_j^Q)\big),
+$$
+
+and we take SGD steps on this batch mean to approximate the variational supremum.
+
+Connection to GAIL (imitation by occupancy matching)
+Let \\(P=\rho_E\\) and \\(Q=\rho_\pi\\) be expert and policy occupancies over \\((s,a) \\). Using the variational identity,
+
+$$
+\min_{\pi}\ \max_{D:(0,1)}\
+\mathbb{E}_{(s,a)\sim \rho_E}[\log D(s,a)]
++\mathbb{E}_{(s,a)\sim \rho_\pi}[\log(1-D(s,a))]
+-\lambda\,\mathcal H(\pi)
+$$
+
+is exactly 
+
+$$\min_{\pi}\; 2\,\mathrm{JS}(\rho_E\|\rho_\pi)-\lambda\mathcal H(\pi)$$. 
+
+In practice we alternate:
+(i) maximize empirical BCE over \\(D\\) (classification on expert vs.\ policy samples),
+(ii) update \\(\pi\\) with an RL optimizer using a reward formed from \\(D\\),
+e.g.
+
+$$r(s,a)=-\log(1-D(s,a))$ or $r(s,a)=\log\frac{D}{1-D}$$, 
+
+and compute advantages via time-sums (GAE) to drive the policy step.
 
 
+Before any variational trick, imitation is ``minimize a divergence between occupancies.'' The \emph{variational identity} for JS turns that into a GAN-style discriminator maximization, whose empirical version is just binary cross-entropy. Coupling that with an RL update on the policy (using a reward built from $D$) yields the GAIL training loop.
 
 
