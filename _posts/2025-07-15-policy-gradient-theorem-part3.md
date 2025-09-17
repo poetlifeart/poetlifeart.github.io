@@ -92,3 +92,137 @@ $$
 = \mathbb{E}_{(s,a,s')\sim \mu_E}\!\big[\delta_Q(s,a)^2\big]
 \;+\;(1-\gamma)\,\mathbb{E}_{s_0\sim \rho_0}\!\left[\log \sum_{a} e^{Q(s_0,a)}\right].
 $$
+
+
+
+
+Goal
+Show precisely how the Jensen--Shannon (JS) divergence turns into the GAN/GAIL discriminator objective (binary cross-entropy), and pinpoint where the variational step enters.
+
+JS divergence in standard and expanded forms
+
+Let \\(P\\) and \\(Q\\) be distributions on \\(\mathcal X\\) with densities \\(p(x)\\) and \\(q(x)\\). Define the mixture 
+
+\\(M=\tfrac12(P+Q)\\) with density \\(m(x)=\tfrac12\big(p(x)+q(x)\big)\\). By definition,
+
+$$
+\mathrm{JS}(P\|Q)
+= \tfrac12\,\mathrm{KL}\!\big(P\|M\big) + \tfrac12\,\mathrm{KL}\!\big(Q\|M\big).
+$$
+
+Expanding the KL terms and substituting \\(m(x)=\tfrac12(p(x)+q(x))\\),
+
+$$
+\mathrm{JS}(P\|Q)
+= \tfrac12\,\mathbb{E}_{x\sim P}\!\left[\log\frac{p(x)}{m(x)}\right]
++ \tfrac12\,\mathbb{E}_{x\sim Q}\!\left[\log\frac{q(x)}{m(x)}\right]
+= \tfrac12\,\mathbb{E}_{P}\!\left[\log\frac{p}{p+q}\right]
++ \tfrac12\,\mathbb{E}_{Q}\!\left[\log\frac{q}{p+q}\right]
++ \log 2.
+$$
+
+Equivalently,
+
+$$
+\mathbb{E}_{P}\!\left[\log\frac{p}{p+q}\right]
++ \mathbb{E}_{Q}\!\left[\log\frac{q}{p+q}\right]
+= 2\,\mathrm{JS}(P\|Q) - 2\log 2.
+$$
+
+Binary classification view and the GAN/GAIL discriminator
+
+Consider the binary classification problem:
+draw \\(Y\in\{1,0\}\\) with equal prior \\(1/2\\), then
+\\(X\mid (Y{=}1)\sim P\\) and \\(X\mid (Y{=}0)\sim Q\\).
+For any discriminator \\(D:\mathcal X\to(0,1)\\) intended to approximate \\(D(x)\approx \Pr(Y{=}1\mid X{=}x)\\), the (negative) expected log-likelihood (binary cross-entropy) is
+
+$$
+\mathcal{L}_{\mathrm{BCE}}(D)
+= -\mathbb{E}_{x\sim P}[\log D(x)] \;-\; \mathbb{E}_{x\sim Q}[\log(1-D(x))].
+$$
+
+Equivalently, maximizing
+
+$$\mathcal{J}(D) := \mathbb{E}_{x\sim P}[\log D(x)] + \mathbb{E}_{x\sim Q}[\log(1-D(x))]$$
+
+gives the Bayes-optimal classifier pointwise in \(x\):
+
+$$
+D^*(x) \;=\; \frac{p(x)}{p(x)+q(x)}.
+$$
+
+Plugging \\(D^*\\) back into \\(\mathcal{J}(D)\\) yields
+
+$$
+\max_{D}\ \mathcal{J}(D)
+= \mathbb{E}_{P}\!\left[\log\frac{p}{p+q}\right]
++ \mathbb{E}_{Q}\!\left[\log\frac{q}{p+q}\right]
+= -\log 4 + 2\,\mathrm{JS}(P\|Q).
+$$
+
+Thus,
+
+$$
+\boxed{\ \max_{D}\ \mathbb{E}_{P}[\log D] + \mathbb{E}_{Q}[\log(1-D)]
+= -\log 4 + 2\,\mathrm{JS}(P\|Q)\ }.
+$$
+
+This is the canonical GAN/GAIL discriminator objective: maximizing the discriminator's expected log-likelihood is \emph{exactly} maximizing a tight lower bound on \\(2\,\mathrm{JS}(P\|Q)-\log 4\\).
+
+Where the variational step comes in
+
+The equality above is a variational characterization of JS divergence: it rewrites the divergence as a supremum over an auxiliary function \\(D\\):
+
+$$
+2\,\mathrm{JS}(P\|Q) - \log 4
+\;=\;
+\sup_{D:\mathcal X\to(0,1)}
+\Big\{
+\mathbb{E}_{x\sim P}[\log D(x)] + \mathbb{E}_{x\sim Q}[\log(1-D(x))]
+\Big\}.
+$$
+
+The ``\\(\sup_D\\)'' is the variational operation. In practice, GANs/GAIL \emph{parametrize} \\(D\\) (e.g., a neural net) and maximize the empirical version of the RHS.
+
+More generally, for an \\(f\\)-divergence one has the variational \\(f\\)-GAN form
+
+$$
+D_f(P\|Q)
+=\sup_{T}\ \mathbb{E}_{P}[T(X)] - \mathbb{E}_{Q}[f^*(T(X))],
+$$
+
+where \(f^*\) is the convex conjugate of \(f\). The JS case with the logistic link reduces to the discriminator objective above.
+
+From divergence to the practical BCE and sums
+
+The theoretical expectations become empirical averages over minibatches. Given samples \(\{x_i^P\}_{i=1}^m\sim P\) and \(\{x_j^Q\}_{j=1}^n\sim Q\),
+
+$$
+\widehat{\mathcal{L}}_{\mathrm{BCE}}(D)
+= -\frac{1}{m}\sum_{i=1}^m \log D(x_i^P)
+\;-\;\frac{1}{n}\sum_{j=1}^n \log\big(1-D(x_j^Q)\big),
+$$
+
+and one performs gradient steps on this batch mean to approximate the variational supremum.
+
+Connection to GAIL (imitation by occupancy matching
+
+Let \\(\rho_E\\) and \\(\rho_\pi\\) denote the expert and current-policy (discounted) occupancy measures over \\((s,a)\\).
+GAIL solves
+
+$$
+\min_{\pi}\ \max_{D:(0,1)}\
+\mathbb{E}_{(s,a)\sim \rho_E}[\log D(s,a)]
++\mathbb{E}_{(s,a)\sim \rho_\pi}[\log(1-D(s,a))]
+-\lambda\,\mathcal H(\pi).
+$$
+
+By the variational identity above, the inner maximization is exactly the JS discriminator problem with \\(P=\rho_E\\), \\(Q=\rho_\pi\\). Thus the outer minimization over \\(\pi\\) is minimizing \\(2\,\mathrm{JS}(\rho_E\|\rho_\pi)-\lambda\mathcal H(\pi)\\), i.e., occupancy matching with entropy regularization. In practice, one alternates:
+(i) maximize the empirical BCE over \\(D\\) (classification on expert vs policy samples), and
+(ii) update \\(\pi\\) with an RL optimizer using a reward formed from \\(D\\), e.g.,
+\\(r(s,a)=-\log(1-D(s,a))\\) or \\(r(s,a)=\log\frac{D}{1-D}\\).
+
+The GAN/GAIL discriminator objective is not a heuristic: it is the exact variational form of the JS divergence. ``Variational'' enters at the supremum over functions \\(D\\). Implementations replace expectations by batch sums/means and parametrize \\(D\\), yielding the familiar binary cross-entropy training loop.
+
+
+
