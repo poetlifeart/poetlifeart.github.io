@@ -253,3 +253,97 @@ Bottom line: with a finite-temperature (MaxEnt/Boltzmann) rationality assumption
 
 
 
+......................
+
+MLE view of IRL (as EBMs). Given expert demonstrations \( \mathcal{D}=\{\tau_i\} \), model a trajectory density with energy (negative reward) and known dynamics:
+
+$$
+p_\theta(\tau)
+\;\propto\;
+p(s_0)\,\prod_{t} P(s_{t+1}\mid s_t,a_t)\,
+\exp\!\Big(\sum_{t} r_\theta(s_t,a_t)\Big).
+$$
+
+Maximum likelihood estimates \( \theta \) by
+
+$$
+\max_\theta\; \sum_{\tau\in\mathcal D} \log p_\theta(\tau)
+\;\;=\;\;
+\mathbb E_{\tau\sim \mathcal D}\Big[\sum_t r_\theta(s_t,a_t)\Big]
+\;-\;\log Z(\theta),
+$$
+
+where \( Z(\theta)=\sum_{\tau} p(s_0)\prod_t P(s_{t+1}\mid s_t,a_t)\exp(\sum_t r_\theta) \).
+The gradient takes the standard EBM form
+
+$$
+\nabla_\theta \mathcal L(\theta)
+\;=\;
+\underbrace{\mathbb E_{\tau\sim \mathcal D}\Big[\sum_t \nabla_\theta r_\theta(s_t,a_t)\Big]}_{\text{data term}}
+\;-\;
+\underbrace{\mathbb E_{\tau\sim p_\theta}\Big[\sum_t \nabla_\theta r_\theta(s_t,a_t)\Big]}_{\text{model term}}.
+$$
+
+For linear rewards \( r_\theta(s,a)=\theta^\top \phi(s,a) \), this reduces to \(\nabla_\theta \mathcal L=\mathbb E_{\mathcal D}[\sum_t\phi]-\mathbb E_{p_\theta}[\sum_t\phi]\): match expert feature expectations (MaxEnt IRL).
+
+Soft Bellman / local partition. The partition can be expressed via soft value functions:
+
+$$
+Q^\text{soft}(s,a)=r_\theta(s,a)+\gamma\,\mathbb E_{s'}[V^\text{soft}(s')],\qquad
+V^\text{soft}(s)=\log\!\sum_a e^{Q^\text{soft}(s,a)}.
+$$
+
+Then the Boltzmann-rational policy is
+
+$$
+\pi_\theta(a\mid s)\;\propto\; \exp\!\big(Q^\text{soft}(s,a)-V^\text{soft}(s)\big),
+$$
+
+and MLE over trajectories is equivalent to entropy-regularized RL with reward \( r_\theta \).
+
+Unknown/large dynamics \(\Rightarrow\) sampling estimators. The model expectation is intractable; use rollouts and importance sampling. Guided Cost Learning (GCL) constructs a mixture sampler \( \mu(\tau) \) (current policy + demo density estimate) and estimates
+
+$$
+\mathbb E_{\tau\sim p_\theta}[f(\tau)]
+\;\approx\;
+\frac{\mathbb E_{\tau\sim \mu}\big[w_\theta(\tau)\,f(\tau)\big]}{\mathbb E_{\tau\sim \mu}[w_\theta(\tau)]},
+\qquad
+w_\theta(\tau)\;\propto\;\frac{p_\theta(\tau)}{\mu(\tau)}\;\propto\;\frac{\exp(\sum_t r_\theta)}{\mu(\tau)}.
+$$
+
+This gives a practical MLE (forward KL) procedure with a learned sampler (policy optimization inner loop).
+
+Adversarial / NCE view (AIRL). Rather than computing \( \log Z \), learn the density ratio by logistic regression (NCE):
+
+$$
+\log\frac{p_E(x)}{p_\theta(x)}\;\approx\;\log\frac{D(x)}{1-D(x)},
+$$
+
+and in AIRL constrain the logit
+
+$$
+\log\frac{D}{1-D}
+\;=\;
+f_{\theta,\phi}(s,a,s')
+\;=\;
+r_\theta(s,a)+\gamma\,h_\phi(s')-h_\phi(s),
+$$
+
+so the inner classifier approximates the likelihood ratio, while \( r_\theta \) is the portable reward. This is an implicit MLE surrogate: maximize a contrastive lower bound rather than the exact likelihood.
+
+GAIL vs MLE. GAIL does \(\min_\pi 2\,\mathrm{JS}(\rho_E\|\rho_\pi)-\lambda\mathcal H(\pi)\) via a discriminator; it does \emph{not} maximize a trajectory likelihood (not an MLE), but its inner step is still density-ratio estimation. MLE corresponds to minimizing forward KL \( \mathrm{KL}(p_E\|p_\theta) \) (mode-covering); adversarial JS behaves differently (often less mode-covering).
+
+IQ-Learn / soft Q IRL as MLE-like. Quadratic (e.g., \( \chi^2 \)) surrogates give practical convex objectives for the soft-Bellman-consistent \(Q\), e.g.
+
+$$
+\min_Q\;\; \mathbb E_{(s,a,s')\sim \mu_E}\!\big[\delta_Q(s,a)^2\big]\;+\;(1-\gamma)\,\mathbb E_{s_0\sim \rho_0}\!\Big[\log\sum_a e^{Q(s_0,a)}\Big],
+\quad
+\delta_Q(s,a)=Q(s,a)-\big(r(s,a)+\gamma\,\mathbb E_{s'}V(s')\big),
+$$
+
+which behaves like a regularized MLE in the soft-RL family.
+
+Takeaways. MaxEnt/causal IRL is \emph{exactly} MLE of an EBM over trajectories/occupancies; GCL implements MLE with importance sampling; AIRL replaces explicit \( \log Z \) with contrastive (NCE/GAN) estimation of the likelihood ratio while structuring the logit to expose a reward; GAIL is not MLE but minimizes JS between occupancies. In all cases, the EBM/MLE lens clarifies the objective (forward KL vs JS), the partition handling (DP, IS, or NCE), and the role of the policy as a sampler.
+
+
+
