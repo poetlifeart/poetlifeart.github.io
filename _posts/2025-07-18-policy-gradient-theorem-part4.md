@@ -346,4 +346,107 @@ which behaves like a regularized MLE in the soft-RL family.
 Takeaways. MaxEnt/causal IRL is \emph{exactly} MLE of an EBM over trajectories/occupancies; GCL implements MLE with importance sampling; AIRL replaces explicit \( \log Z \) with contrastive (NCE/GAN) estimation of the likelihood ratio while structuring the logit to expose a reward; GAIL is not MLE but minimizes JS between occupancies. In all cases, the EBM/MLE lens clarifies the objective (forward KL vs JS), the partition handling (DP, IS, or NCE), and the role of the policy as a sampler.
 
 
+................................
+
+Goal: show how a standard maximum-likelihood estimation (MLE) problem can be written as an equivalent energy-based model (EBM) learning problem.
+
+Start with any positive (possibly unnormalized) model
+with base measure \\( b(x) \\) (independent of \\( \theta \\)) and score \\( s_\theta(x) \\):
+ 
+$$
+\tilde p_\theta(x) \;=\; b(x)\,\exp\!\big(s_\theta(x)\big).
+$$
+ 
+The normalized likelihood is
+ 
+$$
+p_\theta(x) \;=\; \frac{\tilde p_\theta(x)}{Z(\theta)},
+\qquad
+Z(\theta)=\int b(u)\,e^{s_\theta(u)}\,du.
+$$
+ 
+Define the energy
+ 
+$$
+E_\theta(x)\;:=\; -\,s_\theta(x)\;-\;\log b(x).
+$$
+ 
+Then \\( p_\theta \\) is exactly an EBM:
+ 
+$$
+p_\theta(x)\;=\;\frac{\exp\!\big(-E_\theta(x)\big)}{\displaystyle \int \exp\!\big(-E_\theta(u)\big)\,du}.
+$$
+ 
+Given data \\( \mathcal D=\{x_i\}_{i=1}^n \\), the MLE objective
+ 
+$$
+\mathcal L(\theta)\;=\;\frac{1}{n}\sum_{i=1}^n \log p_\theta(x_i)
+$$
+ 
+becomes, after substituting the EBM form,
+ 
+$$
+\mathcal L(\theta)
+\;=\;
+-\;\mathbb E_{x\sim \hat p_{\mathcal D}}\!\big[E_\theta(x)\big]
+\;-\;\log Z(\theta),
+$$
+ 
+with gradient in canonical EBM form
+ 
+$$
+\nabla_\theta \mathcal L(\theta)
+\;=\;
+-\;\mathbb E_{x\sim \hat p_{\mathcal D}}\!\big[\nabla_\theta E_\theta(x)\big]
+\;+\;
+\mathbb E_{x\sim p_\theta}\!\big[\nabla_\theta E_\theta(x)\big].
+$$
+ 
+Exponential family / feature matching case. If \\( s_\theta(x)=\theta^\top \phi(x) \\), then
+ 
+$$
+E_\theta(x)= -\,\theta^\top \phi(x)-\log b(x),
+\qquad
+\nabla_\theta \mathcal L(\theta)=\mathbb E_{\hat p_{\mathcal D}}[\phi(x)]-\mathbb E_{p_\theta}[\phi(x)],
+$$
+ 
+i.e., MLE matches expert feature expectations (MaxEnt IRL special case).
+
+Trajectory models (IRL). Let \\( x=\tau=(s_0,a_0,\dots,s_T) \\) and
+ 
+$$
+\tilde p_\theta(\tau)\;=\;\rho_0(s_0)\,\prod_{t=0}^{T-1} P(s_{t+1}\mid s_t,a_t)\;\exp\!\Big(\sum_{t=0}^{T-1} r_\theta(s_t,a_t)\Big).
+$$
+ 
+Here \\( b(\tau)=\rho_0(s_0)\prod_t P(s_{t+1}\mid s_t,a_t) \\) and \\( s_\theta(\tau)=\sum_t r_\theta(s_t,a_t) \\).
+The energy is
+ 
+$$
+E_\theta(\tau)\;=\;-\sum_{t=0}^{T-1} r_\theta(s_t,a_t)\;-\;\log \rho_0(s_0)\;-\;\sum_{t=0}^{T-1}\log P(s_{t+1}\mid s_t,a_t),
+$$
+ 
+and the MLE gradient reduces to
+ 
+$$
+\nabla_\theta \mathcal L(\theta)
+\;=\;
+\mathbb E_{\tau\sim \hat p_{\mathcal D}}\!\Big[\sum_t \nabla_\theta r_\theta(s_t,a_t)\Big]
+\;-\;
+\mathbb E_{\tau\sim p_\theta}\!\Big[\sum_t \nabla_\theta r_\theta(s_t,a_t)\Big],
+$$
+ 
+since \\( b(\tau) \\) does not depend on \\( \theta \\). This is the MaxEnt IRL EBM view: learn \\( r_\theta \\) so that model feature sums match expert feature sums, with the partition handled via soft DP, sampling (GCL), or contrastive/NCE surrogates (AIRL).
+
+Finally, MLE equals minimizing forward KL:
+ 
+$$
+\max_\theta \mathcal L(\theta)
+\;\;\Longleftrightarrow\;\;
+\min_\theta \mathrm{KL}\!\big(\hat p_{\mathcal D}\,\|\,p_\theta\big),
+$$
+ 
+which in the EBM view yields the same data-minus-model gradient above.
+
+
+
 
