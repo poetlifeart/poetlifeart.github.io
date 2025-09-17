@@ -176,3 +176,80 @@ and compute advantages via time-sums (GAE) to drive the policy step.
 Before any variational trick, imitation is ``minimize a divergence between occupancies.'' The \emph{variational identity} for JS turns that into a GAN-style discriminator maximization, whose empirical version is just binary cross-entropy. Coupling that with an RL update on the policy (using a reward built from $D$) yields the GAIL training loop.
 
 
+
+
+
+
+
+
+
+.................................
+Short answer: almost all modern IRL variants admit an energy-based model (EBM) view—especially MaxEnt / causal MaxEnt, Guided Cost Learning (GCL), AIRL, and adversarial imitation methods. Some classical margin/LP formulations are non-probabilistic but can be recovered as zero-temperature limits of EBMs.
+
+Core EBM template. Define an energy \\( E_\theta(x) \\) over \\( x \\) (either a whole trajectory or a state–action item). The unnormalized density is \\( \exp(-E_\theta(x)) \\) with partition \\( Z(\theta) \\). Learning seeks \\( \theta \\) that makes expert data likely; methods differ by the choice of \\( x \\), the parameterization of \\( E_\theta \\), and how \\( Z(\theta) \\) (or its gradient) is handled.
+
+$$
+p_\theta(x)=\frac{\exp\!\big(-E_\theta(x)\big)}{Z(\theta)},\qquad
+Z(\theta)=\int \exp\!\big(-E_\theta(x)\big)\,dx.
+$$
+
+MaxEnt / causal MaxEnt IRL (Ziebart ’08/’10). Energy is negative cumulative reward along a trajectory \\( \tau=(s_0,a_0,\dots,s_T) \\):
+
+$$
+E_\theta(\tau)=-\sum_{t=0}^{T} r_\theta(s_t,a_t),\qquad
+p_\theta(\tau)\propto \exp\!\Big(\sum_{t=0}^{T} r_\theta(s_t,a_t)\Big).
+$$
+
+Partition handling via soft dynamic programming (log-sum-exp / soft Bellman backups).
+
+Guided Cost Learning (GCL) / GAN-GCL (Finn et al. ’16). Use a learned trajectory score \\( f_\theta(\tau) \\) as energy:
+
+$$
+p_\theta(\tau)\propto \exp\!\big(f_\theta(\tau)\big),
+$$
+
+and estimate \\( \nabla_\theta \log Z(\theta) \\) with importance sampling from mixture samplers (policy rollouts). GAN-style contrastive training reduces variance—still an EBM view.
+
+AIRL (Fu, Luo, Levine ’18). Constrain the discriminator log-odds (logit) to a reward+shaping form:
+
+$$
+\log\frac{D}{1-D}=f_{\theta,\phi}(s,a,s')=r_\theta(s,a)+\gamma\,h_\phi(s')-h_\phi(s).
+$$
+
+This is an implicit EBM over \\( (s,a,s') \\) with energy \\( -f_{\theta,\phi} \\). After training, \\( r_\theta \\) (ideally state-only) is a portable per-step energy/reward; \\( h_\phi \\) captures potential-based shaping.
+
+GAIL (Ho \& Ermon ’16). Not IRL (no explicit reward recovery), but still EBM-flavored: minimize a divergence between expert and policy occupancies \\( \rho_E,\rho_\pi \\) via a discriminator whose log-odds estimates \\( \log \tfrac{\rho_E}{\rho_\pi} \\). That’s classic noise-contrastive estimation (NCE) / density-ratio learning—an implicit EBM with a learned sampler.
+
+Feature-matching IRL (Abbeel \& Ng ’04). With a MaxEnt (Boltzmann) assumption one gets a linear-energy trajectory model
+
+$$
+E_w(\tau)=-\,w^\top \sum_t \phi(s_t,a_t),\qquad
+p_w(\tau)\propto \exp\!\big(w^\top \Phi(\tau)\big).
+$$
+
+The classical margin/LP variant is the zero-temperature limit (\\( \beta\!\to\!\infty \\)) of this EBM.
+
+Bayesian IRL / Boltzmann rationality. Local action likelihoods are EBMs,
+
+$$
+p(a\mid s,\theta)\propto \exp\!\{\beta\,Q^*_\theta(s,a)\},
+$$
+
+and the trajectory likelihood is their product across time given dynamics.
+
+IQ-Learn / Soft Q-IRL / VICE-style methods. Soft Bellman operators make the per-state partition explicit via log-sum-exp:
+
+$$
+V(s)=\log \sum_{a} e^{\,Q(s,a)},
+$$
+
+again an energy view at the action level with a tractable local partition.
+
+What is not automatically an EBM? Pure max-margin / LP IRL without an entropy (Boltzmann) assumption is non-probabilistic by construction, but can often be viewed as the zero-temperature limit of a corresponding MaxEnt EBM. Some inverse optimal control formulations that solve KKT/occupancy constraints directly can remain non-probabilistic unless a Boltzmann/MaxEnt link is added.
+
+Why the EBM perspective helps: it unifies IRL as (contrastive) likelihood learning over expert data; clarifies why discriminators work (they estimate density ratios, i.e., log-energy differences); makes reward shaping explicit as adding potentials that do not change optima; and separates how methods handle the partition: DP (MaxEnt), importance sampling (GCL), or NCE/GAN (AIRL/GAIL).
+
+Bottom line: with a finite-temperature (MaxEnt/Boltzmann) rationality assumption, virtually all IRL methods of practical interest admit an EBM view—trajectory-level or state–action level. The essential design choices are: the energy parameterization, the sampler, and how you estimate/avoid \\( Z(\theta) \\).
+
+
+
