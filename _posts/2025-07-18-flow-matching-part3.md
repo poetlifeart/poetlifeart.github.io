@@ -68,7 +68,7 @@ $$
 For latent-variable models, the variational free energy is defined as:
 
 $$
-\mathcal{F}(q,\theta) = \mathbb{E}_q[\log q(z)] - \mathbb{E}_q[\log p_\theta(x,z)].
+\mathcal{F}(q,\theta) = \mathbb{E}_q[\log q(z)] - \mathbb{E}_{z~(q|x)}[\log p_\theta(x,z)].
 $$
 
 This can be rewritten as:
@@ -86,7 +86,9 @@ $$
 Thus, in physics the minimizer of the free energy functional is the Gibbs distribution, while in VAEs the minimizer is the true posterior. In both cases, the free energy principle provides a way to define a functional over trial distributions 
 \\( q \\) and recover the correct distribution at the optimum. When \\(q\\) is restricted (e.g. Gaussian in VAEs, or mean-field in physics), one obtains the best approximation within that family rather than the exact solution.
 
+Note in phyics we would like to choose a \\(q\\) which is more uniform in energy distribution and hence has higher entropy but this choice increases the energy term; the Gibbs distribution is the thermodynimc equlbrium. In case VAE we want to \\z~(q\\) to maximize 
 
+...................
 $$
 \mathcal{L}(x;\theta,\phi) 
 = \mathbb{E}_{z \sim q_\phi(z|x)} \big[ \log p_\theta(x \mid z) \big] 
