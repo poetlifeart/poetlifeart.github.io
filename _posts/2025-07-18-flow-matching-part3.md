@@ -1,5 +1,5 @@
 ---
-title: "Discrete Flow Matching-3"
+title: "Free Energy minimization in VAEs"
 date: 2025-07-18
 categories:
   - flow-matching
@@ -104,7 +104,7 @@ $$
 D_{\text{KL}}(q_\phi(z|x)\,\|\,p(z))
 $$
 
-- Keeps the encoder’s distribution close to the prior \\(p(z\\), usually Gaussian noise.  
+- Keeps the encoder’s distribution close to the prior \\(p(z)\\), usually Gaussian noise.  
 - Forces the encoder to only encode the information about \\(x\\) that is truly necessary to reconstruct it.  
 - Suppresses spurious assumptions or redundant details, since these would push 
 
