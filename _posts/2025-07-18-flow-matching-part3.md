@@ -85,3 +85,28 @@ $$
 
 Thus, in physics the minimizer of the free energy functional is the Gibbs distribution, while in VAEs the minimizer is the true posterior. In both cases, the free energy principle provides a way to define a functional over trial distributions (q\\) and recover the correct distribution at the optimum. When \\(q\\) is restricted (e.g.\ Gaussian in VAEs, or mean-field in physics), one obtains the best approximation within that family rather than the exact solution.
 
+
+$$
+\mathcal{L}(x;\theta,\phi) 
+= \mathbb{E}_{z \sim q_\phi(z|x)} \big[ \log p_\theta(x \mid z) \big] 
+- D_{\text{KL}}\!\big(q_\phi(z|x)\,\|\,p(z)\big).
+$$
+
+$$
+\mathbb{E}_{z \sim q_\phi(z|x)} [\log p_\theta(x|z)]
+$$
+- The decoder is trained to give high probability to the original $x$ for the $z$ sampled from the encoder.  
+- Hence it learns to decode only those $z$ that the encoder actually produces.  
+
+$$
+D_{\text{KL}}(q_\phi(z|x)\,\|\,p(z))
+$$
+- Keeps the encoder’s distribution close to the prior $p(z)$, usually Gaussian noise.  
+- Forces the encoder to only encode the information about $x$ that is truly necessary to reconstruct it.  
+- Suppresses spurious assumptions or redundant details, since these would push $q_\phi(z|x)$ away from the prior and increase the KL cost.  
+
+- The decoder learns to reconstruct from the encoder’s latents.  
+- The encoder learns to produce latents that are informative enough to reconstruct $x$, but simple enough to remain close to the prior noise.  
+- Together, this yields a latent space that preserves essential structure while discarding unnecessary complexity.  
+
+
