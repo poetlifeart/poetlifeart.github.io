@@ -83,20 +83,5 @@ $$
 \log p_\theta(x) = -\mathcal{F}(q,\theta) + \mathrm{KL}\!\left(q(z)\,\|\,p_\theta(z|x)\right).
 $$
 
-\bigskip
-
-\begin{center}
-\begin{tabular}{|c|c|}
-\hline
-\textbf{Physics} & \textbf{Variational Inference (VAE)} \\
-\hline
-Microstate $s$ & Latent variable $z$ \\
-Energy $E(s)$ & $-\log p_\theta(x,z)$ \\
-True Gibbs distribution $p(s) \propto e^{-\beta E(s)}$ & True posterior $p_\theta(z|x)$ \\
-Trial distribution $q(s)$ & Variational posterior $q_\phi(z|x)$ \\
-Free energy functional $\mathbb{E}_q[E] - TS[q]$ & $\mathbb{E}_q[-\log p_\theta(x,z)] - H[q]$ \\
-Minimizer $q^*(s)$ is Gibbs distribution & Minimizer $q^*(z)$ is true posterior \\
-\hline
-\end{tabular}
-\end{center}
+Thus, in physics the minimizer of the free energy functional is the Gibbs distribution, while in VAEs the minimizer is the true posterior. In both cases, the free energy principle provides a way to define a functional over trial distributions (q\\) and recover the correct distribution at the optimum. When \\(q\\) is restricted (e.g.\ Gaussian in VAEs, or mean-field in physics), one obtains the best approximation within that family rather than the exact solution.
 
