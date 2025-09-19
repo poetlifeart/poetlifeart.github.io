@@ -23,7 +23,7 @@ layout: post
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 
-For a simple system (fixed $N$), the fundamental identity is:
+For a simple system (fixed number of particles), the fundamental identity is:
 
 $$
 dU = T\,dS - p\,dV.
@@ -83,7 +83,8 @@ $$
 \log p_\theta(x) = -\mathcal{F}(q,\theta) + \mathrm{KL}\!\left(q(z)\,\|\,p_\theta(z|x)\right).
 $$
 
-Thus, in physics the minimizer of the free energy functional is the Gibbs distribution, while in VAEs the minimizer is the true posterior. In both cases, the free energy principle provides a way to define a functional over trial distributions (q\\) and recover the correct distribution at the optimum. When \\(q\\) is restricted (e.g.\ Gaussian in VAEs, or mean-field in physics), one obtains the best approximation within that family rather than the exact solution.
+Thus, in physics the minimizer of the free energy functional is the Gibbs distribution, while in VAEs the minimizer is the true posterior. In both cases, the free energy principle provides a way to define a functional over trial distributions 
+\\( q \\) and recover the correct distribution at the optimum. When \\(q\\) is restricted (e.g. Gaussian in VAEs, or mean-field in physics), one obtains the best approximation within that family rather than the exact solution.
 
 
 $$
@@ -96,7 +97,7 @@ $$
 \mathbb{E}_{z \sim q_\phi(z|x)} [\log p_\theta(x|z)]
 $$
 
-- The decoder is trained to give high probability to the original $x$ for the \\(z\\) sampled from the encoder.  
+- The decoder is trained to give high probability to the original \\(x\\) for the \\(z\\) sampled from the encoder.  
 - Hence it learns to decode only those \\(z\\) that the encoder actually produces.  
 
 $$
