@@ -88,8 +88,14 @@ Thus, in physics the minimizer of the free energy functional is the Gibbs distri
 
 Note that in physics, one might choose a \\(q\\) which spreads probability more uniformly over energy states, 
 thus increasing the entropy term \\(S[q]\\). 
-However, such a choice generally increases the expected energy \\(\mathbb{E}_q[E]\\) as well, 
-and therefore increases the free energy \\(\mathcal{F}_\beta[q]\\). 
+However, such a choice generally increases the expected energy 
+
+$$(\mathbb{E}_q[E]$$ 
+
+as well, and therefore increases the free energy 
+
+$$(\mathcal{F}_\beta[q]$$. 
+
 The unique compromise that minimizes the free energy is the Gibbs distribution, 
 which represents true thermodynamic equilibrium.
 
