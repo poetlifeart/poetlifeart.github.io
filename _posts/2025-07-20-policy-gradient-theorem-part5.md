@@ -57,6 +57,7 @@ Interaction requirements (corrected).
 
 Corrected table:
 
+$$
 \begin{center}
 \begin{tabular}{lccc}
 \hline
@@ -71,6 +72,7 @@ DAgger                          & Yes                     & Yes (rollouts + quer
 \hline
 \end{tabular}
 \end{center}
+$$
 
 Discriminator-derived rewards in GAIL/AIRL. For a fixed discriminator \\(D\\), the policy term in the GAIL objective uses \\(\mathbb{E}_{\rho_\pi}[\log(1-D)]\\), so a natural per-step reward is
 
