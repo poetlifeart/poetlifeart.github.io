@@ -1,5 +1,5 @@
 ---
-title: "Offline RL-5"
+title: "Energy Models"
 date: 2025-07-20
 categories:
   - policy-gradient
