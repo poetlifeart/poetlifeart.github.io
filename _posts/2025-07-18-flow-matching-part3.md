@@ -89,6 +89,7 @@ Thus, in physics the minimizer of the free energy functional is the Gibbs distri
 Note in phyics we would like to choose a \\(q\\) which is more uniform in energy distribution and hence has higher entropy but this choice increases the energy term; the Gibbs distribution is the thermodynimc equlbrium. In case VAE we want to \\z~(q\\) to maximize 
 
 ...................
+
 $$
 \mathcal{L}(x;\theta,\phi) 
 = \mathbb{E}_{z \sim q_\phi(z|x)} \big[ \log p_\theta(x \mid z) \big] 
