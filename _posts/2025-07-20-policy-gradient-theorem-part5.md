@@ -3,7 +3,7 @@ title: "Offline RL-4"
 date: 2025-07-18
 categories:
   - policy-gradient
-permalink: /policy-gradient-theorem/part-4/  
+permalink: /policy-gradient-theorem/part-5/  
 tags:
 - reinforcement learning
 - policy gradient
