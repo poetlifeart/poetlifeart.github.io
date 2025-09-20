@@ -104,7 +104,7 @@ decreases, its negative
 
 $$-\mathbb{E}_q[\log p_\theta(x,z)]$$
  
-increases,  and the free energy $\mathcal{F}(q,\theta)$ increases. 
+increases,  and the free energy \\(\mathcal{F}(q,\theta)\\) increases. 
 
 
 ...................
