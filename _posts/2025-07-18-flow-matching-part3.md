@@ -86,7 +86,7 @@ $$
 Thus, in physics the minimizer of the free energy functional is the Gibbs distribution, while in VAEs the minimizer is the true posterior. In both cases, the free energy principle provides a way to define a functional over trial distributions 
 \\( q \\) and recover the correct distribution at the optimum. When \\(q\\) is restricted (e.g. Gaussian in VAEs, or mean-field in physics), one obtains the best approximation within that family rather than the exact solution.
 
-Note that in physics, one might choose a $q$ which spreads probability more uniformly over energy states, 
+Note that in physics, one might choose a \\(q\\) which spreads probability more uniformly over energy states, 
 thus increasing the entropy term \\(S[q]\\). 
 However, such a choice generally increases the expected energy \\(\mathbb{E}_q[E]\\) as well, 
 and therefore increases the free energy \\(\mathcal{F}_\beta[q]\\). 
