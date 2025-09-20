@@ -90,17 +90,15 @@ Note that in physics, one might choose a \\(q\\) which spreads probability more 
 thus increasing the entropy term \\(S[q]\\). 
 However, such a choice generally increases the expected energy 
 
-$$(\mathbb{E}_q[E]$$ 
+$$(\mathbb{E}_q[E](\mathcal{F}_\beta[q]$$. 
 
 as well, and therefore increases the free energy 
-
-$$(\mathcal{F}_\beta[q]$$. 
 
 The unique compromise that minimizes the free energy is the Gibbs distribution, 
 which represents true thermodynamic equilibrium.
 
 In the VAE setting, increasing the entropy of \\(q_\phi(z|x)\\) means that the distribution 
-cannot selectively place higher weight on latent values $z$ where the joint probability 
+cannot selectively place higher weight on latent values \\(z\\) where the joint probability 
 \\(p_\theta(x,z)\\) is large. 
 As a result, the expectation 
 
