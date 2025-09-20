@@ -1,6 +1,6 @@
 ---
-title: "Offline RL-4"
-date: 2025-07-18
+title: "Offline RL-5"
+date: 2025-07-20
 categories:
   - policy-gradient
 permalink: /policy-gradient-theorem/part-5/  
