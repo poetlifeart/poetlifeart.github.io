@@ -109,7 +109,7 @@ decreases, its negative
 $$-\mathbb{E}_q[\log p_\theta(x,z)]$$
  
 increases,  and the free energy \\(\mathcal{F}(q,\theta)\\) increases. 
-
+In statistical mechanics, all permissible microstates remain available and the Hamiltonian only assigns them energies, so the Gibbs distribution balances energy and entropy across the entire state space; in probabilistic models, once the data and parameters are fixed, the joint distribution already restricts which latent states are plausible, so the posterior is confined to a much smaller region, and any attempt to spread a variational distribution beyond it merely wastes probability mass on implausible states and raises the free energy.
 
 ...................
 
