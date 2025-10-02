@@ -300,5 +300,47 @@ D^*(x)
 =\frac{\pi_1 p(x)}{\pi_1 p(x)+\pi_0 q(x)}.
 $$
 
+................................................
+................................................
+
+
+ Unconditional MLE → KL → Cross-Entropy 
+
+
+ Empirical data marginal \\(\hat{p}_X(x)\\); model \\(p_\theta(x)\\).
+
+$$
+J(\theta)\;=\;\mathbb{E}_{x\sim \hat{p}_X}\big[\log p_\theta(x)\big].
+$$
+
+Add–subtract \\(\mathbb{E}_{x\sim \hat{p}_X}\log \hat{p}_X(x)\\) (constant in \\(\theta\\)):
+
+$$
+J(\theta)
+= \mathbb{E}_{\hat{p}_X}\log \hat{p}_X
+\;-\;
+\mathbb{E}_{\hat{p}_X}\!\left[\log\frac{\hat{p}_X(x)}{p_\theta(x)}\right]
+= \mathbb{E}_{\hat{p}_X}\log \hat{p}_X
+\;-\; \mathrm{KL}\!\big(\hat{p}_X \,\|\, p_\theta\big).
+$$
+
+Thus \\(\arg\max_\theta J(\theta)=\arg\min_\theta \mathrm{KL}(\hat{p}_X\|p_\theta)\\).
+
+Define cross-entropy and entropy:
+
+$$
+H(\hat{p}_X,p_\theta):=-\mathbb{E}_{x\sim \hat{p}_X}\big[\log p_\theta(x)\big],
+\qquad
+H(\hat{p}_X):=-\mathbb{E}_{x\sim \hat{p}_X}\big[\log \hat{p}_X(x)\big].
+$$
+
+Identity linking them:
+
+$$
+\mathrm{KL}\!\big(\hat{p}_X \,\|\, p_\theta\big)
+= H(\hat{p}_X,p_\theta)-H(\hat{p}_X).
+$$
+
+Therefore minimizing \\(\mathrm{KL}(\hat{p}_X\|p_\theta)\\) is equivalent to minimizing the cross-entropy \\(H(\hat{p}_X,p_\theta)\\) (since \\(H(\hat{p}_X)\\) is constant in \\(\theta\\)).
 
 
