@@ -324,7 +324,11 @@ J(\theta)
 \;-\; \mathrm{KL}\!\big(\hat{p}_X \,\|\, p_\theta\big).
 $$
 
-Thus \\(\arg\max_\theta J(\theta)=\arg\min_\theta \mathrm{KL}(\hat{p}_X\|p_\theta)\\).
+Thus 
+
+$$
+\arg\max_{\theta} J(\theta) \;=\; \arg\min_{\theta} \mathrm{KL}\!\left(\hat{p}_X \,\|\, p_\theta\right).
+$$
 
 Define cross-entropy and entropy:
 
@@ -341,6 +345,14 @@ $$
 = H(\hat{p}_X,p_\theta)-H(\hat{p}_X).
 $$
 
-Therefore minimizing \\(\mathrm{KL}(\hat{p}_X\|p_\theta)\\) is equivalent to minimizing the cross-entropy \\(H(\hat{p}_X,p_\theta)\\) (since \\(H(\hat{p}_X)\\) is constant in \\(\theta\\)).
+Therefore minimizing 
+
+$$\mathrm{KL}\!\left(\hat{p}_X \,\|\, p_\theta\right)$$ 
+
+is equivalent to minimizing the cross-entropy 
+
+$$H(\hat{p}_X,p_\theta)$$
+
+(since \\(H(\hat{p}_X)\\) is constant in \\(\theta\\).
 
 
