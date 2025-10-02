@@ -265,11 +265,12 @@ $$
 J(\omega)
 &=\sum_{y\in\{0,1\}}\int \tilde p_{Y\mid X}(y\mid x)\,\tilde p_X(x)\,\log p_\omega(y\mid x)\,dx\\
 &=\sum_{y\in\{0,1\}}\int \tilde p_{X,Y}(x,y)\,\log p_\omega(y\mid x)\,dx\\
-&=\arg\max_{\theta} J(\theta) \;=\; \arg\min_{\theta} \mathrm{KL}\!\left(\hat{p}_X \,\|\, p_\theta\right)\\
+&=\sum_{y\in\{0,1\}}\int \tilde p_{X\mid Y}(x\mid y)\,\tilde p_Y(y)\,\log p_\omega(y\mid x)\,dx\\
 &=\pi_1\int p(x)\log D_\omega(x)\,dx\;+\;\pi_0\int q(x)\log\!\big(1-D_\omega(x)\big)\,dx\\
 &=\pi_1\,\mathbb{E}_{x\sim P}\!\big[\log D_\omega(x)\big]\;+\;\pi_0\,\mathbb{E}_{x\sim Q}\!\big[\log(1-D_\omega(x))\big].
 \end{aligned}
 $$
+
 
 Conditional cross-entropy (negative population log-likelihood):
 
