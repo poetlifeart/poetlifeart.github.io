@@ -229,9 +229,9 @@ The GAN/GAIL discriminator objective is not a heuristic: it is the exact variati
 % Binary classification view and the GAN/GAIL discriminator
 % Population MLE → conditional cross-entropy (Route A)
 
-Setup: Priors \(\pi_1=\Pr(Y{=}1)\), \(\pi_0=1-\pi_1\).
-Class-conditionals \(X\mid(Y{=}1)\sim P\) with density \(p(x)\) and \(X\mid(Y{=}0)\sim Q\) with density \(q(x)\).
-Model (discriminator) \(D_\omega(x)=p_\omega(Y{=}1\mid x)\in(0,1)\), so \(p_\omega(0\mid x)=1-D_\omega(x)\).
+Setup: Priors \\(\pi_1=\Pr(Y{=}1)\\), \\(\pi_0=1-\pi_1\\).
+Class-conditionals \\(X\mid(Y{=}1)\sim P\\) with density \\(p(x)\\) and \\(X\mid(Y{=}0)\sim Q\\) with density \\(q(x)\\).
+Model (discriminator) \\(D_\omega(x)=p_\omega(Y{=}1\mid x)\in(0,1)\\), so \\(p_\omega(0\mid x)=1-D_\omega(x)\\).
 
 $$
 \tilde p_{X,Y}(x,y)=
@@ -258,7 +258,7 @@ J(\omega)=\mathbb{E}_{X\sim \tilde p_X}\!\left[\sum_{y\in\{0,1\}}
 \tilde p_{Y\mid X}(y\mid X)\,\log p_\omega(y\mid X)\right].
 $$
 
-\textbf{Route A (expand via the joint \(\tilde p_{X,Y}=\tilde p_{Y\mid X}\tilde p_X\)):}
+Expand via the joint \\(\tilde p_{X,Y}=\tilde p_{Y\mid X}\tilde p_X\\)
 
 $$
 \begin{aligned}
@@ -278,13 +278,15 @@ $$
 -\pi_0\,\mathbb{E}_{x\sim Q}\!\big[\log(1-D_\omega(x))\big].
 $$
 
-Equal priors \(\pi_1=\pi_0=\tfrac12\) (rescale by a positive constant—argmax/argmin unchanged):
+Equal priors \\(\pi_1=\pi_0=\tfrac12\\) (rescale by a positive constant—argmax/argmin unchanged):
 
 $$
 \mathcal{L}_{\mathrm{BCE}}(D_\omega)
 =-\mathbb{E}_{x\sim P}\!\big[\log D_\omega(x)\big]
 -\mathbb{E}_{x\sim Q}\!\big[\log(1-D_\omega(x))\big],
-\qquad
+$$
+
+$$
 \mathcal{J}(D_\omega)
 =\mathbb{E}_{x\sim P}\!\big[\log D_\omega(x)\big]
 +\mathbb{E}_{x\sim Q}\!\big[\log(1-D_\omega(x))\big].
