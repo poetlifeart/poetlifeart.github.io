@@ -224,5 +224,79 @@ By the variational identity above, the inner maximization is exactly the JS disc
 
 The GAN/GAIL discriminator objective is not a heuristic: it is the exact variational form of the JS divergence. ``Variational'' enters at the supremum over functions \\(D\\). Implementations replace expectations by batch sums/means and parametrize \\(D\\), yielding the familiar binary cross-entropy training loop.
 
+.........................................
+
+% Binary classification view and the GAN/GAIL discriminator
+% Population MLE → conditional cross-entropy (Route A)
+
+Setup: Priors \(\pi_1=\Pr(Y{=}1)\), \(\pi_0=1-\pi_1\).
+Class-conditionals \(X\mid(Y{=}1)\sim P\) with density \(p(x)\) and \(X\mid(Y{=}0)\sim Q\) with density \(q(x)\).
+Model (discriminator) \(D_\omega(x)=p_\omega(Y{=}1\mid x)\in(0,1)\), so \(p_\omega(0\mid x)=1-D_\omega(x)\).
+
+$$
+\tilde p_{X,Y}(x,y)=
+\begin{cases}
+\pi_1\,p(x), & y=1,\\
+\pi_0\,q(x), & y=0,
+\end{cases}
+\qquad
+\tilde p_X(x)=\pi_1 p(x)+\pi_0 q(x),
+\qquad
+\tilde p_{Y\mid X}(y\mid x)=\dfrac{\tilde p_{X,Y}(x,y)}{\tilde p_X(x)}.
+$$
+
+Population MLE (conditional model):
+
+$$
+J(\omega)=\mathbb{E}_{(X,Y)\sim \tilde p_{X,Y}}\!\big[\log p_\omega(Y\mid X)\big].
+$$
+
+Condition on \(X\) (tower property):
+
+$$
+J(\omega)=\mathbb{E}_{X\sim \tilde p_X}\!\left[\sum_{y\in\{0,1\}}
+\tilde p_{Y\mid X}(y\mid X)\,\log p_\omega(y\mid X)\right].
+$$
+
+\textbf{Route A (expand via the joint \(\tilde p_{X,Y}=\tilde p_{Y\mid X}\tilde p_X\)):}
+
+$$
+\begin{aligned}
+J(\omega)
+&=\sum_{y\in\{0,1\}}\int \tilde p_{Y\mid X}(y\mid x)\,\tilde p_X(x)\,\log p_\omega(y\mid x)\,dx\\
+&=\sum_{y\in\{0,1\}}\int \tilde p_{X,Y}(x,y)\,\log p_\omega(y\mid x)\,dx\\
+&=\pi_1\int p(x)\log D_\omega(x)\,dx\;+\;\pi_0\int q(x)\log\!\big(1-D_\omega(x)\big)\,dx\\
+&=\pi_1\,\mathbb{E}_{x\sim P}\!\big[\log D_\omega(x)\big]\;+\;\pi_0\,\mathbb{E}_{x\sim Q}\!\big[\log(1-D_\omega(x))\big].
+\end{aligned}
+$$
+
+Conditional cross-entropy (negative population log-likelihood):
+
+$$
+\mathrm{CE}(\omega)=-J(\omega)
+=-\pi_1\,\mathbb{E}_{x\sim P}\!\big[\log D_\omega(x)\big]
+-\pi_0\,\mathbb{E}_{x\sim Q}\!\big[\log(1-D_\omega(x))\big].
+$$
+
+Equal priors \(\pi_1=\pi_0=\tfrac12\) (rescale by a positive constant—argmax/argmin unchanged):
+
+$$
+\mathcal{L}_{\mathrm{BCE}}(D_\omega)
+=-\mathbb{E}_{x\sim P}\!\big[\log D_\omega(x)\big]
+-\mathbb{E}_{x\sim Q}\!\big[\log(1-D_\omega(x))\big],
+\qquad
+\mathcal{J}(D_\omega)
+=\mathbb{E}_{x\sim P}\!\big[\log D_\omega(x)\big]
++\mathbb{E}_{x\sim Q}\!\big[\log(1-D_\omega(x))\big].
+$$
+
+Bayes-optimal discriminator (pointwise in \(x\)):
+
+$$
+D^*(x)
+=\arg\max_{d\in(0,1)}\{\pi_1 p(x)\log d+\pi_0 q(x)\log(1-d)\}
+=\frac{\pi_1 p(x)}{\pi_1 p(x)+\pi_0 q(x)}.
+$$
+
 
 
